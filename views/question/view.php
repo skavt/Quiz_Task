@@ -24,6 +24,13 @@ $this->params['breadcrumbs'][] = $this->title;
                 'method' => 'post',
             ],
         ]) ?>
+    <p calss="text-muted">
+        <small>
+            Created At: <?php echo Yii::$app->formatter->asRelativeTime($model->created_at)?>
+            <br>
+            Updated At: <?php echo Yii::$app->formatter->asRelativeTime($model->created_at)?>
+        </small>
+    </p>
     </p>
 
     <?= DetailView::widget([
@@ -34,8 +41,8 @@ $this->params['breadcrumbs'][] = $this->title;
             'name',
             'hint',
             'max_ans',
-            'created_at',
-            'updated_at',
+//            'created_at',
+//            'updated_at',
         ],
     ]) ?>
 

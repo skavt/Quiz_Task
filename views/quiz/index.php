@@ -22,16 +22,21 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
+//       'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
-
-            'id',
-            'subject',
+          'id',
+            [
+                'attribute' => 'subject',
+                'format' => 'raw',
+                'value' => function($data, $id) {
+                    return Html::a($data['subject'], ['question/index', 'id'=>$id]);
+                },
+            ],
             'min_correct_ans',
             'max_questions',
-            'created_at',
-            //'updated_at',
+//          'created_at',
+//          'updated_at',
 
             ['class' => 'yii\grid\ActionColumn'],
         ],

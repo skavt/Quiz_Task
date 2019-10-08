@@ -26,13 +26,14 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
         ]) ?>
         <br>
-        <p calss="text-muted">
-            <small>
-                Created At: <?php if(!Yii::$app->formatter->asDate($model->created_at)){
-                    var_dump("5 minutes ago");
-                } ?>
-            </small>
-        </p>
+    <p calss="text-muted">
+        <small>
+            Created At: <?php echo Yii::$app->formatter->asRelativeTime($model->created_at)?>
+            <br>
+            Updated At: <?php echo Yii::$app->formatter->asRelativeTime($model->created_at)?>
+        </small>
+    </p>
+
     </p>
 
     <?= DetailView::widget([
@@ -42,8 +43,8 @@ $this->params['breadcrumbs'][] = $this->title;
             'subject',
             'min_correct_ans',
             'max_questions',
-            'created_at',
-            'updated_at',
+//            'created_at',
+//            'updated_at',
         ],
     ]) ?>
 

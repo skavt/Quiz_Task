@@ -3,6 +3,8 @@
 namespace app\models;
 
 use Yii;
+use yii\behaviors\TimestampBehavior;
+use yii\db\ActiveQuery;
 
 /**
  * This is the model class for table "question".
@@ -34,10 +36,16 @@ class Question extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['quiz_id', 'name', 'hint'], 'required'],
+            [['name', 'hint'], 'required'],
             [['quiz_id', 'max_ans', 'created_at', 'updated_at'], 'integer'],
             [['name', 'hint'], 'string', 'max' => 255],
             [['quiz_id'], 'exist', 'skipOnError' => true, 'targetClass' => Quiz::className(), 'targetAttribute' => ['quiz_id' => 'id']],
+        ];
+    }
+    public function behaviors()
+    {
+        return [
+            TimestampBehavior::class,
         ];
     }
 
@@ -58,7 +66,7 @@ class Question extends \yii\db\ActiveRecord
     }
 
     /**
-     * @return \yii\db\ActiveQuery
+     * @return ActiveQuery
      */
     public function getAnswers()
     {
@@ -66,7 +74,7 @@ class Question extends \yii\db\ActiveRecord
     }
 
     /**
-     * @return \yii\db\ActiveQuery
+     * @return ActiveQuery
      */
     public function getQuiz()
     {
