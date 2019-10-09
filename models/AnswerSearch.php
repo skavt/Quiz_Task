@@ -40,7 +40,7 @@ class AnswerSearch extends Answer
      *
      * @return ActiveDataProvider
      */
-    public function search($params,$id)
+    public function search($params, $id)
     {
         $query = Answer::find();
 

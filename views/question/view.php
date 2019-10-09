@@ -20,7 +20,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <small>
             Created At: <?php echo Yii::$app->formatter->asRelativeTime($model->created_at) ?>
             <br>
-            Updated At: <?php echo Yii::$app->formatter->asRelativeTime($model->created_at) ?>
+            Updated At: <?php echo Yii::$app->formatter->asRelativeTime($model->updated_at) ?>
         </small>
     </p>
     </p>

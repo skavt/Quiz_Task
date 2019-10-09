@@ -39,7 +39,7 @@ class Answer extends \yii\db\ActiveRecord
             [['question_id'], 'exist', 'skipOnError' => true, 'targetClass' => Question::className(), 'targetAttribute' => ['question_id' => 'id']],
         ];
     }
-    
+
     public function behaviors()
     {
         return [

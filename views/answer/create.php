@@ -1,14 +1,15 @@
 <?php
 
+use app\models\Question;
 use yii\helpers\Html;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Answer */
-/* @var $newModel \app\models\Question*/
+/* @var $newModel Question */
 
 
-$this->title = 'Create answer for: ' . $newModel->name . ' question' ;
-$this->params['breadcrumbs'][] = ['label' => 'Questions', 'url' => ['answer/index/', 'id'=>$_GET['id']]];
+$this->title = 'Create answer for: ' . $newModel->name . ' question';
+$this->params['breadcrumbs'][] = ['label' => 'Answer', 'url' => ['answer/index/', 'id' => $_GET['id']]];
 //$this->params['breadcrumbs'][] = ['label' => 'Answers', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>

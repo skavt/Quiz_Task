@@ -6,6 +6,7 @@ use app\models\Question;
 use Yii;
 use app\models\Answer;
 use app\models\AnswerSearch;
+use yii\db\StaleObjectException;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -76,7 +77,7 @@ class AnswerController extends Controller
 
         if ($model->load(Yii::$app->request->post())) {
             $model->question_id = $id;
-            if($model->save()) {
+            if ($model->save()) {
                 return $this->redirect(['view', 'id' => $model->id]);
             }
         }
@@ -114,13 +115,13 @@ class AnswerController extends Controller
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      * @throws \Throwable
-     * @throws \yii\db\StaleObjectException
+     * @throws StaleObjectException
      */
     public function actionDelete($id)
     {
         $this->findModel($id)->delete();
 
-        return $this->redirect(['index']);
+        return $this->redirect(['quiz/index']);
     }
 
     /**

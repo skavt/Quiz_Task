@@ -15,25 +15,22 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <h1><?= Html::encode($this->title) ?></h1>
 
-    <p>
 
-        <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a('Delete', ['delete', 'id' => $model->id], [
-            'class' => 'btn btn-danger',
-            'data' => [
-                'confirm' => 'Are you sure you want to delete this item?',
-                'method' => 'post',
-            ],
-        ]) ?>
-        <br>
+    <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
+    <?= Html::a('Delete', ['delete', 'id' => $model->id], [
+        'class' => 'btn btn-danger',
+        'data' => [
+            'confirm' => 'Are you sure you want to delete this item?',
+            'method' => 'post',
+        ],
+    ]) ?>
+    <br>
     <p calss="text-muted">
         <small>
-            Created At: <?php echo Yii::$app->formatter->asRelativeTime($model->created_at)?>
+            Created At: <?php echo Yii::$app->formatter->asRelativeTime($model->created_at) ?>
             <br>
-            Updated At: <?php echo Yii::$app->formatter->asRelativeTime($model->created_at)?>
+            Updated At: <?php echo Yii::$app->formatter->asRelativeTime($model->updated_at) ?>
         </small>
-    </p>
-
     </p>
 
     <?= DetailView::widget([
