@@ -7,7 +7,7 @@ use yii\widgets\DetailView;
 /* @var $model app\models\Answer */
 
 $this->title = $model->name;
-$this->params['breadcrumbs'][] = ['label' => 'Answers', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => 'Answers', 'url' => ['answer/index/', 'id' => $model->question_id]];
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
 ?>
@@ -16,9 +16,6 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <small>
-            At: <?php echo Yii::$app->formatter->asRelativeTime($model->created_at) ?>
-        </small>
         <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
         <?= Html::a('Delete', ['delete', 'id' => $model->id], [
             'class' => 'btn btn-danger',
@@ -29,9 +26,9 @@ $this->params['breadcrumbs'][] = $this->title;
         ]) ?>
     <p calss="text-muted">
         <small>
-            Created At: <?php echo Yii::$app->formatter->asRelativeTime($model->created_at)?>
+            Created At: <?php echo Yii::$app->formatter->asRelativeTime($model->created_at) ?>
             <br>
-            Updated At: <?php echo Yii::$app->formatter->asRelativeTime($model->created_at)?>
+            Updated At: <?php echo Yii::$app->formatter->asRelativeTime($model->created_at) ?>
         </small>
     </p>
     </p>
@@ -39,12 +36,12 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
-            'id',
-            'question_id',
+//            'id',
+//            'question_id',
             'is_correct',
             'name',
-            'created_at',
-            'updated_at',
+//            'created_at',
+//            'updated_at',
         ],
     ]) ?>
 

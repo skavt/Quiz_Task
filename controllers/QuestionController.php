@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\models\Quiz;
 use Yii;
 use app\models\Question;
 use app\models\QuestionSearch;
@@ -37,11 +38,13 @@ class QuestionController extends Controller
     public function actionIndex($id)
     {
         $searchModel = new QuestionSearch();
+        $newModel = Quiz::findOne($id);
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams,$id);
 
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+            'newModel' => $newModel,
         ]);
     }
 
@@ -61,14 +64,16 @@ class QuestionController extends Controller
     /**
      * Creates a new Question model.
      * If creation is successful, the browser will be redirected to the 'view' page.
+     * @param $id
      * @return mixed
      */
     public function actionCreate($id)
     {
         $model = new Question();
 
+        $newModel = Quiz::findOne($id);
         if ($model->load(Yii::$app->request->post())) {
-            $model->quiz_id=$id;
+            $model->quiz_id = $id;
             if($model->save()) {
                 return $this->redirect(['view', 'id' => $model->id]);
             }
@@ -76,6 +81,7 @@ class QuestionController extends Controller
 
         return $this->render('create', [
             'model' => $model,
+            'newModel' => $newModel,
         ]);
     }
 
@@ -105,6 +111,8 @@ class QuestionController extends Controller
      * @param integer $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
+     * @throws \Throwable
+     * @throws \yii\db\StaleObjectException
      */
     public function actionDelete($id)
     {

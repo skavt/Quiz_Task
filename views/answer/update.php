@@ -6,8 +6,8 @@ use yii\helpers\Html;
 /* @var $model app\models\Answer */
 
 $this->title = 'Update Answer: ' . $model->name;
-$this->params['breadcrumbs'][] = ['label' => 'Answers', 'url' => ['index']];
-$this->params['breadcrumbs'][] = ['label' => $model->name, 'url' => ['view', 'id' => $model->id]];
+//$this->params['breadcrumbs'][] = ['label' => 'Questions', 'url' => ['answer/index/', 'id'=>$_GET['id']]];
+//$this->params['breadcrumbs'][] = ['label' => $model->name, 'url' => ['view', 'id' => $model->id]];
 $this->params['breadcrumbs'][] = 'Update';
 ?>
 <div class="answer-update">

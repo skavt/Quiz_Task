@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\models\Question;
 use Yii;
 use app\models\Answer;
 use app\models\AnswerSearch;
@@ -37,12 +38,16 @@ class AnswerController extends Controller
     public function actionIndex($id)
     {
         $searchModel = new AnswerSearch();
+        $newModel = Question::findOne($id);
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams, $id);
+
 
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+            'newModel' => $newModel,
         ]);
+
     }
 
     /**
@@ -61,14 +66,16 @@ class AnswerController extends Controller
     /**
      * Creates a new Answer model.
      * If creation is successful, the browser will be redirected to the 'view' page.
+     * @param $id
      * @return mixed
      */
-    public function actionCreate()
+    public function actionCreate($id)
     {
         $model = new Answer();
+        $newModel = Question::findOne($id);
 
         if ($model->load(Yii::$app->request->post())) {
-            $model->question_id;
+            $model->question_id = $id;
             if($model->save()) {
                 return $this->redirect(['view', 'id' => $model->id]);
             }
@@ -76,6 +83,7 @@ class AnswerController extends Controller
 
         return $this->render('create', [
             'model' => $model,
+            'newModel' => $newModel,
         ]);
     }
 
@@ -105,6 +113,8 @@ class AnswerController extends Controller
      * @param integer $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
+     * @throws \Throwable
+     * @throws \yii\db\StaleObjectException
      */
     public function actionDelete($id)
     {

@@ -19,10 +19,10 @@ $this->params['breadcrumbs'][] = $this->title;
         <small>
             At: <?php echo Yii::$app->formatter->asRelativeTime($model->created_at) ?>
             <br>
-            By: <?php echo $model->createdBy->username?>
+            By: <?php echo $model->createdBy->username ?>
         </small>
     </p>
-    <?php if(!Yii::$app->user->isGuest): ?>
+    <?php if (!Yii::$app->user->isGuest): ?>
         <p>
             <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
             <?= Html::a('Delete', ['delete', 'id' => $model->id], [
