@@ -123,9 +123,12 @@ class QuestionController extends Controller
      */
     public function actionDelete($id)
     {
+        $model = $this->findModel($id);
+        $quizId = $model->quiz_id;
+
         $this->findModel($id)->delete();
 
-        return $this->redirect(['quiz/index']);
+        return $this->redirect(['question/index', 'id' =>$quizId]);
     }
 
     /**

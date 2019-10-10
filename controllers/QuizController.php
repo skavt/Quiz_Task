@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\models\StartQuiz;
 use Yii;
 use app\models\Quiz;
 use app\models\QuizSearch;

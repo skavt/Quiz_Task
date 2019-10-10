@@ -9,7 +9,6 @@ use yii\grid\GridView;
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
 $this->params['breadcrumbs'][] = ['label' => 'Quiz', 'url' => ['quiz/index/', 'id' => $_GET['id']]];
-$this->params['breadcrumbs'][] = ['label' => 'Questions', 'url' => ['question/index/', 'id' => $_GET['id']]];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="question-index">
@@ -18,7 +17,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <div class="alert alert-danger">
         <p>
-            <?= Html::encode('You can\'t create new answer. Please return in Quiz or Questions') ?>
+            <?= Html::encode('You can\'t create new answer. Please return in Quiz') ?>
         </p>
     </div>
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>

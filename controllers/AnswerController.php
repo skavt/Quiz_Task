@@ -125,9 +125,11 @@ class AnswerController extends Controller
      */
     public function actionDelete($id)
     {
+        $model = $this->findModel($id);
+        $questionId = $model->question_id;
         $this->findModel($id)->delete();
 
-        return $this->redirect(['quiz/index']);
+        return $this->redirect(['answer/index', 'id'=> $questionId]);
     }
 
     /**
