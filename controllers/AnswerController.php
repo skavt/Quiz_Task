@@ -81,6 +81,12 @@ class AnswerController extends Controller
                 return $this->redirect(['view', 'id' => $model->id]);
             }
         }
+        $count = Answer::find()->where(['question_id' => $id])->count();
+        if($count >= $newModel->max_ans){
+            return $this->render('_error', [
+                'model' => $model,
+            ]);
+        }
 
         return $this->render('create', [
             'model' => $model,

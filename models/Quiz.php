@@ -38,6 +38,7 @@ class Quiz extends \yii\db\ActiveRecord
             [['subject', 'min_correct_ans'], 'required'],
             [['min_correct_ans', 'max_questions', 'created_at', 'updated_at'], 'integer'],
             [['subject'], 'string', 'max' => 127],
+            [['subject'],'unique'],
         ];
     }
     public function behaviors()

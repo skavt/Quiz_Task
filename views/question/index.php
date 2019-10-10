@@ -9,7 +9,7 @@ use yii\grid\GridView;
 /* @var $model app\models\Answer */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Questions for : ' . $newModel->subject;
+//$this->title = 'Questions for : ' . $newModel->subject;
 $this->params['breadcrumbs'][] = ['label' => 'Quiz', 'url' => ['quiz/index/', 'id' => $_GET['id']]];
 $this->params['breadcrumbs'][] = $this->title;
 ?>

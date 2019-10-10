@@ -66,6 +66,7 @@ class QuestionController extends Controller
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @param $id
      * @return mixed
+     * @throws NotFoundHttpException
      */
     public function actionCreate($id)
     {
@@ -77,6 +78,12 @@ class QuestionController extends Controller
             if($model->save()) {
                 return $this->redirect(['view', 'id' => $model->id]);
             }
+        }
+        $count = Question::find()->where(['quiz_id' => $id])->count();
+        if($count >= $newModel->max_questions){
+            return $this->render('_error', [
+                'model' => $model,
+            ]);
         }
 
         return $this->render('create', [
