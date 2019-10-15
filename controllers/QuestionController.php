@@ -39,7 +39,7 @@ class QuestionController extends Controller
     {
         $searchModel = new QuestionSearch();
         $newModel = Quiz::findOne($id);
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams,$id);
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams, $id);
 
         return $this->render('index', [
             'searchModel' => $searchModel,
@@ -75,12 +75,12 @@ class QuestionController extends Controller
         $newModel = Quiz::findOne($id);
         if ($model->load(Yii::$app->request->post())) {
             $model->quiz_id = $id;
-            if($model->save()) {
+            if ($model->save()) {
                 return $this->redirect(['view', 'id' => $model->id]);
             }
         }
         $count = Question::find()->where(['quiz_id' => $id])->count();
-        if($count >= $newModel->max_questions){
+        if ($count >= $newModel->max_questions) {
             return $this->render('_error', [
                 'model' => $model,
             ]);
@@ -128,7 +128,7 @@ class QuestionController extends Controller
 
         $this->findModel($id)->delete();
 
-        return $this->redirect(['question/index', 'id' =>$quizId]);
+        return $this->redirect(['question/index', 'id' => $quizId]);
     }
 
     /**

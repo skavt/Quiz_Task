@@ -2,10 +2,14 @@
 
 namespace app\controllers;
 
-use app\models\StartQuiz;
+use app\models\Answer;
+use app\models\Question;
 use Yii;
 use app\models\Quiz;
 use app\models\QuizSearch;
+use yii\base\Event;
+use yii\bootstrap\Html;
+use yii\helpers\ArrayHelper;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -127,4 +131,15 @@ class QuizController extends Controller
 
         throw new NotFoundHttpException('The requested page does not exist.');
     }
+
+    public function actionStart($id)
+    {
+        $quizModel = $this->findModel($id);
+        $questionModel = Question::find()->where(['quiz_id' => $id])->all();
+        return $this->render('start', [
+            'quizModel' => $quizModel,
+            'questionModel' => $questionModel,
+        ]);
+    }
+
 }
