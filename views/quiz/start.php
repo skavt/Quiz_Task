@@ -6,6 +6,7 @@ use app\models\Answer;
 use app\models\Question;
 use yii\helpers\Html;
 use yii\grid\GridView;
+use yii\widgets\ActiveForm;
 
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\QuizSearch */
@@ -18,6 +19,8 @@ $this->title = 'Quiz \'' . $quizModel->subject . '\'';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 
+<?php $form = ActiveForm::begin() ?>
+
     <h1 style="text-align: center"><?= Html::encode($this->title) ?></h1>
 <?php foreach ($questionModel as $question) : ?>
 
@@ -25,19 +28,22 @@ $this->params['breadcrumbs'][] = $this->title;
         <?php echo $question->name ?>
         <br>
         <small style="font-size: 10px">
-            <?php echo $question->hint?>
+            <?php echo $question->hint ?>
         </small>
     </label>
-        <?php
-        $answerModel = Answer::find()->where(['question_id' => $question->id])->all();
-        foreach ($answerModel as $answer) :
-            ?>
+    <?php
+    $answerModel = Answer::find()->where(['question_id' => $question->id])->all();
+    foreach ($answerModel as $answer) :
+        ?>
         <div class="radio">
             <label style="margin-left: 500px; font-size: 15px">
-                <input type="radio" name="optionsRadios" id="optionsRadios1" value="option1" checked>
+                <?php echo Html::radio("selectedAnswer_{$question->id}", false, [
+                    'value' => $answer->id
+                ]); ?>
                 <?php echo $answer->name ?>
             </label>
         </div>
     <?php endforeach; ?>
 
 <?php endforeach; ?>
+<?php $form = ActiveForm::end() ?>
