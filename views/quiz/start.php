@@ -34,7 +34,7 @@ $this->params['breadcrumbs'][] = $this->title;
         ?>
         <div class="radio">
             <label style="margin-left: 500px; font-size: 18px">
-                <?php echo Html::radio("selectedAnswer_{$question->id}", false, [
+                <?php echo Html::radio("selected_{$question->id}", false, [
                     'value' => $answer->id
                 ]); ?>
                 <?php echo $answer->name ?>

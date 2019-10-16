@@ -147,7 +147,42 @@ class QuizController extends Controller
 //            ]);
 //        }
         if (Yii::$app->request->post()) {
-            return $this->render('result');
+            $response = Yii::$app->request->post();
+            $answerIndex = 0;
+            $correctAnswer = 0;
+            $maxQuestion = -1;
+            $array = [];
+
+
+            foreach ($response as $text => $answerId) {
+                $maxQuestion++;
+                $select = substr($text, 0, 9);
+                if ($select == 'selected_') {
+                    $array[$answerIndex] = $answerId;
+                    $answerIndex++;
+                }
+            }
+            foreach ($array as $arr) {
+                $answer = Answer::findOne($arr);
+                if ($answer->is_correct == 1) {
+                    $correctAnswer++;
+                }
+            }
+            if ($correctAnswer < $quizModel->min_correct_ans) {
+                $failed = ' ';
+                $passed = '';
+            } else {
+                $passed = ' ';
+                $failed = '';
+            }
+
+            return $this->render('result', [
+                'failed' => $failed,
+                'passed' => $passed,
+                'correctAnswer' => $correctAnswer,
+                'quizModel' => $quizModel,
+                'maxQuestion' => $maxQuestion,
+            ]);
         }
         return $this->render('start', [
             'quizModel' => $quizModel,
