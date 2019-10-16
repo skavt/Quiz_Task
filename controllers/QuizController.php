@@ -9,6 +9,7 @@ use app\models\Quiz;
 use app\models\QuizSearch;
 use yii\base\Event;
 use yii\bootstrap\Html;
+use yii\data\Pagination;
 use yii\helpers\ArrayHelper;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -136,10 +137,24 @@ class QuizController extends Controller
     {
         $quizModel = $this->findModel($id);
         $questionModel = Question::find()->where(['quiz_id' => $id])->all();
+//        foreach ($questionModel as $questionId) {
+//
+//            $answerModel = Answer::find()->where(['question_id' => $questionId->id])->all();
+//            return $this->render('start', [
+//                'answerModel' => $answerModel,
+//                'quizModel' => $quizModel,
+//                'questionModel' => $questionModel,
+//            ]);
+//        }
+        if (Yii::$app->request->post()) {
+            return $this->render('result');
+        }
         return $this->render('start', [
             'quizModel' => $quizModel,
             'questionModel' => $questionModel,
-        ]);
-    }
 
+        ]);
+
+
+    }
 }

@@ -3,9 +3,7 @@
 use app\controllers\QuizController;
 use app\controllers\QuestionController;
 use app\models\Answer;
-use app\models\Question;
 use yii\helpers\Html;
-use yii\grid\GridView;
 use yii\widgets\ActiveForm;
 
 /* @var $this yii\web\View */
@@ -20,11 +18,10 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 
 <?php $form = ActiveForm::begin() ?>
-
     <h1 style="text-align: center"><?= Html::encode($this->title) ?></h1>
 <?php foreach ($questionModel as $question) : ?>
 
-    <label for="name" style="margin-left: 500px; font-size: 20px">
+    <label for="name" style="margin-left: 500px; font-size: 30px">
         <?php echo $question->name ?>
         <br>
         <small style="font-size: 10px">
@@ -36,7 +33,7 @@ $this->params['breadcrumbs'][] = $this->title;
     foreach ($answerModel as $answer) :
         ?>
         <div class="radio">
-            <label style="margin-left: 500px; font-size: 15px">
+            <label style="margin-left: 500px; font-size: 18px">
                 <?php echo Html::radio("selectedAnswer_{$question->id}", false, [
                     'value' => $answer->id
                 ]); ?>
@@ -44,6 +41,9 @@ $this->params['breadcrumbs'][] = $this->title;
             </label>
         </div>
     <?php endforeach; ?>
-
 <?php endforeach; ?>
+
+    <div class="pull-right">
+        <?php echo Html::submitButton('Submit', ['class' => 'btn btn-success']) ?>
+    </div>
 <?php $form = ActiveForm::end() ?>

@@ -29,8 +29,8 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'attribute' => 'subject',
                 'format' => 'raw',
-                'value' => function($data, $id) {
-                    return Html::a($data['subject'], ['question/index', 'id'=>$id]);
+                'value' => function ($data, $id) {
+                    return Html::a($data['subject'], ['question/index', 'id' => $id]);
                 },
             ],
             'min_correct_ans',
