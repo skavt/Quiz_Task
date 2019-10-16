@@ -14,14 +14,14 @@ use yii\widgets\ActiveForm;
 /* @var $model QuestionController */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 $this->title = 'Quiz \'' . $quizModel->subject . '\'';
-$this->params['breadcrumbs'][] = $this->title;
+
 ?>
 
 <?php $form = ActiveForm::begin() ?>
-    <h1 style="text-align: center"><?= Html::encode($this->title) ?></h1>
+    <h1 style="text-align: center"><?= Html::encode($this->title) ?></h1>    <hr>
 <?php foreach ($questionModel as $question) : ?>
 
-    <label for="name" style="margin-left: 500px; font-size: 30px">
+    <label for="name" style="font-size: 30px">
         <?php echo $question->name ?>
         <br>
         <small style="font-size: 10px">
@@ -32,8 +32,9 @@ $this->params['breadcrumbs'][] = $this->title;
     $answerModel = Answer::find()->where(['question_id' => $question->id])->all();
     foreach ($answerModel as $answer) :
         ?>
+
         <div class="radio">
-            <label style="margin-left: 500px; font-size: 18px">
+            <label style="font-size: 18px">
                 <?php echo Html::radio("selected_{$question->id}", false, [
                     'value' => $answer->id
                 ]); ?>

@@ -37,11 +37,10 @@ class Question extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['name', 'hint'], 'required'],
+            [['name'], 'required'],
             [['quiz_id', 'max_ans', 'created_at', 'updated_at'], 'integer'],
             [['name', 'hint'], 'string', 'max' => 255],
             [['quiz_id'], 'exist', 'skipOnError' => true, 'targetClass' => Quiz::className(), 'targetAttribute' => ['quiz_id' => 'id']],
-            [['name'],'unique'],
         ];
     }
 

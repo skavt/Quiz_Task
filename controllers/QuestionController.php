@@ -38,6 +38,7 @@ class QuestionController extends Controller
     public function actionIndex($id)
     {
         $searchModel = new QuestionSearch();
+
         $newModel = Quiz::findOne($id);
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams, $id);
 

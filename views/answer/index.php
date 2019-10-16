@@ -12,8 +12,9 @@ use yii\widgets\DetailView;
 /* @var $searchModel app\models\AnswerSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Answers for : ' . $newModel->name . ' question';
-$this->params['breadcrumbs'][] = ['label' => 'Quiz', 'url' => ['quiz/index/', 'id' => $_GET['id']]];
+$this->title = 'Answers for : ' . $newModel->name ;
+$this->params['breadcrumbs'][] = ['label' => 'Quiz', 'url' => ['quiz/index/', 'id' => $newModel->id]];
+$this->params['breadcrumbs'][] = ['label' => 'Question', 'url' => ['question/index/', 'id' => $newModel->quiz_id]];
 
 $this->params['breadcrumbs'][] = $this->title;
 ?>

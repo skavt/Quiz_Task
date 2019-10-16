@@ -26,7 +26,7 @@ use yii\grid\GridView;
         <hr>
 
         <div class="text-dark" style="text-align: center; font-size: 25px">
-            <?php echo Html::encode('Your correct answer is ' . $correctAnswer . ' from ' . $maxQuestion); ?>
+            <?php echo Html::encode('Your answer is ' . $correctAnswer . ' from ' . $maxQuestion); ?>
             <br>
             <?php echo Html::encode('You needed ' . $quizModel->min_correct_ans . ' correct answer'); ?>
         </div>
@@ -40,7 +40,7 @@ use yii\grid\GridView;
         <hr>
 
         <div class="text-dark" style="text-align: center; font-size: 25px">
-            <?php echo Html::encode('Your correct answer is ' . $correctAnswer . ' from ' . $maxQuestion); ?>
+            <?php echo Html::encode('Your answer is ' . $correctAnswer . ' from ' . $maxQuestion); ?>
             <br>
             <?php echo Html::encode('You needed ' . $quizModel->min_correct_ans . ' correct answer'); ?>
         </div>

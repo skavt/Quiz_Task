@@ -40,6 +40,7 @@ class AnswerController extends Controller
     {
         $searchModel = new AnswerSearch();
         $newModel = Question::findOne($id);
+        $questionId = $newModel->id;
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams, $id);
 
 
@@ -47,6 +48,7 @@ class AnswerController extends Controller
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
             'newModel' => $newModel,
+            'questionId' => $questionId,
         ]);
 
     }
@@ -85,6 +87,7 @@ class AnswerController extends Controller
         if($count >= $newModel->max_ans){
             return $this->render('_error', [
                 'model' => $model,
+                'newModel' => $newModel,
             ]);
         }
 

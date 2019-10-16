@@ -37,7 +37,6 @@ class Answer extends \yii\db\ActiveRecord
             [['question_id', 'is_correct', 'created_at', 'updated_at'], 'integer'],
             [['name'], 'string', 'max' => 255],
             [['question_id'], 'exist', 'skipOnError' => true, 'targetClass' => Question::className(), 'targetAttribute' => ['question_id' => 'id']],
-            [['name'],'unique'],
         ];
     }
 

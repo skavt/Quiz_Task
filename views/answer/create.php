@@ -10,7 +10,6 @@ use yii\helpers\Html;
 
 $this->title = 'Create answer for: ' . $newModel->name . ' question';
 $this->params['breadcrumbs'][] = ['label' => 'Answer', 'url' => ['answer/index/', 'id' => $_GET['id']]];
-//$this->params['breadcrumbs'][] = ['label' => 'Answers', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="answer-create">
