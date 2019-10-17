@@ -21,7 +21,7 @@ $this->title = 'Quiz \'' . $quizModel->subject . '\'';
     <h1 style="text-align: center"><?= Html::encode($this->title) ?></h1>    <hr>
 <?php foreach ($questionModel as $question) : ?>
 
-    <label for="name" style="font-size: 30px">
+    <label for="name" style="font-size: 30px; margin-left: 30px; color: #23527c ;">
         <?php echo $question->name ?>
         <br>
         <small style="font-size: 10px">
@@ -34,7 +34,7 @@ $this->title = 'Quiz \'' . $quizModel->subject . '\'';
         ?>
 
         <div class="radio">
-            <label style="font-size: 18px">
+            <label style="font-size: 20px; text-align: left;  margin-left: 60px;">
                 <?php echo Html::radio("selected_{$question->id}", false, [
                     'value' => $answer->id
                 ]); ?>

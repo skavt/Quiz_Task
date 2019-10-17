@@ -4,13 +4,10 @@ namespace app\controllers;
 
 use app\models\Answer;
 use app\models\Question;
+use app\models\Result;
 use Yii;
 use app\models\Quiz;
 use app\models\QuizSearch;
-use yii\base\Event;
-use yii\bootstrap\Html;
-use yii\data\Pagination;
-use yii\helpers\ArrayHelper;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -137,6 +134,7 @@ class QuizController extends Controller
     {
         $quizModel = $this->findModel($id);
         $questionModel = Question::find()->where(['quiz_id' => $id])->all();
+//        $resultModel = Result::find();
 //        foreach ($questionModel as $questionId) {
 //
 //            $answerModel = Answer::find()->where(['question_id' => $questionId->id])->all();
@@ -150,12 +148,10 @@ class QuizController extends Controller
             $response = Yii::$app->request->post();
             $answerIndex = 0;
             $correctAnswer = 0;
-            $maxQuestion = -1;
             $array = [];
 
 
             foreach ($response as $text => $answerId) {
-                $maxQuestion++;
                 $select = substr($text, 0, 9);
                 if ($select == 'selected_') {
                     $array[$answerIndex] = $answerId;
@@ -167,6 +163,11 @@ class QuizController extends Controller
                 if ($answer->is_correct == 1) {
                     $correctAnswer++;
                 }
+//                $resultModel = $quizModel->subject;
+//                return $this->render('result', [
+//                    'resultModel' => $resultModel,
+//                    'correctAnswer' => $correctAnswer,
+//                ]);
             }
             if ($correctAnswer < $quizModel->min_correct_ans) {
                 $failed = ' ';
@@ -175,13 +176,11 @@ class QuizController extends Controller
                 $passed = ' ';
                 $failed = '';
             }
-
-            return $this->render('result', [
+            return $this->render('outcome', [
                 'failed' => $failed,
                 'passed' => $passed,
                 'correctAnswer' => $correctAnswer,
                 'quizModel' => $quizModel,
-                'maxQuestion' => $maxQuestion,
             ]);
         }
         return $this->render('start', [
@@ -191,5 +190,9 @@ class QuizController extends Controller
         ]);
 
 
+    }
+
+    public function actionResult()
+    {
     }
 }

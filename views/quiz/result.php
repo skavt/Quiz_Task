@@ -1,49 +1,34 @@
 <?php
 
+use app\models\Result;
 use app\controllers\QuizController;
-use yii\helpers\Html;
-use yii\grid\GridView;
 
-/* @var $this yii\web\View */
-/* @var $searchModel app\models\QuestionSearch */
-/* @var $model app\models\Answer */
-/* @var $failed QuizController */
-/* @var $passed QuizController */
-/* @var $quizModel QuizController */
-/* @var $correctAnswer QuizController */
-/* @var $maxQuestion QuizController */
-/* @var $dataProvider yii\data\ActiveDataProvider */
-
+/* @var $result QuizController */
 ?>
-<div class="question-index">
 
-    <?php if ($failed == ' ') : ?>
-        <div class="text-danger" style="font-size: 30px; text-align: center; margin-top: 20px">
-            <p>
-                <?php echo Html::encode('Loser. You failed ' . $quizModel->subject . ' Quiz ') ?>
-            </p>
-        </div>
-        <hr>
+<table class="table">
+    <thead>
+    <tr>
+        <th scope="col">id</th>
+        <th scope="col">Quiz Name</th>
+        <th scope="col">Min Correct Answer</th>
+        <th scope="col">Your Correct Answer</th>
+        <th scope="col">Quiz Pass Date</th>
+    </tr>
+    </thead>
+    <?php $i = 1;
+    foreach ($result as $res) :?>
+        <tbody>
 
-        <div class="text-dark" style="text-align: center; font-size: 25px">
-            <?php echo Html::encode('Your answer is ' . $correctAnswer . ' from ' . $maxQuestion); ?>
-            <br>
-            <?php echo Html::encode('You needed ' . $quizModel->min_correct_ans . ' correct answer'); ?>
-        </div>
-    <?php endif; ?>
-    <?php if ($passed == ' ') : ?>
-        <div class="text-success" style="font-size: 30px; text-align: center; margin-top: 20px">
-            <p>
-                <?php echo Html::encode('Genius. You passed ' . $quizModel->subject . ' Quiz ') ?>
-            </p>
-        </div>
-        <hr>
+        <tr>
+            <th scope="row"><?php echo $i;
+                $i++ ?></th>
+            <td><?php echo $res->quiz_name ?></td>
+            <td><?php echo $res->min_correct_ans ?></td>
+            <td><?php echo $res->correct_ans ?></td>
+            <td><?php echo Yii::$app->formatter->asRelativeTime($res->created_at) ?></td>
+        </tr>
+        </tbody>
+    <?php endforeach; ?>
 
-        <div class="text-dark" style="text-align: center; font-size: 25px">
-            <?php echo Html::encode('Your answer is ' . $correctAnswer . ' from ' . $maxQuestion); ?>
-            <br>
-            <?php echo Html::encode('You needed ' . $quizModel->min_correct_ans . ' correct answer'); ?>
-        </div>
-    <?php endif; ?>
-
-</div>
+</table>
