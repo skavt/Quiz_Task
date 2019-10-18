@@ -5,6 +5,7 @@ namespace app\controllers;
 use app\models\Answer;
 use app\models\Question;
 use app\models\Result;
+use app\models\ResultSearch;
 use Yii;
 use app\models\Quiz;
 use app\models\QuizSearch;
@@ -132,18 +133,10 @@ class QuizController extends Controller
 
     public function actionStart($id)
     {
+        $result = new Result();
         $quizModel = $this->findModel($id);
         $questionModel = Question::find()->where(['quiz_id' => $id])->all();
-//        $resultModel = Result::find();
-//        foreach ($questionModel as $questionId) {
-//
-//            $answerModel = Answer::find()->where(['question_id' => $questionId->id])->all();
-//            return $this->render('start', [
-//                'answerModel' => $answerModel,
-//                'quizModel' => $quizModel,
-//                'questionModel' => $questionModel,
-//            ]);
-//        }
+
         if (Yii::$app->request->post()) {
             $response = Yii::$app->request->post();
             $answerIndex = 0;
@@ -157,17 +150,14 @@ class QuizController extends Controller
                     $array[$answerIndex] = $answerId;
                     $answerIndex++;
                 }
+
             }
             foreach ($array as $arr) {
                 $answer = Answer::findOne($arr);
                 if ($answer->is_correct == 1) {
                     $correctAnswer++;
                 }
-//                $resultModel = $quizModel->subject;
-//                return $this->render('result', [
-//                    'resultModel' => $resultModel,
-//                    'correctAnswer' => $correctAnswer,
-//                ]);
+
             }
             if ($correctAnswer < $quizModel->min_correct_ans) {
                 $failed = ' ';
@@ -176,6 +166,14 @@ class QuizController extends Controller
                 $passed = ' ';
                 $failed = '';
             }
+            $result->correct_ans = $correctAnswer;
+            $result->quiz_id = $quizModel->id;
+            $result->min_correct_ans = $quizModel->min_correct_ans;
+            $result->created_at = time();
+            if (!$result->save()) {
+                var_dump($result->errors);
+                exit;
+            }
             return $this->render('outcome', [
                 'failed' => $failed,
                 'passed' => $passed,
@@ -183,16 +181,23 @@ class QuizController extends Controller
                 'quizModel' => $quizModel,
             ]);
         }
+
+
         return $this->render('start', [
             'quizModel' => $quizModel,
             'questionModel' => $questionModel,
 
         ]);
-
-
     }
 
     public function actionResult()
     {
+        $result = Result::find()->all();
+        $quiz = Quiz::find()->all();
+
+        return $this->render('result', [
+            'result' => $result,
+            'quiz' => $quiz,
+        ]);
     }
 }

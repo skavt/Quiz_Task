@@ -4,6 +4,7 @@ use app\controllers\QuizController;
 use app\controllers\QuestionController;
 use app\models\Answer;
 use yii\helpers\Html;
+use yii\helpers\Url;
 use yii\widgets\ActiveForm;
 
 /* @var $this yii\web\View */
@@ -17,8 +18,10 @@ $this->title = 'Quiz \'' . $quizModel->subject . '\'';
 
 ?>
 
-<?php $form = ActiveForm::begin() ?>
-    <h1 style="text-align: center"><?= Html::encode($this->title) ?></h1>    <hr>
+<?php $form = ActiveForm::begin()?>
+    <h1 style="text-align: center"><?= Html::encode($this->title) ?></h1>
+    <hr>
+
 <?php foreach ($questionModel as $question) : ?>
 
     <label for="name" style="font-size: 30px; margin-left: 30px; color: #23527c ;">
@@ -30,8 +33,7 @@ $this->title = 'Quiz \'' . $quizModel->subject . '\'';
     </label>
     <?php
     $answerModel = Answer::find()->where(['question_id' => $question->id])->all();
-    foreach ($answerModel as $answer) :
-        ?>
+    foreach ($answerModel as $answer) : ?>
 
         <div class="radio">
             <label style="font-size: 20px; text-align: left;  margin-left: 60px;">

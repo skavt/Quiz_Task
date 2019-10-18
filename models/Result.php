@@ -10,7 +10,6 @@ use yii\behaviors\TimestampBehavior;
  *
  * @property int $id
  * @property int $quiz_id
- * @property string $quiz_name
  * @property int $correct_ans
  * @property int $min_correct_ans
  * @property int $created_at
@@ -26,12 +25,12 @@ class Result extends \yii\db\ActiveRecord
     {
         return 'result';
     }
-    public function behaviors()
-    {
-        return [
-            TimestampBehavior::class,
-        ];
-    }
+//    public function behaviors()
+//    {
+//        return [
+//            TimestampBehavior::class,
+//        ];
+//    }
 
     /**
      * {@inheritdoc}
