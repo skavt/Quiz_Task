@@ -5,7 +5,7 @@ use yii\grid\GridView;
 
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\QuestionSearch */
-/* @var $newModel \app\models\Quiz*/
+/* @var $newModel \app\models\Quiz */
 /* @var $model app\models\Answer */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 

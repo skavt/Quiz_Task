@@ -166,8 +166,11 @@ class QuizController extends Controller
                 $passed = ' ';
                 $failed = '';
             }
+            $count = Question::find()->where(['quiz_id' => $id])->count();
             $result->correct_ans = $correctAnswer;
             $result->quiz_id = $quizModel->id;
+            $result->quiz_name = $quizModel->subject;
+            $result->question_count = $count;
             $result->min_correct_ans = $quizModel->min_correct_ans;
             $result->created_at = time();
             if (!$result->save()) {
@@ -177,6 +180,7 @@ class QuizController extends Controller
             return $this->render('outcome', [
                 'failed' => $failed,
                 'passed' => $passed,
+                'count' => $count,
                 'correctAnswer' => $correctAnswer,
                 'quizModel' => $quizModel,
             ]);
@@ -192,12 +196,15 @@ class QuizController extends Controller
 
     public function actionResult()
     {
+        $searchModel = new ResultSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
         $result = Result::find()->all();
-        $quiz = Quiz::find()->all();
+//        var_dump($result); exit();
 
         return $this->render('result', [
             'result' => $result,
-            'quiz' => $quiz,
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
         ]);
     }
 }

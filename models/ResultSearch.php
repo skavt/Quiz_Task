@@ -59,10 +59,12 @@ class ResultSearch extends Result
         $query->andFilterWhere([
             'id' => $this->id,
             'quiz_id' => $this->quiz_id,
-            'quiz_name' => $this->quiz_id,
+            'quiz_name' => $this->quiz_name,
             'correct_ans' => $this->correct_ans,
             'min_correct_ans' => $this->min_correct_ans,
+            'question_count' => $this->question_count,
             'created_at' => $this->created_at,
+            'created_by' => $this->created_by,
         ]);
 
         $query->andFilterWhere(['like', 'subject', $this->quiz_id]);

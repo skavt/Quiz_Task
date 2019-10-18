@@ -15,9 +15,12 @@ class m191017_070734_create_result_table extends Migration
         $this->createTable('{{%result}}', [
             'id' => $this->primaryKey(),
             'quiz_id' => $this->integer(),
+            'quiz_name' => $this->string(255),
             'correct_ans' => $this->integer(),
             'min_correct_ans' => $this->integer(),
+            'question_count' => $this->integer(),
             'created_at' => $this->integer(11),
+            'created_by' => $this->sting(50),
         ]);
 
         $this->addForeignKey(
@@ -26,7 +29,7 @@ class m191017_070734_create_result_table extends Migration
             'quiz_id',
             'quiz',
             'id',
-            'CASCADE'
+            'SET NULL'
         );
     }
 

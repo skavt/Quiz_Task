@@ -3,16 +3,18 @@
 namespace app\models;
 
 use Yii;
-use yii\behaviors\TimestampBehavior;
 
 /**
  * This is the model class for table "result".
  *
  * @property int $id
  * @property int $quiz_id
- * @property int $correct_ans
+ * @property string $quiz_name
  * @property int $min_correct_ans
+ * @property int $question_count
  * @property int $created_at
+ * @property string $created_by
+ * @property int $correct_ans
  *
  * @property Quiz $quiz
  */
@@ -25,12 +27,6 @@ class Result extends \yii\db\ActiveRecord
     {
         return 'result';
     }
-//    public function behaviors()
-//    {
-//        return [
-//            TimestampBehavior::class,
-//        ];
-//    }
 
     /**
      * {@inheritdoc}
@@ -38,7 +34,9 @@ class Result extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['quiz_id', 'correct_ans', 'min_correct_ans', 'created_at'], 'integer'],
+            [['quiz_id', 'min_correct_ans', 'question_count', 'created_at', 'correct_ans'], 'integer'],
+            [['quiz_name'], 'string', 'max' => 255],
+            [['created_by'], 'string', 'max' => 50],
             [['quiz_id'], 'exist', 'skipOnError' => true, 'targetClass' => Quiz::className(), 'targetAttribute' => ['quiz_id' => 'id']],
         ];
     }
@@ -51,9 +49,12 @@ class Result extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'quiz_id' => 'Quiz ID',
-            'correct_ans' => 'Correct Ans',
+            'quiz_name' => 'Quiz Name',
             'min_correct_ans' => 'Min Correct Ans',
+            'question_count' => 'Question Count',
             'created_at' => 'Created At',
+            'created_by' => 'Created By',
+            'correct_ans' => 'Correct Ans',
         ];
     }
 
