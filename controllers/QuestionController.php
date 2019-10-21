@@ -37,6 +37,9 @@ class QuestionController extends Controller
      */
     public function actionIndex($id)
     {
+        if (Yii::$app->user->isGuest) {
+            return $this->redirect('/site/login');
+        }
         $searchModel = new QuestionSearch();
 
         $newModel = Quiz::findOne($id);
@@ -71,6 +74,9 @@ class QuestionController extends Controller
      */
     public function actionCreate($id)
     {
+        if (Yii::$app->user->isGuest) {
+            return $this->redirect('/site/login');
+        }
         $model = new Question();
 
         $newModel = Quiz::findOne($id);

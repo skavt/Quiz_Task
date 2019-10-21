@@ -38,6 +38,9 @@ class AnswerController extends Controller
      */
     public function actionIndex($id)
     {
+        if (Yii::$app->user->isGuest) {
+            return $this->redirect('/site/login');
+        }
         $searchModel = new AnswerSearch();
         $newModel = Question::findOne($id);
         $questionId = $newModel->id;
@@ -74,6 +77,9 @@ class AnswerController extends Controller
      */
     public function actionCreate($id)
     {
+        if (Yii::$app->user->isGuest) {
+            return $this->redirect('/site/login');
+        }
         $model = new Answer();
         $newModel = Question::findOne($id);
 

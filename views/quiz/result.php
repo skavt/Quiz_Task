@@ -17,6 +17,7 @@ use app\controllers\QuizController;
         <th scope="col">Questions</th>
         <th scope="col">Status</th>
         <th scope="col">Percentage</th>
+        <th scope="col">Name</th>
         <th scope="col">Pass Date</th>
     </tr>
     </thead>
@@ -33,7 +34,8 @@ use app\controllers\QuizController;
                 } else {
                     echo '<span style = "color: red;">failed</span>';
                 } ?></td>
-            <td><?php echo ($value->correct_ans * 100) / $value->question_count . ' %'; ?></td>
+            <td><?php echo round(($value->correct_ans * 100) / $value->question_count) . ' %'; ?></td>
+            <td><?php echo $value->createdBy->username ?></td>
             <td><?php echo Yii::$app->formatter->asDatetime($value->created_at) ?></td>
         </tr>
         </tbody>

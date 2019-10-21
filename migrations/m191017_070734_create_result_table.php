@@ -38,6 +38,14 @@ class m191017_070734_create_result_table extends Migration
             'id',
             'SET NULL'
         );
+        $this->addForeignKey(
+            'result_user_id_fk2',
+            'result',
+            'updated_by',
+            'user',
+            'id',
+            'SET NULL'
+        );
     }
 
     /**

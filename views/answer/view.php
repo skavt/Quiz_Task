@@ -25,7 +25,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 <br>
                 <span>
                     Created By: <?php echo $model->createdBy->username ?> |
-                    Updated By: <?php echo $model->createdBy->username ?>
+                    Updated By: <?php echo $model->updatedBy->username ?>
                 </span>
             </i>
         </small>

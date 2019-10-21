@@ -32,13 +32,12 @@ class Result extends \yii\db\ActiveRecord
         return 'result';
     }
 
-//    public function behaviors()
-//    {
-//        return [
-//            'class' => BlameableBehavior::class,
-//            'updatedByAttribute' => false,
-//        ];
-//    }
+    public function behaviors()
+    {
+        return [
+            'class' => BlameableBehavior::class,
+        ];
+    }
 
     /**
      * {@inheritdoc}

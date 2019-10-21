@@ -4,9 +4,10 @@ namespace app\models;
 
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
+use app\models\Result;
 
 /**
- * QuizSearch represents the model behind the search form of `app\models\Quiz`.
+ * ResultSearch represents the model behind the search form of `app\models\Result`.
  */
 class ResultSearch extends Result
 {
@@ -16,7 +17,8 @@ class ResultSearch extends Result
     public function rules()
     {
         return [
-            [['quiz_id', 'correct_ans', 'min_correct_ans', 'created_at', 'created_by'], 'integer'],
+            [['id', 'quiz_id', 'correct_ans', 'min_correct_ans', 'question_count', 'created_at', 'created_by'], 'integer'],
+            [['quiz_name'], 'safe'],
         ];
     }
 
@@ -58,7 +60,6 @@ class ResultSearch extends Result
         $query->andFilterWhere([
             'id' => $this->id,
             'quiz_id' => $this->quiz_id,
-            'quiz_name' => $this->quiz_name,
             'correct_ans' => $this->correct_ans,
             'min_correct_ans' => $this->min_correct_ans,
             'question_count' => $this->question_count,
@@ -66,7 +67,7 @@ class ResultSearch extends Result
             'created_by' => $this->created_by,
         ]);
 
-        $query->andFilterWhere(['like', 'subject', $this->quiz_id]);
+        $query->andFilterWhere(['like', 'quiz_name', $this->quiz_name]);
 
         return $dataProvider;
     }
