@@ -19,12 +19,30 @@ class m191007_144905_create_answer_table extends Migration
             'name' => $this->string(255)->notNull(),
             'created_at' => $this->integer(11),
             'updated_at' => $this->integer(11),
+            'created_by' => $this->integer(11),
+            'updated_by' => $this->integer(11),
         ]);
         $this->addForeignKey(
             'fk-answer_question_id',
             'answer',
             'question_id',
             'question',
+            'id',
+            'CASCADE'
+        );
+        $this->addForeignKey(
+            'answer_user_id_fk',
+            'answer',
+            'created_by',
+            'user',
+            'id',
+            'CASCADE'
+        );
+        $this->addForeignKey(
+            'answer_user_id_fk_2',
+            'answer',
+            'updated_by',
+            'user',
             'id',
             'CASCADE'
         );

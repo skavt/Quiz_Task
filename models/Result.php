@@ -3,6 +3,9 @@
 namespace app\models;
 
 use Yii;
+use yii\behaviors\BlameableBehavior;
+use yii\behaviors\TimestampBehavior;
+use yii\db\ActiveQuery;
 
 /**
  * This is the model class for table "result".
@@ -10,13 +13,14 @@ use Yii;
  * @property int $id
  * @property int $quiz_id
  * @property string $quiz_name
+ * @property int $correct_ans
  * @property int $min_correct_ans
  * @property int $question_count
  * @property int $created_at
- * @property string $created_by
- * @property int $correct_ans
+ * @property int $created_by
  *
  * @property Quiz $quiz
+ * @property User $createdBy
  */
 class Result extends \yii\db\ActiveRecord
 {
@@ -28,16 +32,24 @@ class Result extends \yii\db\ActiveRecord
         return 'result';
     }
 
+//    public function behaviors()
+//    {
+//        return [
+//            'class' => BlameableBehavior::class,
+//            'updatedByAttribute' => false,
+//        ];
+//    }
+
     /**
      * {@inheritdoc}
      */
     public function rules()
     {
         return [
-            [['quiz_id', 'min_correct_ans', 'question_count', 'created_at', 'correct_ans'], 'integer'],
+            [['quiz_id', 'correct_ans', 'min_correct_ans', 'question_count', 'created_at', 'created_by'], 'integer'],
             [['quiz_name'], 'string', 'max' => 255],
-            [['created_by'], 'string', 'max' => 50],
             [['quiz_id'], 'exist', 'skipOnError' => true, 'targetClass' => Quiz::className(), 'targetAttribute' => ['quiz_id' => 'id']],
+            [['created_by'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['created_by' => 'id']],
         ];
     }
 
@@ -50,19 +62,27 @@ class Result extends \yii\db\ActiveRecord
             'id' => 'ID',
             'quiz_id' => 'Quiz ID',
             'quiz_name' => 'Quiz Name',
+            'correct_ans' => 'Correct Ans',
             'min_correct_ans' => 'Min Correct Ans',
             'question_count' => 'Question Count',
             'created_at' => 'Created At',
             'created_by' => 'Created By',
-            'correct_ans' => 'Correct Ans',
         ];
     }
 
     /**
-     * @return \yii\db\ActiveQuery
+     * @return ActiveQuery
      */
     public function getQuiz()
     {
         return $this->hasOne(Quiz::className(), ['id' => 'quiz_id']);
+    }
+
+    /**
+     * @return ActiveQuery
+     */
+    public function getCreatedBy()
+    {
+        return $this->hasOne(User::className(), ['id' => 'created_by']);
     }
 }

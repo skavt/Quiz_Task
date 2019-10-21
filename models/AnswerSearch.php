@@ -17,7 +17,7 @@ class AnswerSearch extends Answer
     public function rules()
     {
         return [
-            [['id', 'question_id', 'is_correct', 'created_at', 'updated_at'], 'integer'],
+            [['id', 'question_id', 'is_correct', 'created_at', 'updated_at', 'created_by', 'updated_by'], 'integer'],
             [['name'], 'safe'],
         ];
     }
@@ -65,6 +65,8 @@ class AnswerSearch extends Answer
             'is_correct' => $this->is_correct,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
+            'created_by' => $this->created_by,
+            'updated_by' => $this->updated_by,
         ]);
 
         $query->andFilterWhere(['like', 'name', $this->name]);

@@ -15,15 +15,20 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <h1><?= Html::encode($this->title) ?></h1>
 
-    <p>
-
     <p calss="text-muted">
         <small>
-            Created At: <?php echo Yii::$app->formatter->asRelativeTime($model->created_at) ?>
-            <br>
-            Updated At: <?php echo Yii::$app->formatter->asRelativeTime($model->updated_at) ?>
+            <i>
+                <span>
+                    Created At: <?php echo Yii::$app->formatter->asRelativeTime($model->created_at) ?> |
+                    Updated At: <?php echo Yii::$app->formatter->asRelativeTime($model->updated_at) ?>
+                </span>
+                <br>
+                <span>
+                    Created By: <?php echo $model->createdBy->username ?> |
+                    Updated By: <?php echo $model->createdBy->username ?>
+                </span>
+            </i>
         </small>
-    </p>
     </p>
 
     <?= DetailView::widget([

@@ -16,8 +16,7 @@ class ResultSearch extends Result
     public function rules()
     {
         return [
-            [['quiz_id', 'correct_ans', 'min_correct_ans', 'created_at'], 'integer'],
-            [['quiz_id'], 'exist', 'skipOnError' => true, 'targetClass' => Quiz::className(), 'targetAttribute' => ['quiz_id' => 'id']],
+            [['quiz_id', 'correct_ans', 'min_correct_ans', 'created_at', 'created_by'], 'integer'],
         ];
     }
 

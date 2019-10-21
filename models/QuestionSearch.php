@@ -17,7 +17,7 @@ class QuestionSearch extends Question
     public function rules()
     {
         return [
-            [['id', 'quiz_id', 'max_ans', 'created_at', 'updated_at'], 'integer'],
+            [['id', 'quiz_id', 'max_ans', 'created_at', 'updated_at', 'created_by', 'updated_by'], 'integer'],
             [['name', 'hint'], 'safe'],
         ];
     }
@@ -65,6 +65,8 @@ class QuestionSearch extends Question
             'max_ans' => $this->max_ans,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
+            'created_by' => $this->created_by,
+            'updated_by' => $this->updated_by,
         ]);
 
         $query->andFilterWhere(['like', 'name', $this->name])

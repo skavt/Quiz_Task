@@ -20,12 +20,30 @@ class m191007_144043_create_question_table extends Migration
             'max_ans' => $this->integer(2),
             'created_at' => $this->integer(11),
             'updated_at' => $this->integer(11),
+            'created_by' => $this->integer(11),
+            'updated_by' => $this->integer(11),
         ]);
         $this->addForeignKey(
             'fk-question_quiz_id',
             'question',
             'quiz_id',
             'quiz',
+            'id',
+            'CASCADE'
+        );
+        $this->addForeignKey(
+            'question_user_id_fk',
+            'question',
+            'created_by',
+            'user',
+            'id',
+            'CASCADE'
+        );
+        $this->addForeignKey(
+            'question_user_id_fk2',
+            'question',
+            'updated_by',
+            'user',
             'id',
             'CASCADE'
         );

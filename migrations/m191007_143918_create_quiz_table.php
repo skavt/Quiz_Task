@@ -19,7 +19,25 @@ class m191007_143918_create_quiz_table extends Migration
             'max_questions' => $this->integer(2),
             'created_at' => $this->integer(11),
             'updated_at' => $this->integer(11),
+            'created_by' => $this->integer(11),
+            'updated_by' => $this->integer(11),
         ]);
+        $this->addForeignKey(
+            'quiz_user_id_fk',
+            'quiz',
+            'updated_by',
+            'user',
+            'id',
+            'CASCADE'
+        );
+        $this->addForeignKey(
+            'quiz_user_id_fk_2',
+            'quiz',
+            'created_by',
+            'user',
+            'id',
+            'CASCADE'
+        );
     }
 
     /**

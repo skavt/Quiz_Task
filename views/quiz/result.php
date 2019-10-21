@@ -5,6 +5,7 @@ use app\controllers\QuizController;
 
 /* @var $result QuizController */
 /* @var $quiz QuizController */
+/* @var $model app\models\Answer */
 ?>
 
 <table class="table">

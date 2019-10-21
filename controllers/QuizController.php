@@ -6,6 +6,7 @@ use app\models\Answer;
 use app\models\Question;
 use app\models\Result;
 use app\models\ResultSearch;
+use app\models\User;
 use Yii;
 use app\models\Quiz;
 use app\models\QuizSearch;
@@ -39,6 +40,9 @@ class QuizController extends Controller
      */
     public function actionIndex()
     {
+        if (Yii::$app->user->isGuest) {
+            return $this->redirect('/site/login');
+        }
         $searchModel = new QuizSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
@@ -133,6 +137,9 @@ class QuizController extends Controller
 
     public function actionStart($id)
     {
+        if (Yii::$app->user->isGuest) {
+            return $this->redirect('/site/login');
+        }
         $result = new Result();
         $quizModel = $this->findModel($id);
         $questionModel = Question::find()->where(['quiz_id' => $id])->all();
@@ -196,6 +203,9 @@ class QuizController extends Controller
 
     public function actionResult()
     {
+        if (Yii::$app->user->isGuest) {
+            return $this->redirect('/site/login');
+        }
         $searchModel = new ResultSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
         $result = Result::find()->all();

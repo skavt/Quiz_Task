@@ -20,14 +20,21 @@ class m191017_070734_create_result_table extends Migration
             'min_correct_ans' => $this->integer(),
             'question_count' => $this->integer(),
             'created_at' => $this->integer(11),
-            'created_by' => $this->sting(50),
+            'created_by' => $this->integer(),
         ]);
-
         $this->addForeignKey(
             'fk-result_quiz_id',
             'result',
             'quiz_id',
             'quiz',
+            'id',
+            'SET NULL'
+        );
+        $this->addForeignKey(
+            'result_user_id_fk',
+            'result',
+            'created_by',
+            'user',
             'id',
             'SET NULL'
         );

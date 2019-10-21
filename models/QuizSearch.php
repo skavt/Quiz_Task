@@ -17,7 +17,7 @@ class QuizSearch extends Quiz
     public function rules()
     {
         return [
-            [['id', 'min_correct_ans', 'max_questions', 'created_at', 'updated_at'], 'integer'],
+            [['id', 'min_correct_ans', 'max_questions', 'created_at', 'updated_at', 'created_by', 'updated_by'], 'integer'],
             [['subject'], 'safe'],
         ];
     }
@@ -63,6 +63,8 @@ class QuizSearch extends Quiz
             'max_questions' => $this->max_questions,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
+            'created_by' => $this->created_by,
+            'updated_by' => $this->updated_by,
         ]);
 
         $query->andFilterWhere(['like', 'subject', $this->subject]);

@@ -3,7 +3,9 @@
 namespace app\models;
 
 use Yii;
+use yii\behaviors\BlameableBehavior;
 use yii\behaviors\TimestampBehavior;
+use yii\db\ActiveQuery;
 
 /**
  * This is the model class for table "answer".
@@ -14,7 +16,11 @@ use yii\behaviors\TimestampBehavior;
  * @property string $name
  * @property int $created_at
  * @property int $updated_at
+ * @property int $created_by
+ * @property int $updated_by
  *
+ * @property User $createdBy
+ * @property User $updatedBy
  * @property Question $question
  */
 class Answer extends \yii\db\ActiveRecord
@@ -27,23 +33,26 @@ class Answer extends \yii\db\ActiveRecord
         return 'answer';
     }
 
+    public function behaviors()
+    {
+        return [
+            TimestampBehavior::class,
+            BlameableBehavior::class,
+        ];
+    }
+
     /**
      * {@inheritdoc}
      */
     public function rules()
     {
         return [
-            [['name'], 'required'],
-            [['question_id', 'is_correct', 'created_at', 'updated_at'], 'integer'],
+            [['question_id', 'name'], 'required'],
+            [['question_id', 'is_correct', 'created_at', 'updated_at', 'created_by', 'updated_by'], 'integer'],
             [['name'], 'string', 'max' => 255],
+            [['created_by'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['created_by' => 'id']],
+            [['updated_by'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['updated_by' => 'id']],
             [['question_id'], 'exist', 'skipOnError' => true, 'targetClass' => Question::className(), 'targetAttribute' => ['question_id' => 'id']],
-        ];
-    }
-
-    public function behaviors()
-    {
-        return [
-            TimestampBehavior::class,
         ];
     }
 
@@ -59,11 +68,29 @@ class Answer extends \yii\db\ActiveRecord
             'name' => 'Name',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
+            'created_by' => 'Created By',
+            'updated_by' => 'Updated By',
         ];
     }
 
     /**
-     * @return \yii\db\ActiveQuery
+     * @return ActiveQuery
+     */
+    public function getCreatedBy()
+    {
+        return $this->hasOne(User::className(), ['id' => 'created_by']);
+    }
+
+    /**
+     * @return ActiveQuery
+     */
+    public function getUpdatedBy()
+    {
+        return $this->hasOne(User::className(), ['id' => 'updated_by']);
+    }
+
+    /**
+     * @return ActiveQuery
      */
     public function getQuestion()
     {

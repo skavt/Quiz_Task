@@ -17,9 +17,13 @@ use yii\db\ActiveQuery;
  * @property int $max_ans
  * @property int $created_at
  * @property int $updated_at
+ * @property int $created_by
+ * @property int $updated_by
  *
  * @property Answer[] $answers
  * @property Quiz $quiz
+ * @property User $createdBy
+ * @property User $updatedBy
  */
 class Question extends \yii\db\ActiveRecord
 {
@@ -30,6 +34,13 @@ class Question extends \yii\db\ActiveRecord
     {
         return 'question';
     }
+    public function behaviors()
+    {
+        return [
+            TimestampBehavior::class,
+            BlameableBehavior::class,
+        ];
+    }
 
     /**
      * {@inheritdoc}
@@ -37,17 +48,12 @@ class Question extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['name'], 'required'],
-            [['quiz_id', 'max_ans', 'created_at', 'updated_at'], 'integer'],
+            [['quiz_id', 'name'], 'required'],
+            [['quiz_id', 'max_ans', 'created_at', 'updated_at', 'created_by', 'updated_by'], 'integer'],
             [['name', 'hint'], 'string', 'max' => 255],
             [['quiz_id'], 'exist', 'skipOnError' => true, 'targetClass' => Quiz::className(), 'targetAttribute' => ['quiz_id' => 'id']],
-        ];
-    }
-
-    public function behaviors()
-    {
-        return [
-            TimestampBehavior::class,
+            [['created_by'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['created_by' => 'id']],
+            [['updated_by'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['updated_by' => 'id']],
         ];
     }
 
@@ -64,6 +70,8 @@ class Question extends \yii\db\ActiveRecord
             'max_ans' => 'Max Ans',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
+            'created_by' => 'Created By',
+            'updated_by' => 'Updated By',
         ];
     }
 
@@ -81,5 +89,21 @@ class Question extends \yii\db\ActiveRecord
     public function getQuiz()
     {
         return $this->hasOne(Quiz::className(), ['id' => 'quiz_id']);
+    }
+
+    /**
+     * @return ActiveQuery
+     */
+    public function getCreatedBy()
+    {
+        return $this->hasOne(User::className(), ['id' => 'created_by']);
+    }
+
+    /**
+     * @return ActiveQuery
+     */
+    public function getUpdatedBy()
+    {
+        return $this->hasOne(User::className(), ['id' => 'updated_by']);
     }
 }
