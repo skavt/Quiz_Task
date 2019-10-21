@@ -1,6 +1,7 @@
 <?php
 
 use yii\helpers\Html;
+use yii\web\YiiAsset;
 use yii\widgets\DetailView;
 
 /* @var $this yii\web\View */
@@ -9,20 +10,20 @@ use yii\widgets\DetailView;
 $this->title = $model->subject;
 $this->params['breadcrumbs'][] = ['label' => 'Quizzes', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
-\yii\web\YiiAsset::register($this);
+YiiAsset::register($this);
 ?>
 <div class="quiz-view">
 
-    <h1><?= Html::encode($this->title) ?></h1>
+    <h1><?php echo Html::encode($this->title) ?></h1>
 
-
-    <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
-    <?= Html::a('Delete', ['delete', 'id' => $model->id], [
+    <?php echo Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
+    <?php echo Html::a('Delete', ['delete', 'id' => $model->id], [
         'class' => 'btn btn-danger',
-        'data' => [
-            'confirm' => 'Are you sure you want to delete this item?',
-            'method' => 'post',
-        ],
+        'data' =>
+            [
+                'confirm' => 'Are you sure you want to delete this item?',
+                'method' => 'post',
+            ],
     ]) ?>
     <br>
     <p calss="text-muted">
@@ -41,16 +42,14 @@ $this->params['breadcrumbs'][] = $this->title;
         </small>
     </p>
 
-    <?= DetailView::widget([
+    <?php echo DetailView::widget([
         'model' => $model,
-        'attributes' => [
-//            'id',
-            'subject',
-            'min_correct_ans',
-            'max_questions',
-//            'created_at',
-//            'updated_at',
-        ],
+        'attributes' =>
+            [
+                'subject',
+                'min_correct_ans',
+                'max_questions',
+            ],
     ]) ?>
 
 </div>

@@ -8,12 +8,15 @@ use yii\helpers\Html;
 $this->title = 'Update Question : ' . $model->name;
 $this->params['breadcrumbs'][] = 'Update';
 ?>
+
 <div class="question-update">
 
-    <h1><?= Html::encode($this->title) ?></h1>
+    <h1><?php echo Html::encode($this->title) ?></h1>
 
-    <?= $this->render('_form', [
-        'model' => $model,
-    ]) ?>
+    <?php echo $this->render('_form',
+        [
+            'model' => $model,
+        ]);
+    ?>
 
 </div>

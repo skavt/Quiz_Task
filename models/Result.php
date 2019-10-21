@@ -61,9 +61,9 @@ class Result extends \yii\db\ActiveRecord
             'id' => 'ID',
             'quiz_id' => 'Quiz ID',
             'quiz_name' => 'Quiz Name',
-            'correct_ans' => 'Correct Ans',
-            'min_correct_ans' => 'Min Correct Ans',
-            'question_count' => 'Question Count',
+            'correct_ans' => 'Correct Answer',
+            'min_correct_ans' => 'Min Correct Answer',
+            'question_count' => 'Max Question',
             'created_at' => 'Created At',
             'created_by' => 'Created By',
         ];

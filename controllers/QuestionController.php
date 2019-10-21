@@ -38,10 +38,11 @@ class QuestionController extends Controller
     public function actionIndex($id)
     {
         if (Yii::$app->user->isGuest) {
+            Yii::$app->session->setFlash('error', 'Please Login');
             return $this->redirect('/site/login');
         }
-        $searchModel = new QuestionSearch();
 
+        $searchModel = new QuestionSearch();
         $newModel = Quiz::findOne($id);
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams, $id);
 
@@ -60,6 +61,11 @@ class QuestionController extends Controller
      */
     public function actionView($id)
     {
+        if (Yii::$app->user->isGuest) {
+            Yii::$app->session->setFlash('error', 'Please Login');
+            return $this->redirect('/site/login');
+        }
+
         return $this->render('view', [
             'model' => $this->findModel($id),
         ]);
@@ -75,22 +81,25 @@ class QuestionController extends Controller
     public function actionCreate($id)
     {
         if (Yii::$app->user->isGuest) {
+            Yii::$app->session->setFlash('error', 'Please Login');
             return $this->redirect('/site/login');
         }
-        $model = new Question();
 
+        $model = new Question();
         $newModel = Quiz::findOne($id);
+
         if ($model->load(Yii::$app->request->post())) {
             $model->quiz_id = $id;
             if ($model->save()) {
                 return $this->redirect(['view', 'id' => $model->id]);
             }
         }
+
         $count = Question::find()->where(['quiz_id' => $id])->count();
+
         if ($count >= $newModel->max_questions) {
-            return $this->render('_error', [
-                'model' => $model,
-            ]);
+            Yii::$app->session->setFlash('error', 'You can\'t create new question. Please return in Quiz');
+            return $this->render('/quiz/_error');
         }
 
         return $this->render('create', [
@@ -110,6 +119,10 @@ class QuestionController extends Controller
     {
         $model = $this->findModel($id);
 
+        if (Yii::$app->user->isGuest) {
+            Yii::$app->session->setFlash('error', 'Please Login');
+            return $this->redirect('/site/login');
+        }
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         }
@@ -130,9 +143,13 @@ class QuestionController extends Controller
      */
     public function actionDelete($id)
     {
+        if (Yii::$app->user->isGuest) {
+            Yii::$app->session->setFlash('error', 'Please Login');
+            return $this->redirect('/site/login');
+        }
+
         $model = $this->findModel($id);
         $quizId = $model->quiz_id;
-
         $this->findModel($id)->delete();
 
         return $this->redirect(['question/index', 'id' => $quizId]);

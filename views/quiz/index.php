@@ -12,36 +12,34 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="quiz-index">
 
-    <h1><?= Html::encode($this->title) ?></h1>
+    <h1><?php echo Html::encode($this->title) ?></h1>
+
     <?php if (!Yii::$app->user->isGuest): ?>
-    <p>
-        <?= Html::a('Create Quiz', ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
+        <p>
+            <?php echo Html::a('Create Quiz', ['create'], ['class' => 'btn btn-success']) ?>
+        </p>
     <?php endif; ?>
 
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
-
-    <?= GridView::widget([
+    <?php echo GridView::widget([
         'dataProvider' => $dataProvider,
-//       'filterModel' => $searchModel,
-        'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
-//          'id',
+        'columns' =>
             [
-                'attribute' => 'subject',
-                'format' => 'raw',
-                'value' => function ($data, $id) {
-                    return Html::a($data['subject'], ['question/index', 'id' => $id]);
-                },
+                [
+                    'class' => 'yii\grid\SerialColumn'
+                ],
+                [
+                    'attribute' => 'subject',
+                    'format' => 'raw',
+                    'value' => function ($data, $id) {
+                        return Html::a($data['subject'], ['question/index', 'id' => $id]);
+                    },
+                ],
+                'min_correct_ans',
+                'max_questions',
+                [
+                    'class' => 'yii\grid\ActionColumn'
+                ],
             ],
-            'min_correct_ans',
-            'max_questions',
-//          'created_at',
-//          'updated_at',
-
-            ['class' => 'yii\grid\ActionColumn'],
-        ],
     ]); ?>
-
 
 </div>

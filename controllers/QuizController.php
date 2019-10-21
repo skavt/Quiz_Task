@@ -6,7 +6,6 @@ use app\models\Answer;
 use app\models\Question;
 use app\models\Result;
 use app\models\ResultSearch;
-use app\models\User;
 use Yii;
 use app\models\Quiz;
 use app\models\QuizSearch;
@@ -19,6 +18,7 @@ use yii\filters\VerbFilter;
  */
 class QuizController extends Controller
 {
+
     /**
      * {@inheritdoc}
      */
@@ -41,8 +41,10 @@ class QuizController extends Controller
     public function actionIndex()
     {
         if (Yii::$app->user->isGuest) {
+            Yii::$app->session->setFlash('error', 'Please Login');
             return $this->redirect('/site/login');
         }
+
         $searchModel = new QuizSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
@@ -60,6 +62,11 @@ class QuizController extends Controller
      */
     public function actionView($id)
     {
+        if (Yii::$app->user->isGuest) {
+            Yii::$app->session->setFlash('error', 'Please Login');
+            return $this->redirect('/site/login');
+        }
+
         return $this->render('view', [
             'model' => $this->findModel($id),
         ]);
@@ -72,12 +79,20 @@ class QuizController extends Controller
      */
     public function actionCreate()
     {
+        if (Yii::$app->user->isGuest) {
+            Yii::$app->session->setFlash('error', 'Please Login');
+            return $this->redirect('/site/login');
+        }
+
         $model = new Quiz();
 
+        if ($model->load(Yii::$app->request->post()) && $model->min_correct_ans > $model->max_questions) {
+            Yii::$app->session->setFlash('error', 'You can\'t create quiz. Min correct answer num is more than Max question num');
+            return $this->render('_error');
+        }
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         }
-
         return $this->render('create', [
             'model' => $model,
         ]);
@@ -92,6 +107,11 @@ class QuizController extends Controller
      */
     public function actionUpdate($id)
     {
+        if (Yii::$app->user->isGuest) {
+            Yii::$app->session->setFlash('error', 'Please Login');
+            return $this->redirect('/site/login');
+        }
+
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
@@ -114,6 +134,11 @@ class QuizController extends Controller
      */
     public function actionDelete($id)
     {
+        if (Yii::$app->user->isGuest) {
+            Yii::$app->session->setFlash('error', 'Please Login');
+            return $this->redirect('/site/login');
+        }
+
         $this->findModel($id)->delete();
 
         return $this->redirect(['index']);
@@ -138,18 +163,24 @@ class QuizController extends Controller
     public function actionStart($id)
     {
         if (Yii::$app->user->isGuest) {
+            Yii::$app->session->setFlash('error', 'Please Login');
             return $this->redirect('/site/login');
         }
+
         $result = new Result();
         $quizModel = $this->findModel($id);
         $questionModel = Question::find()->where(['quiz_id' => $id])->all();
+        $count = Question::find()->where(['quiz_id' => $id])->count();
 
+        if ($count < $quizModel->min_correct_ans) {
+            Yii::$app->session->setFlash('error', 'Please add more Questions and you can Start quiz');
+            return $this->render('_error');
+        }
         if (Yii::$app->request->post()) {
             $response = Yii::$app->request->post();
             $answerIndex = 0;
             $correctAnswer = 0;
             $array = [];
-
 
             foreach ($response as $text => $answerId) {
                 $select = substr($text, 0, 9);
@@ -164,7 +195,6 @@ class QuizController extends Controller
                 if ($answer->is_correct == 1) {
                     $correctAnswer++;
                 }
-
             }
             if ($correctAnswer < $quizModel->min_correct_ans) {
                 $failed = ' ';
@@ -173,17 +203,19 @@ class QuizController extends Controller
                 $passed = ' ';
                 $failed = '';
             }
-            $count = Question::find()->where(['quiz_id' => $id])->count();
+
             $result->correct_ans = $correctAnswer;
             $result->quiz_id = $quizModel->id;
             $result->quiz_name = $quizModel->subject;
             $result->question_count = $count;
             $result->min_correct_ans = $quizModel->min_correct_ans;
             $result->created_at = time();
+
             if (!$result->save()) {
                 var_dump($result->errors);
                 exit;
             }
+
             return $this->render('outcome', [
                 'failed' => $failed,
                 'passed' => $passed,
@@ -192,7 +224,6 @@ class QuizController extends Controller
                 'quizModel' => $quizModel,
             ]);
         }
-
 
         return $this->render('start', [
             'quizModel' => $quizModel,
@@ -204,15 +235,14 @@ class QuizController extends Controller
     public function actionResult()
     {
         if (Yii::$app->user->isGuest) {
+            Yii::$app->session->setFlash('error', 'Please Login');
             return $this->redirect('/site/login');
         }
+
         $searchModel = new ResultSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-        $result = Result::find()->all();
-//        var_dump($result); exit();
 
         return $this->render('result', [
-            'result' => $result,
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);

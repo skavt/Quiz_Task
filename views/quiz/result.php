@@ -1,45 +1,55 @@
 <?php
 
-use app\models\Result;
-use app\controllers\QuizController;
+use app\models\Quiz;
 
-/* @var $result QuizController */
-/* @var $quiz QuizController */
 /* @var $model app\models\Answer */
+/* @var $dataProvider Quiz */
 ?>
 
-<table class="table">
-    <thead>
-    <tr>
-        <th scope="col">Quiz Name</th>
-        <th scope="col">Correct Answer</th>
-        <th scope="col">Min Correct Answer</th>
-        <th scope="col">Questions</th>
-        <th scope="col">Status</th>
-        <th scope="col">Percentage</th>
-        <th scope="col">Name</th>
-        <th scope="col">Pass Date</th>
-    </tr>
-    </thead>
+<?php echo \yii\grid\GridView::widget([
+    'dataProvider' => $dataProvider,
+    'headerRowOptions' =>
+        [
+            'style' => 'background-color:#ccf8fe; color:#0a73bb',
+        ],
+    'columns' =>
+        [
+            'quiz_name',
+            'correct_ans',
+            'min_correct_ans',
+            'question_count',
+            [
+                'label' => 'Status',
+                'value' => function ($model) {
+                    if ($model->correct_ans >= $model->min_correct_ans) {
+                        return 'passed';
+                    } else {
+                        return 'failed';
+                    }
+                },
+                'contentOptions' => function ($model) {
+                    return ['style' => 'color: ' . ($model->correct_ans >= $model->min_correct_ans ? 'green' : 'red')];
+                }
+            ],
+            [
+                'label' => 'Percentage',
+                'value' => function ($model) {
+                    return round(($model->correct_ans * 100) / $model->question_count) . ' %';
+                }
+            ],
+            [
+                'attribute' => 'created_by',
+                'value' => function ($model) {
+                    return $model->createdBy->username;
+                }
+            ],
+            [
+                'attribute' => 'created_at',
+                'value' => function ($model) {
+                    return Yii::$app->formatter->asDatetime($model->created_at);
+                }
+            ],
+        ]
+]); ?>
 
-    <?php foreach ($result as $value) : ?>
-        <tbody>
-        <tr>
-            <td><?php echo $value->quiz_name ?></td>
-            <td><?php echo $value->correct_ans ?></td>
-            <td><?php echo $value->min_correct_ans ?></td>
-            <td><?php echo $value->question_count ?></td>
-            <td><?php if ($value->correct_ans >= $value->min_correct_ans) {
-                    echo '<span style = "color: green;">passed</span>';
-                } else {
-                    echo '<span style = "color: red;">failed</span>';
-                } ?></td>
-            <td><?php echo round(($value->correct_ans * 100) / $value->question_count) . ' %'; ?></td>
-            <td><?php echo $value->createdBy->username ?></td>
-            <td><?php echo Yii::$app->formatter->asDatetime($value->created_at) ?></td>
-        </tr>
-        </tbody>
-    <?php endforeach; ?>
-
-</table>
 

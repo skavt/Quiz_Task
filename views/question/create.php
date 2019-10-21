@@ -11,12 +11,15 @@ $this->title = 'Create question for : ' . $newModel->subject;
 $this->params['breadcrumbs'][] = ['label' => 'Questions', 'url' => ['question/index/', 'id' => $_GET['id']]];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
+
 <div class="question-create">
 
-    <h1><?= Html::encode($this->title) ?></h1>
+    <h1><?php echo Html::encode($this->title) ?></h1>
 
-    <?= $this->render('_form', [
-        'model' => $model,
-    ]) ?>
+    <?php echo $this->render('_form',
+        [
+            'model' => $model,
+        ]);
+    ?>
 
 </div>

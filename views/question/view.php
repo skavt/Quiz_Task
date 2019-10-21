@@ -1,6 +1,7 @@
 <?php
 
 use yii\helpers\Html;
+use yii\web\YiiAsset;
 use yii\widgets\DetailView;
 
 /* @var $this yii\web\View */
@@ -9,11 +10,11 @@ use yii\widgets\DetailView;
 $this->title = $model->name;
 $this->params['breadcrumbs'][] = ['label' => 'Questions', 'url' => ['question/index', 'id' => $model->quiz_id]];
 $this->params['breadcrumbs'][] = $this->title;
-\yii\web\YiiAsset::register($this);
+YiiAsset::register($this);
 ?>
 <div class="question-view">
 
-    <h1><?= Html::encode($this->title) ?></h1>
+    <h1><?php echo Html::encode($this->title) ?></h1>
 
     <p calss="text-muted">
         <small>
@@ -31,17 +32,14 @@ $this->params['breadcrumbs'][] = $this->title;
         </small>
     </p>
 
-    <?= DetailView::widget([
+    <?php echo DetailView::widget([
         'model' => $model,
-        'attributes' => [
-//            'id',
-//            'quiz_id',
-            'name',
-            'hint',
-            'max_ans',
-//            'created_at',
-//            'updated_at',
-        ],
+        'attributes' =>
+            [
+                'name',
+                'hint',
+                'max_ans',
+            ],
     ]) ?>
 
 </div>

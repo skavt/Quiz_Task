@@ -4,7 +4,6 @@ use app\controllers\QuizController;
 use app\controllers\QuestionController;
 use app\models\Answer;
 use yii\helpers\Html;
-use yii\helpers\Url;
 use yii\widgets\ActiveForm;
 
 /* @var $this yii\web\View */
@@ -18,7 +17,7 @@ $this->title = 'Quiz \'' . $quizModel->subject . '\'';
 
 ?>
 
-<?php $form = ActiveForm::begin()?>
+<?php $form = ActiveForm::begin() ?>
     <h1 style="text-align: center"><?= Html::encode($this->title) ?></h1>
     <hr>
 
@@ -43,7 +42,9 @@ $this->title = 'Quiz \'' . $quizModel->subject . '\'';
                 <?php echo $answer->name ?>
             </label>
         </div>
+
     <?php endforeach; ?>
+
 <?php endforeach; ?>
 
     <div class="pull-right">

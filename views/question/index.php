@@ -1,11 +1,12 @@
 <?php
 
+use app\models\Quiz;
 use yii\helpers\Html;
 use yii\grid\GridView;
 
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\QuestionSearch */
-/* @var $newModel \app\models\Quiz */
+/* @var $newModel Quiz */
 /* @var $model app\models\Answer */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
@@ -15,38 +16,34 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="question-index">
 
-    <h1><?= Html::encode($this->title) ?></h1>
+    <h1><?php echo Html::encode($this->title) ?></h1>
     <?php if (!Yii::$app->user->isGuest): ?>
-    <p>
-        <?= Html::a('Create Question', ['create', 'id' => $_GET['id']], ['class' => 'btn btn-success']) ?>
-    </p>
-<?php endif; ?>
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
+        <p>
+            <?= Html::a('Create Question', ['create', 'id' => $_GET['id']], ['class' => 'btn btn-success']) ?>
+        </p>
+    <?php endif; ?>
 
-    <?= GridView::widget([
+    <?php echo GridView::widget([
         'dataProvider' => $dataProvider,
-//        'filterModel' => $searchModel,
-        'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
-
-//            'id',
-//            [
-//                'attribute'=>'quiz_id',],
+        'columns' =>
             [
-                'attribute' => 'name',
-                'format' => 'raw',
-                'value' => function ($data, $id) {
-                    return Html::a($data['name'], ['answer/index', 'id' => $id]);
-                },
+                [
+                    'class' => 'yii\grid\SerialColumn'
+                ],
+                [
+                    'attribute' => 'name',
+                    'format' => 'raw',
+                    'value' => function ($data, $id) {
+                        return Html::a($data['name'], ['answer/index', 'id' => $id]);
+                    },
+                ],
+                'hint',
+                'max_ans',
+
+                [
+                    'class' => 'yii\grid\ActionColumn'
+                ],
             ],
-            'hint',
-            'max_ans',
-            //'created_at',
-            //'updated_at',
-
-            ['class' => 'yii\grid\ActionColumn'],
-        ],
     ]); ?>
-
 
 </div>
