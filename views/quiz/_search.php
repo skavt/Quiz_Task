@@ -23,9 +23,6 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'max_questions') ?>
 
-<!--    --><?//= $form->field($model, 'created_at') ?>
-
-    <?php // echo $form->field($model, 'updated_at') ?>
 
     <div class="form-group">
         <?= Html::submitButton('Search', ['class' => 'btn btn-primary']) ?>

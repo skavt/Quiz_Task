@@ -7,6 +7,7 @@ use Yii;
 use app\models\Answer;
 use app\models\AnswerSearch;
 use yii\db\StaleObjectException;
+use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -28,6 +29,24 @@ class AnswerController extends Controller
                     'delete' => ['POST'],
                 ],
             ],
+            'access' => [
+                'class' => AccessControl::className(),
+                'only' => ['index', 'view', 'update', 'delete', 'create'],
+                'rules' => [
+                    [
+                        'allow' => false,
+                        'roles' => ['?'],
+                        'denyCallback' => function () {
+                            Yii::$app->session->setFlash('error', 'Please Login');
+                            return Yii::$app->controller->redirect('/site/login');
+                        }
+                    ],
+                    [
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ]
+                ]
+            ]
         ];
     }
 
@@ -38,11 +57,6 @@ class AnswerController extends Controller
      */
     public function actionIndex($id)
     {
-        if (Yii::$app->user->isGuest) {
-            Yii::$app->session->setFlash('error', 'Please Login');
-            return $this->redirect('/site/login');
-        }
-
         $searchModel = new AnswerSearch();
         $newModel = Question::findOne($id);
         $questionId = $newModel->id;
@@ -65,11 +79,6 @@ class AnswerController extends Controller
      */
     public function actionView($id)
     {
-        if (Yii::$app->user->isGuest) {
-            Yii::$app->session->setFlash('error', 'Please Login');
-            return $this->redirect('/site/login');
-        }
-
         return $this->render('view', [
             'model' => $this->findModel($id),
         ]);
@@ -83,11 +92,6 @@ class AnswerController extends Controller
      */
     public function actionCreate($id)
     {
-        if (Yii::$app->user->isGuest) {
-            Yii::$app->session->setFlash('error', 'Please Login');
-            return $this->redirect('/site/login');
-        }
-
         $model = new Answer();
         $newModel = Question::findOne($id);
 
@@ -122,10 +126,6 @@ class AnswerController extends Controller
     {
         $model = $this->findModel($id);
 
-        if (Yii::$app->user->isGuest) {
-            Yii::$app->session->setFlash('error', 'Please Login');
-            return $this->redirect('/site/login');
-        }
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         }
@@ -146,11 +146,6 @@ class AnswerController extends Controller
      */
     public function actionDelete($id)
     {
-        if (Yii::$app->user->isGuest) {
-            Yii::$app->session->setFlash('error', 'Please Login');
-            return $this->redirect('/site/login');
-        }
-
         $model = $this->findModel($id);
         $questionId = $model->question_id;
         $this->findModel($id)->delete();

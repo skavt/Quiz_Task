@@ -9,6 +9,7 @@ use app\models\ResultSearch;
 use Yii;
 use app\models\Quiz;
 use app\models\QuizSearch;
+use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -31,6 +32,24 @@ class QuizController extends Controller
                     'delete' => ['POST'],
                 ],
             ],
+            'access' => [
+                'class' => AccessControl::className(),
+                'only' => ['index', 'view', 'update', 'delete', 'result', 'start', 'create'],
+                'rules' => [
+                    [
+                        'allow' => false,
+                        'roles' => ['?'],
+                        'denyCallback' => function () {
+                            Yii::$app->session->setFlash('error', 'Please Login');
+                            return Yii::$app->controller->redirect('/site/login');
+                        }
+                    ],
+                    [
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ]
+                ]
+            ]
         ];
     }
 
@@ -40,11 +59,6 @@ class QuizController extends Controller
      */
     public function actionIndex()
     {
-        if (Yii::$app->user->isGuest) {
-            Yii::$app->session->setFlash('error', 'Please Login');
-            return $this->redirect('/site/login');
-        }
-
         $searchModel = new QuizSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
@@ -62,11 +76,6 @@ class QuizController extends Controller
      */
     public function actionView($id)
     {
-        if (Yii::$app->user->isGuest) {
-            Yii::$app->session->setFlash('error', 'Please Login');
-            return $this->redirect('/site/login');
-        }
-
         return $this->render('view', [
             'model' => $this->findModel($id),
         ]);
@@ -79,11 +88,6 @@ class QuizController extends Controller
      */
     public function actionCreate()
     {
-        if (Yii::$app->user->isGuest) {
-            Yii::$app->session->setFlash('error', 'Please Login');
-            return $this->redirect('/site/login');
-        }
-
         $model = new Quiz();
 
         if ($model->load(Yii::$app->request->post()) && $model->min_correct_ans > $model->max_questions) {
@@ -107,11 +111,6 @@ class QuizController extends Controller
      */
     public function actionUpdate($id)
     {
-        if (Yii::$app->user->isGuest) {
-            Yii::$app->session->setFlash('error', 'Please Login');
-            return $this->redirect('/site/login');
-        }
-
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
@@ -134,11 +133,6 @@ class QuizController extends Controller
      */
     public function actionDelete($id)
     {
-        if (Yii::$app->user->isGuest) {
-            Yii::$app->session->setFlash('error', 'Please Login');
-            return $this->redirect('/site/login');
-        }
-
         $this->findModel($id)->delete();
 
         return $this->redirect(['index']);
@@ -162,11 +156,6 @@ class QuizController extends Controller
 
     public function actionStart($id)
     {
-        if (Yii::$app->user->isGuest) {
-            Yii::$app->session->setFlash('error', 'Please Login');
-            return $this->redirect('/site/login');
-        }
-
         $result = new Result();
         $quizModel = $this->findModel($id);
         $questionModel = Question::find()->where(['quiz_id' => $id])->all();
@@ -234,11 +223,6 @@ class QuizController extends Controller
 
     public function actionResult()
     {
-        if (Yii::$app->user->isGuest) {
-            Yii::$app->session->setFlash('error', 'Please Login');
-            return $this->redirect('/site/login');
-        }
-
         $searchModel = new ResultSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 

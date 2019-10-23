@@ -14,11 +14,9 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <h1><?php echo Html::encode($this->title) ?></h1>
 
-    <?php if (!Yii::$app->user->isGuest): ?>
         <p>
             <?php echo Html::a('Create Quiz', ['create'], ['class' => 'btn btn-success']) ?>
         </p>
-    <?php endif; ?>
 
     <?php echo GridView::widget([
         'dataProvider' => $dataProvider,
