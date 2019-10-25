@@ -13,6 +13,7 @@ use yii\behaviors\TimestampBehavior;
  * @property string $subject
  * @property int $min_correct_ans
  * @property int $max_questions
+ * @property string $certification_valid
  * @property int $created_at
  * @property int $updated_at
  * @property int $created_by
@@ -21,7 +22,6 @@ use yii\behaviors\TimestampBehavior;
  * @property Question[] $questions
  * @property User $updatedBy
  * @property User $createdBy
- * @property Result[] $results
  */
 class Quiz extends \yii\db\ActiveRecord
 {
@@ -49,6 +49,7 @@ class Quiz extends \yii\db\ActiveRecord
         return [
             [['subject', 'min_correct_ans'], 'required'],
             [['min_correct_ans', 'max_questions', 'created_at', 'updated_at', 'created_by', 'updated_by'], 'integer'],
+            [['certification_valid'], 'safe'],
             [['subject'], 'string', 'max' => 127],
             [['updated_by'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['updated_by' => 'id']],
             [['created_by'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['created_by' => 'id']],
@@ -65,6 +66,7 @@ class Quiz extends \yii\db\ActiveRecord
             'subject' => 'Subject',
             'min_correct_ans' => 'Min Correct Ans',
             'max_questions' => 'Max Questions',
+            'certification_valid' => 'Certification Valid',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
             'created_by' => 'Created By',
@@ -94,13 +96,5 @@ class Quiz extends \yii\db\ActiveRecord
     public function getCreatedBy()
     {
         return $this->hasOne(User::className(), ['id' => 'created_by']);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getResults()
-    {
-        return $this->hasMany(Result::className(), ['quiz_id' => 'id']);
     }
 }

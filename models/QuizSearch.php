@@ -18,7 +18,7 @@ class QuizSearch extends Quiz
     {
         return [
             [['id', 'min_correct_ans', 'max_questions', 'created_at', 'updated_at', 'created_by', 'updated_by'], 'integer'],
-            [['subject'], 'safe'],
+            [['subject', 'certification_valid'], 'safe'],
         ];
     }
 
@@ -64,6 +64,7 @@ class QuizSearch extends Quiz
             'id' => $this->id,
             'min_correct_ans' => $this->min_correct_ans,
             'max_questions' => $this->max_questions,
+            'certification_valid' => $this->certification_valid,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
             'created_by' => $this->created_by,

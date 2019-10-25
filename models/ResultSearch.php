@@ -17,8 +17,8 @@ class ResultSearch extends Result
     public function rules()
     {
         return [
-            [['id', 'quiz_id', 'correct_ans', 'min_correct_ans', 'question_count', 'created_at', 'created_by'], 'integer'],
-            [['quiz_name'], 'safe'],
+            [['id', 'correct_ans', 'min_correct_ans', 'question_count', 'created_at', 'created_by'], 'integer'],
+            [['quiz_name', 'certification_valid'], 'safe'],
         ];
     }
 
@@ -62,10 +62,10 @@ class ResultSearch extends Result
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
-            'quiz_id' => $this->quiz_id,
             'correct_ans' => $this->correct_ans,
             'min_correct_ans' => $this->min_correct_ans,
             'question_count' => $this->question_count,
+            'certification_valid' => $this->certification_valid,
             'created_at' => $this->created_at,
             'created_by' => $this->created_by,
         ]);

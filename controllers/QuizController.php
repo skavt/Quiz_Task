@@ -3,12 +3,15 @@
 namespace app\controllers;
 
 use app\models\Answer;
+use app\models\AnswerSearch;
 use app\models\Question;
+use app\models\QuestionSearch;
 use app\models\Result;
 use app\models\ResultSearch;
 use Yii;
 use app\models\Quiz;
 use app\models\QuizSearch;
+use yii\data\ActiveDataProvider;
 use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -156,7 +159,9 @@ class QuizController extends Controller
 
     public function actionStart($id)
     {
+//        $searchModel = new QuestionSearch();
         $result = new Result();
+//        $dataProvider = $searchModel->search(Yii::$app->request->queryParams, $id);
         $quizModel = $this->findModel($id);
         $questionModel = Question::find()->where(['quiz_id' => $id])->all();
         $count = Question::find()->where(['quiz_id' => $id])->count();
@@ -194,11 +199,12 @@ class QuizController extends Controller
             }
 
             $result->correct_ans = $correctAnswer;
-            $result->quiz_id = $quizModel->id;
             $result->quiz_name = $quizModel->subject;
             $result->question_count = $count;
             $result->min_correct_ans = $quizModel->min_correct_ans;
             $result->created_at = time();
+            $month = strtotime(" + $quizModel->certification_valid months", $result->created_at);
+            $result->certification_valid = $month;;
 
             if (!$result->save()) {
                 var_dump($result->errors);
@@ -213,10 +219,20 @@ class QuizController extends Controller
                 'quizModel' => $quizModel,
             ]);
         }
+        $query = Question::find();
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+            'pagination' => [
+                'pageSize' => 1,
+            ],
+        ]);
 
         return $this->render('start', [
             'quizModel' => $quizModel,
             'questionModel' => $questionModel,
+//            'searchModel' => $searchModel,
+//            'dataProvider' => $dataProvider,
 
         ]);
     }

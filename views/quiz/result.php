@@ -44,9 +44,24 @@ use app\models\Quiz;
                 }
             ],
             [
+                'attribute' => 'certification_valid',
+                'value' => function ($model) {
+                    if ($model->correct_ans <= $model->min_correct_ans) {
+                        return '';
+                    } else if (time() > $model->certification_valid) {
+                        return 'inactive ' . Yii::$app->formatter->asDate($model->certification_valid);
+                    } else {
+                        return 'active ' . Yii::$app->formatter->asDate($model->certification_valid);
+                    }
+                },
+                'contentOptions' => function ($model) {
+                    return ['style' => 'color: ' . (time() > $model->certification_valid ? 'red' : 'green')];
+                }
+            ],
+            [
                 'attribute' => 'created_at',
                 'value' => function ($model) {
-                    return Yii::$app->formatter->asDatetime($model->created_at);
+                    return Yii::$app->formatter->asDate($model->created_at);
                 }
             ],
         ]
