@@ -31,5 +31,3 @@ tests/_support/_generated
 
 #vagrant folder
 /.vagrant
-/migrations/m191025_085106_drop_certification_valid_column_from_quiz_table.php
-/migrations/m191025_085435_add_certification_valid_column_to_quiz_table.php
