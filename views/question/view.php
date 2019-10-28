@@ -39,6 +39,10 @@ YiiAsset::register($this);
                 'name',
                 'hint',
                 'max_ans',
+                'created_at:datetime',
+                'updated_at:datetime',
+                'created_by',
+                'updated_by',
             ],
     ]) ?>
 

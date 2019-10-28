@@ -64,7 +64,7 @@ class Quiz extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'subject' => 'Subject',
-            'min_correct_ans' => 'Min Correct Ans',
+            'min_correct_ans' => 'Min Correct Answer',
             'max_questions' => 'Max Questions',
             'certification_valid' => 'Certification Valid',
             'created_at' => 'Created At',

@@ -67,7 +67,7 @@ class Question extends \yii\db\ActiveRecord
             'quiz_id' => 'Quiz ID',
             'name' => 'Name',
             'hint' => 'Hint',
-            'max_ans' => 'Max Ans',
+            'max_ans' => 'Max Answer',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
             'created_by' => 'Created By',

@@ -39,6 +39,10 @@ YiiAsset::register($this);
             [
                 'is_correct',
                 'name',
+                'created_at:datetime',
+                'updated_at:datetime',
+                'created_by',
+                'updated_by',
             ],
     ]) ?>
 

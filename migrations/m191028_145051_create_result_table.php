@@ -5,7 +5,7 @@ use yii\db\Migration;
 /**
  * Handles the creation of table `{{%result}}`.
  */
-class m191017_070734_create_result_table extends Migration
+class m191028_145051_create_result_table extends Migration
 {
     /**
      * {@inheritdoc}
@@ -17,6 +17,7 @@ class m191017_070734_create_result_table extends Migration
             'quiz_name' => $this->string(255),
             'correct_ans' => $this->integer(),
             'min_correct_ans' => $this->integer(),
+            'certification_valid' => $this->integer(11),
             'question_count' => $this->integer(),
             'created_at' => $this->integer(11),
             'created_by' => $this->integer(),

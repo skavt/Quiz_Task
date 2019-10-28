@@ -49,6 +49,10 @@ YiiAsset::register($this);
                 'subject',
                 'min_correct_ans',
                 'max_questions',
+                'created_at:datetime',
+                'updated_at:datetime',
+                'created_by',
+                'updated_by',
             ],
     ]) ?>
 

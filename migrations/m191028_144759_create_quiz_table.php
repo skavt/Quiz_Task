@@ -5,7 +5,7 @@ use yii\db\Migration;
 /**
  * Handles the creation of table `{{%quiz}}`.
  */
-class m191007_143918_create_quiz_table extends Migration
+class m191028_144759_create_quiz_table extends Migration
 {
     /**
      * {@inheritdoc}
@@ -17,6 +17,7 @@ class m191007_143918_create_quiz_table extends Migration
             'subject' => $this->string(127)->notNull(),
             'min_correct_ans' => $this->integer(2)->notNull(),
             'max_questions' => $this->integer(2),
+            'certification_valid' => $this->integer(11),
             'created_at' => $this->integer(11),
             'updated_at' => $this->integer(11),
             'created_by' => $this->integer(11),
