@@ -159,9 +159,7 @@ class QuizController extends Controller
 
     public function actionStart($id)
     {
-//        $searchModel = new QuestionSearch();
         $result = new Result();
-//        $dataProvider = $searchModel->search(Yii::$app->request->queryParams, $id);
         $quizModel = $this->findModel($id);
         $questionModel = Question::find()->where(['quiz_id' => $id])->all();
         $count = Question::find()->where(['quiz_id' => $id])->count();
@@ -219,21 +217,10 @@ class QuizController extends Controller
                 'quizModel' => $quizModel,
             ]);
         }
-        $query = Question::find();
-
-        $dataProvider = new ActiveDataProvider([
-            'query' => $query,
-            'pagination' => [
-                'pageSize' => 1,
-            ],
-        ]);
 
         return $this->render('start', [
             'quizModel' => $quizModel,
             'questionModel' => $questionModel,
-//            'searchModel' => $searchModel,
-//            'dataProvider' => $dataProvider,
-
         ]);
     }
 

@@ -18,7 +18,7 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'max_questions')->textInput() ?>
 
-    <?= $form->field($model, 'certification_valid')->textInput() ?>
+    <?= $form->field($model, 'certification_valid')->textInput()->input('certification_valid', ['placeholder' => "Only Months"]) ?>
 
     <div class="form-group">
         <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>

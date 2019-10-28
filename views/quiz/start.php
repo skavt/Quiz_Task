@@ -5,7 +5,6 @@ use app\controllers\QuestionController;
 use app\models\Answer;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
-use yii\widgets\ListView;
 
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\QuizSearch */
@@ -17,42 +16,6 @@ use yii\widgets\ListView;
 $this->title = 'Quiz \'' . $quizModel->subject . '\'';
 
 ?>
-<?php //echo ListView::widget([
-//    'dataProvider' => $dataProvider,
-//    'summary'=>'',
-//    'pager' => [
-//        'prevPageLabel' => 'previous',
-//        'nextPageLabel' => 'next',
-//        'maxButtonCount' => 0,
-//        'options' => [
-//                'class' => 'pagination pull-right',
-//            'style' => 'margin-top: 200px; display : block'
-//            ]
-//    ],
-//    'itemView' => function($model){
-//    ?>
-<!--        <div style="margin-left: 30px;">-->
-<!--            <h3 style="font-size: 30px; color: #23527c ;">-->
-<!--                --><?php //echo Html::encode($model->name) ?>
-<!--            </h3>-->
-<!--            <small>--><?php //echo Html::encode($model->hint) ?><!--</small>-->
-<!--        </div>-->
-<!--        --><?php
-//        $answerModel = Answer::find()->where(['question_id' => $model->id])->all();
-//        foreach ($answerModel as $answer) : ?>
-<!---->
-<!--            <div class="radio">-->
-<!--                <label style="font-size: 20px; text-align: left;  margin-left: 60px;">-->
-<!--                    --><?php //echo Html::radio("selected_{$model->quiz_id}", false, [
-//                        'value' => $answer->id
-//                    ]); ?>
-<!--                    --><?php //echo $answer->name ?>
-<!--                </label>-->
-<!--            </div>-->
-<!---->
-<!--        --><?php //endforeach; ?>
-<!--  --><?php // } ]); ?>
-
 
 <?php $form = ActiveForm::begin() ?>
     <h1 style="text-align: center"><?php echo Html::encode($this->title) ?></h1>
