@@ -58,15 +58,13 @@ class AnswerController extends Controller
     public function actionIndex($id)
     {
         $searchModel = new AnswerSearch();
-        $newModel = Question::findOne($id);
-        $questionId = $newModel->id;
+        $questionModel = Question::findOne($id);
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams, $id);
 
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
-            'newModel' => $newModel,
-            'questionId' => $questionId,
+            'questionModel' => $questionModel,
         ]);
 
     }
@@ -93,25 +91,37 @@ class AnswerController extends Controller
     public function actionCreate($id)
     {
         $model = new Answer();
-        $newModel = Question::findOne($id);
+        $questionModel = Question::findOne($id);
 
         if ($model->load(Yii::$app->request->post())) {
             $model->question_id = $id;
-            if ($model->save()) {
-                return $this->redirect(['view', 'id' => $model->id]);
+            $correctAnsCount = Answer::find()->where(['question_id' => $id, 'is_correct' => true])->count();
+            $count = Answer::find()->where(['question_id' => $id])->count();
+
+            if ($count >= $questionModel->max_ans) {
+                Yii::$app->session->setFlash('error', 'You can\'t create new answer');
+                return $this->render('create', [
+                    'model' => $model,
+                    'questionModel' => $questionModel,
+                ]);
             }
-        }
 
-        $count = Answer::find()->where(['question_id' => $id])->count();
+            if ($correctAnsCount == 1 && $model->is_correct == 1) {
+                Yii::$app->session->setFlash('error', 'You have already chosen correct answer');
+                return $this->render('create', [
+                    'model' => $model,
+                    'questionModel' => $questionModel,
+                ]);
+            }
 
-        if ($count >= $newModel->max_ans) {
-            Yii::$app->session->setFlash('error', 'You can\'t create new answer. Please return in Quiz');
-            return $this->render('/quiz/_error');
+            if ($model->save()) {
+                return $this->redirect(['index', 'id' => $questionModel->id]);
+            }
         }
 
         return $this->render('create', [
             'model' => $model,
-            'newModel' => $newModel,
+            'questionModel' => $questionModel,
         ]);
     }
 

@@ -98,7 +98,7 @@ class QuizController extends Controller
             return $this->render('_error');
         }
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            return $this->redirect('index');
         }
         return $this->render('create', [
             'model' => $model,
@@ -205,8 +205,8 @@ class QuizController extends Controller
             $result->certification_valid = $month;;
 
             if (!$result->save()) {
-                var_dump($result->errors);
-                exit;
+                Yii::$app->session->setFlash('error', 'Your result is not save. Please try again');
+                return $this->render('_error');
             }
 
             return $this->render('outcome', [

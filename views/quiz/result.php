@@ -46,7 +46,7 @@ use app\models\Quiz;
             [
                 'attribute' => 'certification_valid',
                 'value' => function ($model) {
-                    if ($model->correct_ans <= $model->min_correct_ans) {
+                    if ($model->correct_ans < $model->min_correct_ans) {
                         return '';
                     } else if (time() > $model->certification_valid) {
                         return 'inactive ' . Yii::$app->formatter->asDate($model->certification_valid);

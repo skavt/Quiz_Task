@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\models\Answer;
 use app\models\Quiz;
 use Yii;
 use app\models\Question;
@@ -57,13 +58,13 @@ class QuestionController extends Controller
     public function actionIndex($id)
     {
         $searchModel = new QuestionSearch();
-        $newModel = Quiz::findOne($id);
+        $quizModel = Quiz::findOne($id);
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams, $id);
 
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
-            'newModel' => $newModel,
+            'quizModel' => $quizModel,
         ]);
     }
 
@@ -90,25 +91,25 @@ class QuestionController extends Controller
     public function actionCreate($id)
     {
         $model = new Question();
-        $newModel = Quiz::findOne($id);
+        $quizModel = Quiz::findOne($id);
 
         if ($model->load(Yii::$app->request->post())) {
             $model->quiz_id = $id;
             if ($model->save()) {
-                return $this->redirect(['view', 'id' => $model->id]);
+                return $this->redirect(['index', 'id' => $quizModel->id]);
             }
         }
 
         $count = Question::find()->where(['quiz_id' => $id])->count();
 
-        if ($count >= $newModel->max_questions) {
-            Yii::$app->session->setFlash('error', 'You can\'t create new question. Please return in Quiz');
+        if ($count >= $quizModel->max_questions) {
+            Yii::$app->session->setFlash('error', 'You can\'t create new question');
             return $this->render('/quiz/_error');
         }
 
         return $this->render('create', [
             'model' => $model,
-            'newModel' => $newModel,
+            'quizModel' => $quizModel,
         ]);
     }
 
