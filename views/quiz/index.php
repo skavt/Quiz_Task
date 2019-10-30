@@ -31,6 +31,9 @@ $this->params['breadcrumbs'][] = $this->title;
                     'value' => function ($data, $id) {
                         return Html::a($data['subject'], ['question/index', 'id' => $id]);
                     },
+                    'contentOptions' => function () {
+                        return ['title' => 'Create Questions'];
+                    }
                 ],
                 'min_correct_ans',
                 'max_questions',

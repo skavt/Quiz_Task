@@ -61,12 +61,12 @@ class Result extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'quiz_name' => 'Quiz Name',
-            'correct_ans' => 'Correct Ans',
+            'correct_ans' => 'Correct Answer',
             'min_correct_ans' => 'Min Correct Answer',
             'question_count' => 'Question Count',
-            'certification_valid' => 'Certification Valid',
-            'created_at' => 'Created At',
-            'created_by' => 'Created By',
+            'certification_valid' => 'Certification Status',
+            'created_at' => 'Passed At',
+            'created_by' => 'Passed By',
         ];
     }
 

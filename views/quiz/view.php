@@ -1,11 +1,13 @@
 <?php
 
+use yii\grid\GridView;
 use yii\helpers\Html;
 use yii\web\YiiAsset;
 use yii\widgets\DetailView;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Quiz */
+/* @var $dataProvider yii\data\ActiveDataProvider */
 
 $this->title = $model->subject;
 $this->params['breadcrumbs'][] = ['label' => 'Quizzes', 'url' => ['index']];
@@ -25,35 +27,66 @@ YiiAsset::register($this);
                 'method' => 'post',
             ],
     ]) ?>
-    <br>
-    <p calss="text-muted">
-        <small>
-            <i>
-                <span>
-                    Created At: <?php echo Yii::$app->formatter->asRelativeTime($model->created_at) ?> |
-                    Updated At: <?php echo Yii::$app->formatter->asRelativeTime($model->updated_at) ?>
-                </span>
-                <br>
-                <span>
-                    Created By: <?php echo $model->createdBy->username ?> |
-                    Updated By: <?php echo $model->updatedBy->username ?>
-                </span>
-            </i>
-        </small>
-    </p>
 
-    <?php echo DetailView::widget([
-        'model' => $model,
-        'attributes' =>
+    <p>
+
+        <?php echo DetailView::widget([
+            'model' => $model,
+            'attributes' =>
+                [
+                    'subject',
+                    'min_correct_ans',
+                    'max_questions',
+                    [
+                        'attribute' => 'certification_valid',
+                        'value' => function ($model) {
+                            return $model->certification_valid . ' Months';
+                        }
+                    ],
+                    'created_at:datetime',
+                    'updated_at:datetime',
+                    [
+                        'attribute' => 'created_by',
+                        'value' => function ($model) {
+                            return $model->createdBy->username;
+                        }
+                    ],
+                    [
+                        'attribute' => 'updated_by',
+                        'value' => function ($model) {
+                            return $model->updatedBy->username;
+                        }
+                    ],
+                ],
+        ]) ?>
+    <h1>Questions</h1>
+    <p>
+        <?= Html::a('Create Question', ['/question/create', 'id' => $model->id], ['class' => 'btn btn-success']) ?>
+    </p>
+    <?php echo GridView::widget([
+        'dataProvider' => $dataProvider,
+        'columns' =>
             [
-                'subject',
-                'min_correct_ans',
-                'max_questions',
-                'created_at:datetime',
-                'updated_at:datetime',
-                'created_by',
-                'updated_by',
+                [
+                    'class' => 'yii\grid\SerialColumn'
+                ],
+                [
+                    'attribute' => 'name',
+                    'format' => 'raw',
+                    'value' => function ($data, $id) {
+                        return Html::a($data['name'], ['answer/index', 'id' => $id]);
+                    },
+                    'contentOptions' => function () {
+                        return ['title' => 'Create Answers'];
+                    }
+                ],
+                'hint',
+                'max_ans',
+
+                [
+                    'class' => 'yii\grid\ActionColumn'
+                ],
             ],
-    ]) ?>
+    ]); ?>
 
 </div>

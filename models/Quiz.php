@@ -47,10 +47,11 @@ class Quiz extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['subject', 'min_correct_ans'], 'required'],
-            [['min_correct_ans', 'max_questions', 'created_at', 'updated_at', 'created_by', 'updated_by'], 'integer'],
+            [['subject', 'min_correct_ans', 'certification_valid', 'max_questions'], 'required'],
+            [['min_correct_ans', 'max_questions', 'certification_valid', 'created_at', 'updated_at', 'created_by', 'updated_by'], 'integer', 'min' => 0],
             [['certification_valid'], 'safe'],
             [['subject'], 'string', 'max' => 127],
+            ['max_questions','compare','compareAttribute' => 'min_correct_ans', 'operator' => '>=', 'type' => 'number'],
             [['updated_by'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['updated_by' => 'id']],
             [['created_by'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['created_by' => 'id']],
         ];
@@ -66,7 +67,7 @@ class Quiz extends \yii\db\ActiveRecord
             'subject' => 'Subject',
             'min_correct_ans' => 'Min Correct Answer',
             'max_questions' => 'Max Questions',
-            'certification_valid' => 'Certification Valid',
+            'certification_valid' => 'Certification Valid (Month)',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
             'created_by' => 'Created By',

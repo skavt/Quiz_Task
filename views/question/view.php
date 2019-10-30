@@ -25,23 +25,8 @@ YiiAsset::register($this);
                 'method' => 'post',
             ],
     ]) ?>
-    <br>
 
-    <p calss="text-muted">
-        <small>
-            <i>
-                <span>
-                    Created At: <?php echo Yii::$app->formatter->asRelativeTime($model->created_at) ?> |
-                    Updated At: <?php echo Yii::$app->formatter->asRelativeTime($model->updated_at) ?>
-                </span>
-                <br>
-                <span>
-                    Created By: <?php echo $model->createdBy->username ?> |
-                    Updated By: <?php echo $model->updatedBy->username ?>
-                </span>
-            </i>
-        </small>
-    </p>
+    <p>
 
     <?php echo DetailView::widget([
         'model' => $model,
@@ -52,9 +37,20 @@ YiiAsset::register($this);
                 'max_ans',
                 'created_at:datetime',
                 'updated_at:datetime',
-                'created_by',
-                'updated_by',
+                [
+                    'attribute' => 'created_by',
+                    'value' => function ($model) {
+                        return $model->createdBy->username;
+                    }
+                ],
+                [
+                    'attribute' => 'updated_by',
+                    'value' => function ($model) {
+                        return $model->updatedBy->username;
+                    }
+                ],
             ],
     ]) ?>
+
 
 </div>

@@ -3,7 +3,6 @@
 namespace app\controllers;
 
 use app\models\Answer;
-use app\models\AnswerSearch;
 use app\models\Question;
 use app\models\QuestionSearch;
 use app\models\Result;
@@ -11,7 +10,6 @@ use app\models\ResultSearch;
 use Yii;
 use app\models\Quiz;
 use app\models\QuizSearch;
-use yii\data\ActiveDataProvider;
 use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -79,8 +77,15 @@ class QuizController extends Controller
      */
     public function actionView($id)
     {
+        $searchModel = new QuestionSearch();
+        $quizModel = Quiz::findOne($id);
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams, $id);
+
         return $this->render('view', [
             'model' => $this->findModel($id),
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+            'quizModel' => $quizModel,
         ]);
     }
 
@@ -93,10 +98,6 @@ class QuizController extends Controller
     {
         $model = new Quiz();
 
-        if ($model->load(Yii::$app->request->post()) && $model->min_correct_ans > $model->max_questions) {
-            Yii::$app->session->setFlash('error', 'You can\'t create quiz. Min correct answer num is more than Max question num');
-            return $this->render('_error');
-        }
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect('index');
         }
@@ -162,9 +163,16 @@ class QuizController extends Controller
         $result = new Result();
         $quizModel = $this->findModel($id);
         $questionModel = Question::find()->where(['quiz_id' => $id])->all();
-        $count = Question::find()->where(['quiz_id' => $id])->count();
+        $countQuestion = Question::find()->where(['quiz_id' => $id])->count();
 
-        if ($count < $quizModel->min_correct_ans) {
+        foreach ($questionModel as $question) {
+            if (!Answer::findOne(['question_id' => $question->id])) {
+                Yii::$app->session->setFlash('error', 'Please add more Questions or Answers and you can Start quiz');
+                return $this->render('_error');
+            }
+        }
+
+        if ($countQuestion < $quizModel->min_correct_ans) {
             Yii::$app->session->setFlash('error', 'Please add more Questions and you can Start quiz');
             return $this->render('_error');
         }
@@ -198,11 +206,11 @@ class QuizController extends Controller
 
             $result->correct_ans = $correctAnswer;
             $result->quiz_name = $quizModel->subject;
-            $result->question_count = $count;
+            $result->question_count = $countQuestion;
             $result->min_correct_ans = $quizModel->min_correct_ans;
             $result->created_at = time();
             $month = strtotime(" + $quizModel->certification_valid months", $result->created_at);
-            $result->certification_valid = $month;;
+            $result->certification_valid = $month;
 
             if (!$result->save()) {
                 Yii::$app->session->setFlash('error', 'Your result is not save. Please try again');
@@ -212,7 +220,7 @@ class QuizController extends Controller
             return $this->render('outcome', [
                 'failed' => $failed,
                 'passed' => $passed,
-                'count' => $count,
+                'countQuestion' => $countQuestion,
                 'correctAnswer' => $correctAnswer,
                 'quizModel' => $quizModel,
             ]);

@@ -8,7 +8,7 @@ use yii\helpers\Html;
 /* @var $questionModel AnswerController */
 
 
-$this->title = 'Create answer for: ' . $questionModel->name . ' question';
+$this->title = 'Create answer for: ' . $questionModel->name;
 $this->params['breadcrumbs'][] = ['label' => 'Answer', 'url' => ['answer/index/', 'id' => $_GET['id']]];
 $this->params['breadcrumbs'][] = $this->title;
 ?>

@@ -14,11 +14,11 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'subject')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'min_correct_ans')->textInput() ?>
+    <?= $form->field($model, 'min_correct_ans')->input('number', ['min' => 0]) ?>
 
-    <?= $form->field($model, 'max_questions')->textInput() ?>
+    <?= $form->field($model, 'max_questions')->input('number', ['min' => 0]) ?>
 
-    <?= $form->field($model, 'certification_valid')->textInput()->input('certification_valid', ['placeholder' => "Only Months"]) ?>
+    <?= $form->field($model, 'certification_valid')->input('number', ['min' => 0]) ?>
 
     <div class="form-group">
         <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>

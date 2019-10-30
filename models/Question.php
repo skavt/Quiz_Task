@@ -48,8 +48,8 @@ class Question extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['quiz_id', 'name'], 'required'],
-            [['quiz_id', 'max_ans', 'created_at', 'updated_at', 'created_by', 'updated_by'], 'integer'],
+            [['quiz_id', 'name', 'max_ans'], 'required'],
+            [['quiz_id', 'created_at', 'updated_at', 'created_by', 'updated_by'], 'integer'],
             [['name', 'hint'], 'string', 'max' => 255],
             [['quiz_id'], 'exist', 'skipOnError' => true, 'targetClass' => Quiz::className(), 'targetAttribute' => ['quiz_id' => 'id']],
             [['created_by'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['created_by' => 'id']],

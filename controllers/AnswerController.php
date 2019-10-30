@@ -96,6 +96,7 @@ class AnswerController extends Controller
         if ($model->load(Yii::$app->request->post())) {
             $model->question_id = $id;
             $correctAnsCount = Answer::find()->where(['question_id' => $id, 'is_correct' => true])->count();
+            $incorrectAnsCount = Answer::find()->where(['question_id' => $id, 'is_correct' => false])->count();
             $count = Answer::find()->where(['question_id' => $id])->count();
 
             if ($count >= $questionModel->max_ans) {
@@ -108,6 +109,12 @@ class AnswerController extends Controller
 
             if ($correctAnsCount == 1 && $model->is_correct == 1) {
                 Yii::$app->session->setFlash('error', 'You have already chosen correct answer');
+                return $this->render('create', [
+                    'model' => $model,
+                    'questionModel' => $questionModel,
+                ]);
+            }  else if($incorrectAnsCount == $questionModel->max_ans-1 && $model->is_correct == 0) {
+                Yii::$app->session->setFlash('error', 'You can\'t choose another incorrect answer');
                 return $this->render('create', [
                     'model' => $model,
                     'questionModel' => $questionModel,
