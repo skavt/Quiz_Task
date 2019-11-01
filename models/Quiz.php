@@ -62,7 +62,9 @@ class Quiz extends \yii\db\ActiveRecord
 
     public function validateMaxQuestion($attribute)
     {
-        $countQuestion = Question::find()->where(['quiz_id' => $this->id])->count();
+        $countQuestion = Question::find()
+            ->where(['quiz_id' => $this->id])
+            ->count();
 
         if ($countQuestion > $this->max_questions) {
             $this->addError($attribute, 'Your questions is more than that Max question');

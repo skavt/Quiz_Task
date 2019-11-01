@@ -111,10 +111,14 @@ class QuestionController extends Controller
             }
         }
 
-        $count = Question::find()->where(['quiz_id' => $id])->count();
+        $count = Question::find()
+            ->where(['quiz_id' => $id])
+            ->count();
 
         if ($count >= $quizModel->max_questions) {
-            Yii::$app->session->setFlash('error', 'You can\'t create new question');
+            Yii::$app->session
+                ->setFlash('error', 'You can\'t create new question');
+
             return $this->render('/quiz/_error');
         }
 

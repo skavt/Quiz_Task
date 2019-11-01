@@ -39,8 +39,11 @@ class AnswerController extends Controller
                         'allow' => false,
                         'roles' => ['?'],
                         'denyCallback' => function () {
-                            Yii::$app->session->setFlash('error', 'Please Login');
-                            return Yii::$app->controller->redirect('/site/login');
+                            Yii::$app->session
+                                ->setFlash('error', 'Please Login');
+
+                            return Yii::$app->controller
+                                ->redirect('/site/login');
                         }
                     ],
                     [
@@ -61,7 +64,9 @@ class AnswerController extends Controller
     {
         $searchModel = new AnswerSearch();
         $questionModel = Question::findOne($id);
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams, $id);
+        $dataProvider = $searchModel
+            ->search(Yii::$app->request->queryParams, $id);
+
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
@@ -91,6 +96,7 @@ class AnswerController extends Controller
     public function actionCreate($id)
     {
         $model = new Answer();
+        $model->question_id = $id;
         $questionModel = Question::findOne($id);
 
         if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
@@ -99,9 +105,11 @@ class AnswerController extends Controller
         }
 
         if ($model->load(Yii::$app->request->post())) {
-            $model->question_id = $id;
 
-            $count = Answer::find()->where(['question_id' => $id])->count();
+            $count = Answer::find()
+                ->where(['question_id' => $id])
+                ->count();
+
             if ($count >= $questionModel->max_ans) {
                 Yii::$app->session->setFlash('error', 'You can\'t create new answer');
                 return $this->render('create', [

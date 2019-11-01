@@ -62,7 +62,9 @@ class Question extends \yii\db\ActiveRecord
 
     public function validateMaxAnswer($attribute)
     {
-        $countAnswer = Answer::find()->where(['question_id' => $this->id])->count();
+        $countAnswer = Answer::find()
+            ->where(['question_id' => $this->id])
+            ->count();
 
         if ($countAnswer > $this->max_ans) {
             $this->addError($attribute, 'Your answers is more than that Max answer');

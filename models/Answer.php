@@ -60,7 +60,9 @@ class Answer extends \yii\db\ActiveRecord
 
     public function correctAnswerValidator($attribute)
     {
-        $correctAnsCount = Answer::find()->where(['question_id' => $this->question_id, 'is_correct' => true])->count();
+        $correctAnsCount = Answer::find()
+            ->where(['question_id' => $this->question_id, 'is_correct' => true])
+            ->count();
 
         if ($correctAnsCount == 1 && $this->is_correct == 1) {
             $this->addError($attribute, 'You have already chosen correct answer');
@@ -69,10 +71,18 @@ class Answer extends \yii\db\ActiveRecord
 
     public function incorrectAnswerValidator($attribute)
     {
-        $incorrectAnsCount = Answer::find()->where(['question_id' => $this->question_id, 'is_correct' => false])->count();
-        $questionModel = Question::find()->where(['id' => $this->question_id])->select('max_ans')->scalar();
+        $incorrectAnsCount = Answer::find()
+            ->where([
+                'question_id' => $this->question_id,
+                'is_correct' => false
+            ])
+            ->count();
 
-        if ($incorrectAnsCount == $questionModel - 1 && $this->is_correct == 0) {
+        $question = Question::find()
+            ->where(['id' => $this->question_id])
+            ->one();
+
+        if ($this->is_correct == 0 && $incorrectAnsCount == $question->max_ans - 1) {
             $this->addError($attribute, 'You can\'t choose another incorrect answer');
         }
     }

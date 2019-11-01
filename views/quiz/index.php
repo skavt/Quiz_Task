@@ -1,5 +1,6 @@
 <?php
 
+use dosamigos\datepicker\DatePicker;
 use yii\helpers\Html;
 use yii\grid\GridView;
 
@@ -20,6 +21,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?php echo GridView::widget([
         'dataProvider' => $dataProvider,
+        'filterModel' => $searchModel,
         'columns' =>
             [
                 [
@@ -33,10 +35,25 @@ $this->params['breadcrumbs'][] = $this->title;
                     },
                     'contentOptions' => function () {
                         return ['title' => 'Create Questions'];
-                    }
+                    },
                 ],
                 'min_correct_ans',
                 'max_questions',
+                [
+                    'attribute' => 'created_at',
+//                    'value' => function ($model) {
+//                        return Yii::$app->formatter->asDate($model->created_at);
+//                    },
+//                    'filter' => DatePicker::widget([
+//                        'name' => 'created_at',
+//                        'attribute' => 'date',
+//                        'template' => '{input}{addon}',
+//                        'clientOptions' => [
+//                            'autoclose' => true,
+//                            'format' => 'dd-M-yyyy'
+//                        ]
+//                    ]),
+                ],
                 [
                     'class' => 'yii\grid\ActionColumn'
                 ],
