@@ -53,7 +53,28 @@ class Answer extends \yii\db\ActiveRecord
             [['created_by'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['created_by' => 'id']],
             [['updated_by'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['updated_by' => 'id']],
             [['question_id'], 'exist', 'skipOnError' => true, 'targetClass' => Question::className(), 'targetAttribute' => ['question_id' => 'id']],
+            ['is_correct', 'correctAnswerValidator'],
+            ['is_correct', 'incorrectAnswerValidator'],
         ];
+    }
+
+    public function correctAnswerValidator($attribute)
+    {
+        $correctAnsCount = Answer::find()->where(['question_id' => $this->question_id, 'is_correct' => true])->count();
+
+        if ($correctAnsCount == 1 && $this->is_correct == 1) {
+            $this->addError($attribute, 'You have already chosen correct answer');
+        }
+    }
+
+    public function incorrectAnswerValidator($attribute)
+    {
+        $incorrectAnsCount = Answer::find()->where(['question_id' => $this->question_id, 'is_correct' => false])->count();
+        $questionModel = Question::find()->where(['id' => $this->question_id])->select('max_ans')->scalar();
+
+        if ($incorrectAnsCount == $questionModel - 1 && $this->is_correct == 0) {
+            $this->addError($attribute, 'You can\'t choose another incorrect answer');
+        }
     }
 
     /**

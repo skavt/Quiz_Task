@@ -84,7 +84,10 @@ YiiAsset::register($this);
                 'max_ans',
 
                 [
-                    'class' => 'yii\grid\ActionColumn'
+                    'class' => 'yii\grid\ActionColumn',
+                    'urlCreator' => function ($action, $model) {
+                        return "/question/$action?id=" . $model->id;
+                    },
                 ],
             ],
     ]); ?>

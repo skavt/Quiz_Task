@@ -48,19 +48,37 @@ class Quiz extends \yii\db\ActiveRecord
     {
         return [
             [['subject', 'min_correct_ans', 'certification_valid', 'max_questions'], 'required'],
-            [['min_correct_ans', 'max_questions', 'certification_valid', 'created_at', 'updated_at', 'created_by', 'updated_by'], 'integer', 'min' => 0],
+            [['min_correct_ans', 'max_questions', 'created_at', 'updated_at', 'created_by', 'updated_by'], 'integer'],
             [['certification_valid'], 'safe'],
+            [['min_correct_ans'], 'integer', 'min' => 1],
+            [['max_questions'], 'integer', 'min' => 2],
             [['subject'], 'string', 'max' => 127],
-            ['max_questions','compare','compareAttribute' => 'min_correct_ans', 'operator' => '>=', 'type' => 'number'],
+            ['max_questions', 'compare', 'compareAttribute' => 'min_correct_ans', 'operator' => '>=', 'type' => 'number'],
+            ['max_questions', 'validateMaxQuestion'],
             [['updated_by'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['updated_by' => 'id']],
             [['created_by'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['created_by' => 'id']],
         ];
     }
 
+    public function validateMaxQuestion($attribute)
+    {
+        $countQuestion = Question::find()->where(['quiz_id' => $this->id])->count();
+
+        if ($countQuestion > $this->max_questions) {
+            $this->addError($attribute, 'Your questions is more than that Max question');
+        }
+    }
+
+    public function dropDownList()
+    {
+        return range(1, 6);
+    }
+
     /**
      * {@inheritdoc}
      */
-    public function attributeLabels()
+    public
+    function attributeLabels()
     {
         return [
             'id' => 'ID',
@@ -78,7 +96,8 @@ class Quiz extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getQuestions()
+    public
+    function getQuestions()
     {
         return $this->hasMany(Question::className(), ['quiz_id' => 'id']);
     }
@@ -86,7 +105,8 @@ class Quiz extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getUpdatedBy()
+    public
+    function getUpdatedBy()
     {
         return $this->hasOne(User::className(), ['id' => 'updated_by']);
     }
@@ -94,7 +114,8 @@ class Quiz extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getCreatedBy()
+    public
+    function getCreatedBy()
     {
         return $this->hasOne(User::className(), ['id' => 'created_by']);
     }

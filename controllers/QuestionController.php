@@ -3,6 +3,7 @@
 namespace app\controllers;
 
 use app\models\Answer;
+use app\models\AnswerSearch;
 use app\models\Quiz;
 use Yii;
 use app\models\Question;
@@ -11,6 +12,8 @@ use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\web\Response;
+use yii\widgets\ActiveForm;
 
 /**
  * QuestionController implements the CRUD actions for Question model.
@@ -76,8 +79,15 @@ class QuestionController extends Controller
      */
     public function actionView($id)
     {
+        $searchModel = new AnswerSearch();
+        $questionModel = Question::findOne($id);
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams, $id);
+
         return $this->render('view', [
             'model' => $this->findModel($id),
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+            'questionModel' => $questionModel,
         ]);
     }
 
@@ -92,6 +102,7 @@ class QuestionController extends Controller
     {
         $model = new Question();
         $quizModel = Quiz::findOne($id);
+
 
         if ($model->load(Yii::$app->request->post())) {
             $model->quiz_id = $id;
@@ -123,6 +134,11 @@ class QuestionController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
+
+        if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
+            Yii::$app->response->format = Response::FORMAT_JSON;
+            return ActiveForm::validate($model);
+        }
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);

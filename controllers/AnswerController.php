@@ -11,6 +11,8 @@ use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\web\Response;
+use yii\widgets\ActiveForm;
 
 /**
  * AnswerController implements the CRUD actions for Answer model.
@@ -60,13 +62,11 @@ class AnswerController extends Controller
         $searchModel = new AnswerSearch();
         $questionModel = Question::findOne($id);
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams, $id);
-
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
             'questionModel' => $questionModel,
         ]);
-
     }
 
     /**
@@ -93,12 +93,15 @@ class AnswerController extends Controller
         $model = new Answer();
         $questionModel = Question::findOne($id);
 
+        if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
+            Yii::$app->response->format = Response::FORMAT_JSON;
+            return ActiveForm::validate($model);
+        }
+
         if ($model->load(Yii::$app->request->post())) {
             $model->question_id = $id;
-            $correctAnsCount = Answer::find()->where(['question_id' => $id, 'is_correct' => true])->count();
-            $incorrectAnsCount = Answer::find()->where(['question_id' => $id, 'is_correct' => false])->count();
-            $count = Answer::find()->where(['question_id' => $id])->count();
 
+            $count = Answer::find()->where(['question_id' => $id])->count();
             if ($count >= $questionModel->max_ans) {
                 Yii::$app->session->setFlash('error', 'You can\'t create new answer');
                 return $this->render('create', [
@@ -106,25 +109,11 @@ class AnswerController extends Controller
                     'questionModel' => $questionModel,
                 ]);
             }
-
-            if ($correctAnsCount == 1 && $model->is_correct == 1) {
-                Yii::$app->session->setFlash('error', 'You have already chosen correct answer');
-                return $this->render('create', [
-                    'model' => $model,
-                    'questionModel' => $questionModel,
-                ]);
-            }  else if($incorrectAnsCount == $questionModel->max_ans-1 && $model->is_correct == 0) {
-                Yii::$app->session->setFlash('error', 'You can\'t choose another incorrect answer');
-                return $this->render('create', [
-                    'model' => $model,
-                    'questionModel' => $questionModel,
-                ]);
-            }
-
             if ($model->save()) {
                 return $this->redirect(['index', 'id' => $questionModel->id]);
             }
         }
+
 
         return $this->render('create', [
             'model' => $model,
@@ -143,10 +132,14 @@ class AnswerController extends Controller
     {
         $model = $this->findModel($id);
 
+        if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
+            Yii::$app->response->format = Response::FORMAT_JSON;
+            return ActiveForm::validate($model);
+        }
+
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         }
-
         return $this->render('update', [
             'model' => $model,
         ]);
@@ -166,7 +159,6 @@ class AnswerController extends Controller
         $model = $this->findModel($id);
         $questionId = $model->question_id;
         $this->findModel($id)->delete();
-
         return $this->redirect(['answer/index', 'id' => $questionId]);
     }
 
@@ -182,7 +174,6 @@ class AnswerController extends Controller
         if (($model = Answer::findOne($id)) !== null) {
             return $model;
         }
-
         throw new NotFoundHttpException('The requested page does not exist.');
     }
 }

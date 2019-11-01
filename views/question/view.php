@@ -1,11 +1,13 @@
 <?php
 
+use yii\grid\GridView;
 use yii\helpers\Html;
 use yii\web\YiiAsset;
 use yii\widgets\DetailView;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Question */
+/* @var $dataProvider yii\data\ActiveDataProvider */
 
 $this->title = $model->name;
 $this->params['breadcrumbs'][] = ['label' => 'Questions', 'url' => ['question/index', 'id' => $model->quiz_id]];
@@ -28,29 +30,52 @@ YiiAsset::register($this);
 
     <p>
 
-    <?php echo DetailView::widget([
-        'model' => $model,
-        'attributes' =>
-            [
-                'name',
-                'hint',
-                'max_ans',
-                'created_at:datetime',
-                'updated_at:datetime',
+        <?php echo DetailView::widget([
+            'model' => $model,
+            'attributes' =>
                 [
-                    'attribute' => 'created_by',
-                    'value' => function ($model) {
-                        return $model->createdBy->username;
-                    }
+                    'name',
+                    'hint',
+                    'max_ans',
+                    'created_at:datetime',
+                    'updated_at:datetime',
+                    [
+                        'attribute' => 'created_by',
+                        'value' => function ($model) {
+                            return $model->createdBy->username;
+                        }
+                    ],
+                    [
+                        'attribute' => 'updated_by',
+                        'value' => function ($model) {
+                            return $model->updatedBy->username;
+                        }
+                    ],
                 ],
+        ]) ?>
+    <h1>Answers</h1>
+    <p>
+        <?= Html::a('Create Answer', ['/answer/create', 'id' => $model->id], ['class' => 'btn btn-success']) ?>
+    </p>
+    <?php echo GridView::widget([
+        'dataProvider' => $dataProvider,
+        'columns' =>
+            [
                 [
-                    'attribute' => 'updated_by',
-                    'value' => function ($model) {
-                        return $model->updatedBy->username;
-                    }
+                    'class' => 'yii\grid\SerialColumn'
+                ],
+                'is_correct',
+                'name',
+
+                [
+                    'class' => 'yii\grid\ActionColumn',
+                    'urlCreator' => function ($action, $model) {
+                        return "/answer/$action?id=" . $model->id;
+                    },
                 ],
             ],
-    ]) ?>
+
+    ]); ?>
 
 
 </div>

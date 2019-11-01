@@ -34,6 +34,7 @@ class Question extends \yii\db\ActiveRecord
     {
         return 'question';
     }
+
     public function behaviors()
     {
         return [
@@ -51,10 +52,21 @@ class Question extends \yii\db\ActiveRecord
             [['quiz_id', 'name', 'max_ans'], 'required'],
             [['quiz_id', 'created_at', 'updated_at', 'created_by', 'updated_by'], 'integer'],
             [['name', 'hint'], 'string', 'max' => 255],
+            [['max_ans'], 'integer', 'min' => 2, 'max' => 6],
+            ['max_ans', 'validateMaxAnswer'],
             [['quiz_id'], 'exist', 'skipOnError' => true, 'targetClass' => Quiz::className(), 'targetAttribute' => ['quiz_id' => 'id']],
             [['created_by'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['created_by' => 'id']],
             [['updated_by'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['updated_by' => 'id']],
         ];
+    }
+
+    public function validateMaxAnswer($attribute)
+    {
+        $countAnswer = Answer::find()->where(['question_id' => $this->id])->count();
+
+        if ($countAnswer > $this->max_ans) {
+            $this->addError($attribute, 'Your answers is more than that Max answer');
+        }
     }
 
     /**

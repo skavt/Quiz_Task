@@ -14,6 +14,8 @@ use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\web\Response;
+use yii\widgets\ActiveForm;
 
 /**
  * QuizController implements the CRUD actions for Quiz model.
@@ -97,12 +99,14 @@ class QuizController extends Controller
     public function actionCreate()
     {
         $model = new Quiz();
+        $dropDownList = $model->dropDownList();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect('index');
         }
         return $this->render('create', [
             'model' => $model,
+            'dropDownList' => $dropDownList,
         ]);
     }
 
@@ -116,13 +120,22 @@ class QuizController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
+        $dropDownList = $model->dropDownList();
+
+
+        if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
+            Yii::$app->response->format = Response::FORMAT_JSON;
+            return ActiveForm::validate($model);
+        }
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
+
         }
 
         return $this->render('update', [
             'model' => $model,
+            'dropDownList' => $dropDownList,
         ]);
     }
 
@@ -166,8 +179,10 @@ class QuizController extends Controller
         $countQuestion = Question::find()->where(['quiz_id' => $id])->count();
 
         foreach ($questionModel as $question) {
-            if (!Answer::findOne(['question_id' => $question->id])) {
-                Yii::$app->session->setFlash('error', 'Please add more Questions or Answers and you can Start quiz');
+            $countAnswer = Answer::find()->where(['question_id' => $question->id])->count();
+//            var_dump($countAnswer);
+            if ($countAnswer == 0 || $countAnswer == 1) {
+                Yii::$app->session->setFlash('error', 'Please add Answers and you can Start quiz');
                 return $this->render('_error');
             }
         }
