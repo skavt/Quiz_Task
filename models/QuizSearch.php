@@ -60,11 +60,12 @@ class QuizSearch extends Quiz
             return $dataProvider;
         }
 
-        if ($this->created_at) {
-            $query->andFilterWhere([
-                'FROM_UNIXTIME (created_at, "%Y-%m-%d")' => $this->created_at
-            ]);
-        }
+//        uncomment the following lines if you want to filter by created_at
+//        if ($this->created_at) {
+//            $query->andFilterWhere([
+//                'FROM_UNIXTIME (created_at, "%Y-%m-%d")' => $this->created_at
+//            ]);
+//        }
 
         // grid filtering conditions
         $query->andFilterWhere([

@@ -173,65 +173,35 @@ class QuizController extends Controller
 
     public function actionStart($id)
     {
-        $result = new Result();
         $quizModel = $this->findModel($id);
         $questionModel = Question::find()->where(['quiz_id' => $id])->all();
         $countQuestion = Question::find()->where(['quiz_id' => $id])->count();
 
-        foreach ($questionModel as $question) {
-            $countAnswer = Answer::find()->where(['question_id' => $question->id])->count();
-//            var_dump($countAnswer);
-            if ($countAnswer == 0 || $countAnswer == 1) {
-                Yii::$app->session->setFlash('error', 'Please add Answers and you can Start quiz');
-                return $this->render('_error');
-            }
-        }
+        $questionValidator = $quizModel->startQuizQuestionValidation();
 
-        if ($countQuestion < $quizModel->min_correct_ans) {
+        if ($questionValidator == true) {
             Yii::$app->session->setFlash('error', 'Please add more Questions and you can Start quiz');
             return $this->render('_error');
         }
+
+        $answerValidator = $quizModel->startQuizAnswerValidation();
+
+        if ($answerValidator == true) {
+            Yii::$app->session->setFlash('error', 'Please add Answers and you can Start quiz');
+            return $this->render('_error');
+        }
+
+        $correctAnswer = $quizModel->startQuiz();
+
         if (Yii::$app->request->post()) {
-            $response = Yii::$app->request->post();
-            $answerIndex = 0;
-            $correctAnswer = 0;
-            $array = [];
 
-            foreach ($response as $text => $answerId) {
-                $select = substr($text, 0, 9);
-                if ($select == 'selected_') {
-                    $array[$answerIndex] = $answerId;
-                    $answerIndex++;
-                }
-
-            }
-            foreach ($array as $arr) {
-                $answer = Answer::findOne($arr);
-                if ($answer->is_correct == 1) {
-                    $correctAnswer++;
-                }
-            }
             if ($correctAnswer < $quizModel->min_correct_ans) {
                 $failed = ' ';
                 $passed = '';
             } else {
-                $passed = ' ';
                 $failed = '';
+                $passed = ' ';
             }
-
-            $result->correct_ans = $correctAnswer;
-            $result->quiz_name = $quizModel->subject;
-            $result->question_count = $countQuestion;
-            $result->min_correct_ans = $quizModel->min_correct_ans;
-            $result->created_at = time();
-            $month = strtotime(" + $quizModel->certification_valid months", $result->created_at);
-            $result->certification_valid = $month;
-
-            if (!$result->save()) {
-                Yii::$app->session->setFlash('error', 'Your result is not save. Please try again');
-                return $this->render('_error');
-            }
-
             return $this->render('outcome', [
                 'failed' => $failed,
                 'passed' => $passed,

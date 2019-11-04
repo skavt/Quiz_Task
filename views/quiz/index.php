@@ -21,7 +21,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?php echo GridView::widget([
         'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
+//        'filterModel' => $searchModel,
         'columns' =>
             [
                 [
@@ -44,15 +44,15 @@ $this->params['breadcrumbs'][] = $this->title;
                     'value' => function ($model) {
                         return Yii::$app->formatter->asDate($model->created_at, 'php:Y-m-d');
                     },
-                    'filter' => DatePicker::widget([
-                        'model' => $searchModel,
-                        'attribute' => 'created_at',
-                        'template' => '{input}{addon}',
-                        'clientOptions' => [
-                            'autoclose' => true,
-                            'format' => 'yyyy-mm-dd',
-                        ]
-                    ]),
+//                    'filter' => DatePicker::widget([
+//                        'model' => $searchModel,
+//                        'attribute' => 'created_at',
+//                        'template' => '{input}{addon}',
+//                        'clientOptions' => [
+//                            'autoclose' => true,
+//                            'format' => 'yyyy-mm-dd',
+//                        ]
+//                    ]),
                 ],
                 [
                     'class' => 'yii\grid\ActionColumn'

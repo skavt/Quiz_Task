@@ -71,6 +71,78 @@ class Quiz extends \yii\db\ActiveRecord
         }
     }
 
+    public function startQuizQuestionValidation()
+    {
+        $countQuestion = Question::find()
+            ->where(['quiz_id' => $this->id])
+            ->count();
+
+        if ($countQuestion < $this->min_correct_ans) {
+            return true;
+        }
+    }
+
+    public function startQuizAnswerValidation()
+    {
+
+        $questionModel = Question::find()
+            ->where(['quiz_id' => $this->id])
+            ->all();
+
+        foreach ($questionModel as $question) {
+            $countAnswer = Answer::find()
+                ->where(['question_id' => $question->id])
+                ->count();
+
+            if ($countAnswer <= 1) {
+                return true;
+            }
+        }
+    }
+
+    public function startQuiz()
+    {
+        $result = new Result();
+        $countQuestion = Question::find()
+            ->where(['quiz_id' => $this->id])
+            ->count();
+
+        if (Yii::$app->request->post()) {
+            $response = Yii::$app->request->post();
+            $answerIndex = 0;
+            $correctAnswer = 0;
+            $array = [];
+
+            foreach ($response as $text => $answerId) {
+                $select = substr($text, 0, 9);
+                if ($select == 'selected_') {
+                    $array[$answerIndex] = $answerId;
+                    $answerIndex++;
+                }
+            }
+            foreach ($array as $arr) {
+                $answer = Answer::findOne($arr);
+                if ($answer->is_correct == 1) {
+                    $correctAnswer++;
+                }
+            }
+            $result->correct_ans = $correctAnswer;
+            $result->quiz_name = $this->subject;
+            $result->question_count = $countQuestion;
+            $result->min_correct_ans = $this->min_correct_ans;
+            $result->created_at = time();
+            $month = strtotime(" + $this->certification_valid months", $result->created_at);
+            $result->certification_valid = $month;
+
+            if (!$result->save()) {
+                return [
+                    'message' => 'Your result didn\'t save'
+                ];
+            }
+            return $correctAnswer;
+        }
+    }
+
     public function dropDownList()
     {
         return range(1, 6);
