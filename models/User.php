@@ -50,6 +50,7 @@ class User extends ActiveRecord implements IdentityInterface
             'access_token' => 'Access Token',
         ];
     }
+
     /**
      * {@inheritdoc}
      */
@@ -110,6 +111,6 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public function validatePassword($password)
     {
-        return Yii::$app->security->validatePassword($password,$this->password);
+        return Yii::$app->security->validatePassword($password, $this->password);
     }
 }

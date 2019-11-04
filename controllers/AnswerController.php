@@ -64,8 +64,7 @@ class AnswerController extends Controller
     {
         $searchModel = new AnswerSearch();
         $questionModel = Question::findOne($id);
-        $dataProvider = $searchModel
-            ->search(Yii::$app->request->queryParams, $id);
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams, $id);
 
         return $this->render('index', [
             'searchModel' => $searchModel,
@@ -98,28 +97,30 @@ class AnswerController extends Controller
         $model = new Answer();
         $model->question_id = $id;
         $questionModel = Question::findOne($id);
+        $count = Answer::find()
+            ->where(['question_id' => $id])
+            ->count();
+
+        if ($count >= $questionModel->max_ans) {
+            Yii::$app->session
+                ->setFlash('error', 'You can\'t create new answer');
+
+            return $this->render('create', [
+                'model' => $model,
+                'questionModel' => $questionModel,
+            ]);
+        }
 
         if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
             Yii::$app->response->format = Response::FORMAT_JSON;
             return ActiveForm::validate($model);
         }
 
-        if ($model->load(Yii::$app->request->post())) {
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
 
-            $count = Answer::find()
-                ->where(['question_id' => $id])
-                ->count();
-
-            if ($count >= $questionModel->max_ans) {
-                Yii::$app->session->setFlash('error', 'You can\'t create new answer');
-                return $this->render('create', [
-                    'model' => $model,
-                    'questionModel' => $questionModel,
-                ]);
-            }
-            if ($model->save()) {
-                return $this->redirect(['index', 'id' => $questionModel->id]);
-            }
+            return $this->redirect([
+                'index', 'id' => $questionModel->id
+            ]);
         }
 
 
@@ -146,7 +147,11 @@ class AnswerController extends Controller
         }
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+
+            return $this->redirect([
+                'view', 'id' => $model->id
+            ]);
+
         }
         return $this->render('update', [
             'model' => $model,
@@ -167,7 +172,10 @@ class AnswerController extends Controller
         $model = $this->findModel($id);
         $questionId = $model->question_id;
         $this->findModel($id)->delete();
-        return $this->redirect(['answer/index', 'id' => $questionId]);
+
+        return $this->redirect([
+            'answer/index', 'id' => $questionId
+        ]);
     }
 
     /**

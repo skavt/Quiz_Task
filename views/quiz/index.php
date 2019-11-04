@@ -42,7 +42,8 @@ $this->params['breadcrumbs'][] = $this->title;
                 [
                     'attribute' => 'created_at',
                     'value' => function ($model) {
-                        return Yii::$app->formatter->asDate($model->created_at, 'php:Y-m-d');
+                        return Yii::$app->formatter
+                            ->asDate($model->created_at, 'php:Y-m-d');
                     },
 //                    'filter' => DatePicker::widget([
 //                        'model' => $searchModel,

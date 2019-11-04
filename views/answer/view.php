@@ -26,7 +26,8 @@ YiiAsset::register($this);
                 'method' => 'post',
             ],
     ]) ?>
-    <p>
+
+    <p></p>
 
     <?php echo DetailView::widget([
         'model' => $model,

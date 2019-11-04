@@ -28,37 +28,37 @@ YiiAsset::register($this);
             ],
     ]) ?>
 
-    <p>
+    <p></p>
 
-        <?php echo DetailView::widget([
-            'model' => $model,
-            'attributes' =>
+    <?php echo DetailView::widget([
+        'model' => $model,
+        'attributes' =>
+            [
+                'subject',
+                'min_correct_ans',
+                'max_questions',
                 [
-                    'subject',
-                    'min_correct_ans',
-                    'max_questions',
-                    [
-                        'attribute' => 'certification_valid',
-                        'value' => function ($model) {
-                            return $model->certification_valid . ' Months';
-                        }
-                    ],
-                    'created_at:datetime',
-                    'updated_at:datetime',
-                    [
-                        'attribute' => 'created_by',
-                        'value' => function ($model) {
-                            return $model->createdBy->username;
-                        }
-                    ],
-                    [
-                        'attribute' => 'updated_by',
-                        'value' => function ($model) {
-                            return $model->updatedBy->username;
-                        }
-                    ],
+                    'attribute' => 'certification_valid',
+                    'value' => function ($model) {
+                        return $model->certification_valid . ' Months';
+                    }
                 ],
-        ]) ?>
+                'created_at:datetime',
+                'updated_at:datetime',
+                [
+                    'attribute' => 'created_by',
+                    'value' => function ($model) {
+                        return $model->createdBy->username;
+                    }
+                ],
+                [
+                    'attribute' => 'updated_by',
+                    'value' => function ($model) {
+                        return $model->updatedBy->username;
+                    }
+                ],
+            ],
+    ]) ?>
     <h1>Questions</h1>
     <p>
         <?= Html::a('Create Question', ['/question/create', 'id' => $model->id], ['class' => 'btn btn-success']) ?>

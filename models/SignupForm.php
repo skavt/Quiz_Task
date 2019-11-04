@@ -18,7 +18,7 @@ class SignupForm extends Model
         return [
             [['username', 'password', 'password_repeat'], 'required'],
             [['username'], 'string', 'min' => 4, 'max' => 55],
-            [['password', 'password_repeat', 'pattern' => '(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%]).{6,20}'], 'string' ,'min' => 6],
+            [['password', 'password_repeat', 'pattern' => '(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%]).{6,20}'], 'string', 'min' => 6],
             ['password_repeat', 'compare', 'compareAttribute' => 'password'],
         ];
     }
@@ -31,8 +31,7 @@ class SignupForm extends Model
         $user->auth_key = \Yii::$app->security->generateRandomString();
         $user->access_token = \Yii::$app->security->generateRandomString();
 
-        if($user->save())
-        {
+        if ($user->save()) {
             return true;
         }
 

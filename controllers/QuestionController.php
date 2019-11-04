@@ -103,14 +103,6 @@ class QuestionController extends Controller
         $model = new Question();
         $quizModel = Quiz::findOne($id);
 
-
-        if ($model->load(Yii::$app->request->post())) {
-            $model->quiz_id = $id;
-            if ($model->save()) {
-                return $this->redirect(['index', 'id' => $quizModel->id]);
-            }
-        }
-
         $count = Question::find()
             ->where(['quiz_id' => $id])
             ->count();
@@ -120,6 +112,19 @@ class QuestionController extends Controller
                 ->setFlash('error', 'You can\'t create new question');
 
             return $this->render('/quiz/_error');
+        }
+
+        if ($model->load(Yii::$app->request->post())) {
+
+            $model->quiz_id = $id;
+
+            if ($model->save()) {
+
+                return $this->redirect([
+                    'index', 'id' => $quizModel->id
+                ]);
+
+            }
         }
 
         return $this->render('create', [
@@ -145,7 +150,11 @@ class QuestionController extends Controller
         }
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+
+            return $this->redirect([
+                'view', 'id' => $model->id
+            ]);
+
         }
 
         return $this->render('update', [
@@ -168,7 +177,9 @@ class QuestionController extends Controller
         $quizId = $model->quiz_id;
         $this->findModel($id)->delete();
 
-        return $this->redirect(['question/index', 'id' => $quizId]);
+        return $this->redirect([
+            'question/index', 'id' => $quizId
+        ]);
     }
 
     /**

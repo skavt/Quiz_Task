@@ -49,9 +49,11 @@ use app\models\Quiz;
                     if ($model->correct_ans < $model->min_correct_ans) {
                         return '';
                     } else if (time() > $model->certification_valid) {
-                        return 'inactive ' . Yii::$app->formatter->asDate($model->certification_valid);
+                        return 'inactive ' . Yii::$app->formatter
+                                ->asDate($model->certification_valid);
                     } else {
-                        return 'active ' . Yii::$app->formatter->asDate($model->certification_valid);
+                        return 'active ' . Yii::$app->formatter
+                                ->asDate($model->certification_valid);
                     }
                 },
                 'contentOptions' => function ($model) {
@@ -61,7 +63,8 @@ use app\models\Quiz;
             [
                 'attribute' => 'created_at',
                 'value' => function ($model) {
-                    return Yii::$app->formatter->asDate($model->created_at);
+                    return Yii::$app->formatter
+                        ->asDate($model->created_at);
                 }
             ],
         ]

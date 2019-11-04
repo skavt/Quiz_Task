@@ -174,20 +174,28 @@ class QuizController extends Controller
     public function actionStart($id)
     {
         $quizModel = $this->findModel($id);
-        $questionModel = Question::find()->where(['quiz_id' => $id])->all();
-        $countQuestion = Question::find()->where(['quiz_id' => $id])->count();
+        $questionModel = Question::find()
+            ->where(['quiz_id' => $id])
+            ->all();
+        $countQuestion = Question::find()
+            ->where(['quiz_id' => $id])
+            ->count();
 
         $questionValidator = $quizModel->startQuizQuestionValidation();
 
         if ($questionValidator == true) {
-            Yii::$app->session->setFlash('error', 'Please add more Questions and you can Start quiz');
+            Yii::$app->session
+                ->setFlash('error', 'Please add more Questions and you can Start quiz');
+
             return $this->render('_error');
         }
 
         $answerValidator = $quizModel->startQuizAnswerValidation();
 
         if ($answerValidator == true) {
-            Yii::$app->session->setFlash('error', 'Please add Answers and you can Start quiz');
+            Yii::$app->session
+                ->setFlash('error', 'Please add Answers and you can Start quiz');
+
             return $this->render('_error');
         }
 

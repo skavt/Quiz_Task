@@ -40,7 +40,7 @@ class QuestionSearch extends Question
      *
      * @return ActiveDataProvider
      */
-    public function search($params,$id)
+    public function search($params, $id)
     {
         $query = Question::find();
 

@@ -21,9 +21,9 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="answer-index">
 
     <h1><?php echo Html::encode($this->title) ?></h1>
-        <p>
-            <?php echo Html::a('Create Answer', ['create', 'id' => $_GET['id']], ['class' => 'btn btn-success']) ?>
-        </p>
+    <p>
+        <?php echo Html::a('Create Answer', ['create', 'id' => $_GET['id']], ['class' => 'btn btn-success']) ?>
+    </p>
 
     <?php echo GridView::widget([
         'dataProvider' => $dataProvider,

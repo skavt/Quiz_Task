@@ -28,7 +28,7 @@ class StartController extends Controller
                     [
                         'allow' => false,
                         'roles' => ['?'],
-                        'denyCallback' => function() {
+                        'denyCallback' => function () {
                             Yii::$app->session->setFlash('error', 'Please Login');
                             return Yii::$app->controller->redirect('/site/login');
                         }
