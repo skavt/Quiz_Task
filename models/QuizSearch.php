@@ -17,8 +17,9 @@ class QuizSearch extends Quiz
     public function rules()
     {
         return [
-            [['id', 'min_correct_ans', 'max_questions', 'created_at', 'updated_at', 'created_by', 'updated_by'], 'integer'],
+            [['id', 'min_correct_ans', 'max_questions',], 'integer'],
             [['subject', 'certification_valid'], 'safe'],
+            [['created_at'], 'string']
         ];
     }
 
@@ -59,16 +60,17 @@ class QuizSearch extends Quiz
             return $dataProvider;
         }
 
+        if ($this->created_at) {
+            $query->andFilterWhere([
+                'FROM_UNIXTIME (created_at, "%Y-%m-%d")' => $this->created_at
+            ]);
+        }
+
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
             'min_correct_ans' => $this->min_correct_ans,
             'max_questions' => $this->max_questions,
-            'certification_valid' => $this->certification_valid,
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at,
-            'created_by' => $this->created_by,
-            'updated_by' => $this->updated_by,
         ]);
 
         $query->andFilterWhere(['like', 'subject', $this->subject]);

@@ -41,18 +41,18 @@ $this->params['breadcrumbs'][] = $this->title;
                 'max_questions',
                 [
                     'attribute' => 'created_at',
-//                    'value' => function ($model) {
-//                        return Yii::$app->formatter->asDate($model->created_at);
-//                    },
-//                    'filter' => DatePicker::widget([
-//                        'name' => 'created_at',
-//                        'attribute' => 'date',
-//                        'template' => '{input}{addon}',
-//                        'clientOptions' => [
-//                            'autoclose' => true,
-//                            'format' => 'dd-M-yyyy'
-//                        ]
-//                    ]),
+                    'value' => function ($model) {
+                        return Yii::$app->formatter->asDate($model->created_at, 'php:Y-m-d');
+                    },
+                    'filter' => DatePicker::widget([
+                        'model' => $searchModel,
+                        'attribute' => 'created_at',
+                        'template' => '{input}{addon}',
+                        'clientOptions' => [
+                            'autoclose' => true,
+                            'format' => 'yyyy-mm-dd',
+                        ]
+                    ]),
                 ],
                 [
                     'class' => 'yii\grid\ActionColumn'

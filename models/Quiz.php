@@ -54,13 +54,13 @@ class Quiz extends \yii\db\ActiveRecord
             [['max_questions'], 'integer', 'min' => 2],
             [['subject'], 'string', 'max' => 127],
             ['max_questions', 'compare', 'compareAttribute' => 'min_correct_ans', 'operator' => '>=', 'type' => 'number'],
-            ['max_questions', 'validateMaxQuestion'],
+            ['max_questions', 'maxQuestionValidator'],
             [['updated_by'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['updated_by' => 'id']],
             [['created_by'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['created_by' => 'id']],
         ];
     }
 
-    public function validateMaxQuestion($attribute)
+    public function maxQuestionValidator($attribute)
     {
         $countQuestion = Question::find()
             ->where(['quiz_id' => $this->id])
