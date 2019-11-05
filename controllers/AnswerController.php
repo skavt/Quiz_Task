@@ -95,6 +95,7 @@ class AnswerController extends Controller
     public function actionCreate($id)
     {
         $model = new Answer();
+        $model->scenario = 'create';
         $model->question_id = $id;
         $questionModel = Question::findOne($id);
         $count = Answer::find()
@@ -109,11 +110,6 @@ class AnswerController extends Controller
                 'model' => $model,
                 'questionModel' => $questionModel,
             ]);
-        }
-
-        if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
-            Yii::$app->response->format = Response::FORMAT_JSON;
-            return ActiveForm::validate($model);
         }
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
@@ -140,11 +136,6 @@ class AnswerController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-
-        if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
-            Yii::$app->response->format = Response::FORMAT_JSON;
-            return ActiveForm::validate($model);
-        }
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
 

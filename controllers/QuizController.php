@@ -122,12 +122,6 @@ class QuizController extends Controller
         $model = $this->findModel($id);
         $dropDownList = $model->dropDownList();
 
-
-        if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
-            Yii::$app->response->format = Response::FORMAT_JSON;
-            return ActiveForm::validate($model);
-        }
-
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
 

@@ -53,8 +53,8 @@ class Answer extends \yii\db\ActiveRecord
             [['created_by'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['created_by' => 'id']],
             [['updated_by'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['updated_by' => 'id']],
             [['question_id'], 'exist', 'skipOnError' => true, 'targetClass' => Question::className(), 'targetAttribute' => ['question_id' => 'id']],
-            ['is_correct', 'correctAnswerValidator'],
-            ['is_correct', 'incorrectAnswerValidator'],
+            ['is_correct', 'correctAnswerValidator', 'on' => 'create'],
+            ['is_correct', 'incorrectAnswerValidator', 'on' => 'create'],
         ];
     }
 
@@ -67,6 +67,7 @@ class Answer extends \yii\db\ActiveRecord
         if ($correctAnsCount == 1 && $this->is_correct == 1) {
             $this->addError($attribute, 'You have already chosen correct answer');
         }
+
     }
 
     public function incorrectAnswerValidator($attribute)

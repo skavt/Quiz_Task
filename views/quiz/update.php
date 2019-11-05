@@ -17,20 +17,12 @@ $this->params['breadcrumbs'][] = 'Update';
 
     <h1><?php echo Html::encode($this->title) ?></h1>
 
-    <?php $form = ActiveForm::begin(); ?>
+    <?php echo $this->render('_form',
+        [
+            'model' => $model,
+            'dropDownList' => $dropDownList,
+        ]);
+    ?>
 
-    <?= $form->field($model, 'subject')->textInput(['maxlength' => true]) ?>
-
-    <?= $form->field($model, 'min_correct_ans')->textInput() ?>
-
-    <?= $form->field($model, 'max_questions', ['enableAjaxValidation' => true])->textInput() ?>
-
-    <?= $form->field($model, 'certification_valid')->dropDownList((array)$dropDownList) ?>
-
-    <div class="form-group">
-        <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
-    </div>
-
-    <?php ActiveForm::end(); ?>
 
 </div>
