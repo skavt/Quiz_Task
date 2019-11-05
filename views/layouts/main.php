@@ -40,7 +40,7 @@ AppAsset::register($this);
         'options' => ['class' => 'navbar-nav navbar-right'],
         'items' => [
             ['label' => 'Home', 'url' => [Yii::$app->homeUrl]],
-            ['label' => 'Start Quiz', 'url' => ['/start/index']],
+            ['label' => 'Create Quiz', 'url' => ['/quiz/index']],
             ['label' => 'Result', 'url' => ['/quiz/result']],
             Yii::$app->user->isGuest ? (
             ['label' => 'Login', 'url' => ['/site/login']]

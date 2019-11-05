@@ -102,7 +102,7 @@ class Quiz extends \yii\db\ActiveRecord
 
             if ($countAllAnswer <= 1 || $countIncorrectAnswer == $question->max_ans
                 || $countCorrectAnswer != 1 || $countCorrectAnswer > 1) {
-                return true;
+                return true . $question->name;
             }
         }
     }
