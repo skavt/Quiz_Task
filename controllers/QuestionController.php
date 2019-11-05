@@ -102,7 +102,7 @@ class QuestionController extends Controller
     {
         $model = new Question();
         $quizModel = Quiz::findOne($id);
-
+        $model->scenario = 'create';
         $count = Question::find()
             ->where(['quiz_id' => $id])
             ->count();

@@ -94,10 +94,16 @@ class Quiz extends \yii\db\ActiveRecord
                 ->where(['question_id' => $question->id])
                 ->count();
             $countIncorrectAnswer = Answer::find()
-                ->where(['question_id' => $question->id, 'is_correct' => false])
+                ->where([
+                    'question_id' => $question->id,
+                    'is_correct' => false
+                ])
                 ->count();
             $countCorrectAnswer = Answer::find()
-                ->where(['question_id' => $question->id, 'is_correct' => true])
+                ->where([
+                    'question_id' => $question->id,
+                    'is_correct' => true
+                ])
                 ->count();
 
             if ($countAllAnswer <= 1 || $countIncorrectAnswer == $question->max_ans

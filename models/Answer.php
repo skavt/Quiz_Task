@@ -55,13 +55,17 @@ class Answer extends \yii\db\ActiveRecord
             [['question_id'], 'exist', 'skipOnError' => true, 'targetClass' => Question::className(), 'targetAttribute' => ['question_id' => 'id']],
             ['is_correct', 'correctAnswerValidator', 'on' => 'create'],
             ['is_correct', 'incorrectAnswerValidator', 'on' => 'create'],
+            ['name', 'answerNameValidator', 'on' => 'create'],
         ];
     }
 
     public function correctAnswerValidator($attribute)
     {
         $correctAnsCount = Answer::find()
-            ->where(['question_id' => $this->question_id, 'is_correct' => true])
+            ->where([
+                'question_id' => $this->question_id,
+                'is_correct' => true
+            ])
             ->count();
 
         if ($correctAnsCount == 1 && $this->is_correct == 1) {
@@ -85,6 +89,20 @@ class Answer extends \yii\db\ActiveRecord
 
         if ($this->is_correct == 0 && $incorrectAnsCount == $question->max_ans - 1) {
             $this->addError($attribute, 'You can\'t choose another incorrect answer');
+        }
+    }
+
+    public function answerNameValidator($attribute)
+    {
+        $answer = Answer::find()
+            ->where([
+                'question_id' => $this->question_id,
+                'name' => $this->name
+            ])
+            ->count();
+
+        if ($answer >= 1) {
+            $this->addError($attribute, 'Name "' . $this->name . '" has already been taken.');
         }
     }
 

@@ -57,6 +57,7 @@ class Question extends \yii\db\ActiveRecord
             [['quiz_id'], 'exist', 'skipOnError' => true, 'targetClass' => Quiz::className(), 'targetAttribute' => ['quiz_id' => 'id']],
             [['created_by'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['created_by' => 'id']],
             [['updated_by'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['updated_by' => 'id']],
+            ['name', 'questionNameValidator', 'on' => 'create']
         ];
     }
 
@@ -68,6 +69,20 @@ class Question extends \yii\db\ActiveRecord
 
         if ($countAnswer > $this->max_ans) {
             $this->addError($attribute, 'Your answers is more than that Max answer');
+        }
+    }
+
+    public function questionNameValidator($attribute)
+    {
+        $question = Question::find()
+            ->where([
+                'quiz_id' => $this->quiz_id,
+                'name' => $this->name
+            ])
+            ->count();
+
+        if ($question >= 1) {
+            $this->addError($attribute, 'Name "' . $this->name . '" has already been taken.');
         }
     }
 
