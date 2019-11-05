@@ -188,7 +188,7 @@ class QuizController extends Controller
 
         if ($answerValidator == true) {
             Yii::$app->session
-                ->setFlash('error', 'Please add Answers and you can Start quiz');
+                ->setFlash('error', 'Please add Valid Answers and you can Start quiz');
 
             return $this->render('_error');
         }

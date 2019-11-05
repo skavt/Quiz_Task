@@ -90,11 +90,18 @@ class Quiz extends \yii\db\ActiveRecord
             ->all();
 
         foreach ($questionModel as $question) {
-            $countAnswer = Answer::find()
+            $countAllAnswer = Answer::find()
                 ->where(['question_id' => $question->id])
                 ->count();
+            $countIncorrectAnswer = Answer::find()
+                ->where(['question_id' => $question->id, 'is_correct' => false])
+                ->count();
+            $countCorrectAnswer = Answer::find()
+                ->where(['question_id' => $question->id, 'is_correct' => true])
+                ->count();
 
-            if ($countAnswer <= 1) {
+            if ($countAllAnswer <= 1 || $countIncorrectAnswer == $question->max_ans
+                || $countCorrectAnswer != 1 || $countCorrectAnswer > 1) {
                 return true;
             }
         }
