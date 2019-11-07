@@ -11,6 +11,8 @@ use Yii;
 use app\models\Quiz;
 use app\models\QuizSearch;
 use yii\filters\AccessControl;
+use yii\helpers\Html;
+use yii\helpers\Json;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -171,6 +173,19 @@ class QuizController extends Controller
         $questionModel = Question::find()
             ->where(['quiz_id' => $id])
             ->all();
+
+        if (Yii::$app->request->isAjax) {
+            Yii::$app->response->format = Response::FORMAT_JSON;
+            return Json::encode($quizModel->questionsWithAnswers());
+        }
+
+//        foreach ($questionModel as $question){
+//            $answerModel = Answer::find()
+//                ->where((['question_id' => $question->id]))
+//                ->all();
+//            return Json::encode($answerModel);
+//        }
+
         $countQuestion = Question::find()
             ->where(['quiz_id' => $id])
             ->count();
@@ -190,30 +205,30 @@ class QuizController extends Controller
             $answerValidator = substr($answerValidator, 1);
             Yii::$app->session
                 ->setFlash('error', 'Please add Valid Answers for ( Quiz : "' . $quizModel->subject .
-                    '", Question : "' .$answerValidator .'" ) and you can Start quiz');
+                    '", Question : "' . $answerValidator . '" ) and you can Start quiz');
 
             return $this->render('_error');
         }
 
-        $correctAnswer = $quizModel->startQuiz();
-
-        if (Yii::$app->request->post()) {
-
-            if ($correctAnswer < $quizModel->min_correct_ans) {
-                $failed = ' ';
-                $passed = '';
-            } else {
-                $failed = '';
-                $passed = ' ';
-            }
-            return $this->render('outcome', [
-                'failed' => $failed,
-                'passed' => $passed,
-                'countQuestion' => $countQuestion,
-                'correctAnswer' => $correctAnswer,
-                'quizModel' => $quizModel,
-            ]);
-        }
+//        $correctAnswer = $quizModel->startQuiz();
+//
+//        if (Yii::$app->request->post()) {
+//
+//            if ($correctAnswer < $quizModel->min_correct_ans) {
+//                $failed = ' ';
+//                $passed = '';
+//            } else {
+//                $failed = '';
+//                $passed = ' ';
+//            }
+//            return $this->render('outcome', [
+//                'failed' => $failed,
+//                'passed' => $passed,
+//                'countQuestion' => $countQuestion,
+//                'correctAnswer' => $correctAnswer,
+//                'quizModel' => $quizModel,
+//            ]);
+//        }
 
         return $this->render('start', [
             'quizModel' => $quizModel,
