@@ -23,6 +23,7 @@ $this->title = 'Quiz \'' . $quizModel->subject . '\'';
 <h1 style="text-align: center" id="title">
     <?php echo Html::encode($this->title) ?>
 </h1>
+<small id="id"><?php $id = $quizModel->id ?></small>
 <hr>
 <label id="result" for="name">
 
@@ -30,8 +31,8 @@ $this->title = 'Quiz \'' . $quizModel->subject . '\'';
 
 </label>
 <div style="margin-left:30px">
-    <a class="btn btn-danger" id="prev">Prev</a>
-    <a class="btn btn-success" id="next">Next</a>
+    <a class="btn btn-danger" id="prev" type="submit">Prev</a>
+    <a class="btn btn-success" id="next" type="submit">Next</a>
     <button class="btn btn-success" id="submit">Submit</button>
 </div>
 <?php $form = ActiveForm::end() ?>

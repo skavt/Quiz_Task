@@ -1,8 +1,10 @@
+let id = document.getElementById('id');
+
 $.ajax({
 
     type: "GET",
 
-    url: "/quiz/start?id=1",
+    url: "/quiz/start?id=".id,
 
     data: {_csrf: yii.getCsrfToken()},
 
@@ -26,6 +28,7 @@ $.ajax({
 function startQuiz(data) {
 
     let currentPage = 1;
+    let selectOptions = [];
 
     function prevPage() {
         if (currentPage > 1) {
@@ -66,7 +69,7 @@ function startQuiz(data) {
                     '<input type="radio" name="option">' +
                     data[i].answers[j].name +
                     '</label>' +
-                    '</div>'
+                    '</div>';
             }
             result += outputQuestion +
                 '<br>' +
@@ -75,14 +78,20 @@ function startQuiz(data) {
                 '</div>';
 
             document.getElementById('result').innerHTML = result;
+
+
         }
+
         if (page === 1) {
-            prevBtn.style.visibility = 'hidden';
             submitBtn.style.visibility = 'hidden';
+            prevBtn.style.cursor = 'not-allowed';
+            prevBtn.className = 'btn btn-secondary';
         } else {
-            prevBtn.style.visibility = 'visible';
+            prevBtn.style.cursor = 'pointer';
+            prevBtn.className = 'btn btn-danger';
             submitBtn.style.visibility = 'hidden';
         }
+
         if (page === data.length) {
             submitBtn.style.visibility = 'visible';
             nextBtn.style.cursor = 'not-allowed';
@@ -90,7 +99,9 @@ function startQuiz(data) {
 
         } else {
             nextBtn.style.visibility = 'visible';
-            submitBtn.style.visibility = 'hidden'
+            submitBtn.style.visibility = 'hidden';
+            nextBtn.style.cursor = 'pointer';
+            nextBtn.className = 'btn btn-success';
         }
     }
 
