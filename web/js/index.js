@@ -9,24 +9,51 @@ $.ajax({
     dataType: "json",
 
     success: function (data) {
+
         data = JSON.parse(data);
 
-        let result = '';
-        let recordPerPage = 1;
-        let page = 10;
+        startQuiz(data);
 
-        function numPages() {
-            return Math.ceil(data.length / recordPerPage);
+    },
+
+    error: function (response, status) {
+
+        alert("Failed");
+
+    }
+});
+
+function startQuiz(data) {
+
+    let currentPage = 1;
+
+    function prevPage() {
+        if (currentPage > 1) {
+            currentPage--;
+            changePage(currentPage);
         }
+    }
+
+    function nextPage() {
+        if (currentPage < data.length) {
+            currentPage++;
+            changePage(currentPage);
+        }
+    }
+
+    function changePage(page) {
 
         let nextBtn = document.getElementById('next');
+        nextBtn.addEventListener('click', nextPage);
         let prevBtn = document.getElementById('prev');
+        prevBtn.addEventListener('click', prevPage);
         let submitBtn = document.getElementById('submit');
 
-        for (let i = (page - 1) * recordPerPage; i < (page * recordPerPage); i++) {
+        for (let i = (page - 1); i < page; i++) {
 
             let outputAnswer = '';
             let outputQuestion = '';
+            let result = '';
 
             outputQuestion += '<label style="font-size:30px;margin-left:30px;color:#23527c">' +
                 data[i].name +
@@ -45,38 +72,31 @@ $.ajax({
                 '<br>' +
                 outputAnswer +
                 '<div class="form-group" style="margin-left:30px">' +
-                // '<button onclick="next()" class="btn btn-danger">Prev</button>' +
-                // " " +
-                // '<button onclick="next()" class="btn btn-success">Next</button>' +
                 '</div>';
-            if (data[i].id === '1') {
-                prevBtn.disabled = true;
-                prevBtn.className = 'btn btn-secondary';
-                submitBtn.disabled = true;
-            } else {
-                prevBtn.style.visibility = 'visible';
-                submitBtn.style.visibility = 'hidden'
-            }
-            if (page === numPages()) {
-                nextBtn.disabled = true;
-                nextBtn.className = 'btn btn-secondary';
-                submitBtn.style.visibility = 'visible'
-            } else {
-                nextBtn.style.visibility = 'visible';
-                submitBtn.style.visibility = 'hidden'
-            }
 
             document.getElementById('result').innerHTML = result;
         }
+        if (page === 1) {
+            prevBtn.style.visibility = 'hidden';
+            submitBtn.style.visibility = 'hidden';
+        } else {
+            prevBtn.style.visibility = 'visible';
+            submitBtn.style.visibility = 'hidden';
+        }
+        if (page === data.length) {
+            submitBtn.style.visibility = 'visible';
+            nextBtn.style.cursor = 'not-allowed';
+            nextBtn.className = 'btn btn-secondary';
 
-
-        console.log(data);
-
-    },
-
-    error: function (response, status) {
-
-        alert("Failed");
-
+        } else {
+            nextBtn.style.visibility = 'visible';
+            submitBtn.style.visibility = 'hidden'
+        }
     }
-});
+
+    window.onload = function () {
+        changePage(1);
+    };
+    console.log(data);
+
+}

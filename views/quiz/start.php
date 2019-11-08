@@ -30,8 +30,8 @@ $this->title = 'Quiz \'' . $quizModel->subject . '\'';
 
 </label>
 <div style="margin-left:30px">
-    <button class="btn btn-danger" id="prev">Prev</button>
-    <button class="btn btn-success" id="next">Next</button>
+    <a class="btn btn-danger" id="prev">Prev</a>
+    <a class="btn btn-success" id="next">Next</a>
     <button class="btn btn-success" id="submit">Submit</button>
 </div>
 <?php $form = ActiveForm::end() ?>
