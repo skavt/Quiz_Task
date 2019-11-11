@@ -3,6 +3,8 @@
 namespace app\controllers;
 
 use app\models\Answer;
+use app\models\Checked;
+use app\models\Progress;
 use app\models\Question;
 use app\models\QuestionSearch;
 use app\models\Result;
@@ -167,12 +169,24 @@ class QuizController extends Controller
         throw new NotFoundHttpException('The requested page does not exist.');
     }
 
+    public function actionProgress()
+    {
+        $model = new Progress();
+
+        if (Yii::$app->request->isAjax && Yii::$app->request->isPost) {
+
+            $model->insertData();
+
+        }
+    }
+
     public function actionStart($id)
     {
         $quizModel = $this->findModel($id);
         $questionModel = Question::find()
             ->where(['quiz_id' => $id])
             ->all();
+        $progress = new Progress();
 
         if (Yii::$app->request->isAjax) {
             Yii::$app->response->format = Response::FORMAT_JSON;

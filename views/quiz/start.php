@@ -23,19 +23,23 @@ $this->title = 'Quiz \'' . $quizModel->subject . '\'';
 <h1 style="text-align: center" id="title">
     <?php echo Html::encode($this->title) ?>
 </h1>
-<small id="id"><?php $id = $quizModel->id ?></small>
+<input id="id" value="<?php echo $quizModel->id ?>" hidden>
 <hr>
 <label id="result" for="name">
-
     <br>
-
 </label>
-<div style="margin-left:30px">
-    <a class="btn btn-danger" id="prev" type="submit">Prev</a>
-    <a class="btn btn-success" id="next" type="submit">Next</a>
-    <button class="btn btn-success" id="submit">Submit</button>
-</div>
+<form method="post">
+    <div style="margin-left:30px">
+        <a class="btn btn-danger" id="prev" type="submit">Prev</a>
+        <a class="btn btn-success" id="next" type="submit">Next</a>
+        <button class="btn btn-success" id="submit">Submit</button>
+        <!--    --><?php //echo Html::submitButton('Submit', ['class' => 'btn btn-success']) ?>
+    </div>
+</form>
+<script src="https://code.jquery.com/jquery-3.4.0.min.js"></script>
+
 <?php $form = ActiveForm::end() ?>
+
 <?php try {
     $this->registerJsFile('@web/js/index.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
 } catch (\yii\base\InvalidConfigException $e) {

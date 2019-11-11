@@ -1,13 +1,10 @@
-let id = document.getElementById('id');
+let id = document.getElementById('id').value;
 
 $.ajax({
 
     type: "GET",
-
-    url: "/quiz/start?id=".id,
-
+    url: `/quiz/start?id=${id}`,
     data: {_csrf: yii.getCsrfToken()},
-
     dataType: "json",
 
     success: function (data) {
@@ -28,9 +25,9 @@ $.ajax({
 function startQuiz(data) {
 
     let currentPage = 1;
-    let selectOptions = [];
 
     function prevPage() {
+        chooseOption();
         if (currentPage > 1) {
             currentPage--;
             changePage(currentPage);
@@ -38,10 +35,43 @@ function startQuiz(data) {
     }
 
     function nextPage() {
+        chooseOption();
         if (currentPage < data.length) {
             currentPage++;
             changePage(currentPage);
         }
+    }
+
+    function chooseOption() {
+        let chooseAnswer;
+        if (document.querySelector('input[name = "option"]:checked') != null) {
+            chooseAnswer = document.querySelector('input[name = "option"]:checked').value;
+        } else {
+            chooseAnswer = null;
+        }
+        $.ajax({
+
+            type: "POST",
+            url: "/quiz/progress",
+            data: {
+                selected_answer: chooseAnswer,
+                last_question: currentPage,
+                quiz_id: id,
+                question_id: data[currentPage-1].id,
+                _csrf: yii.getCsrfToken()
+            },
+
+            success: function (data) {
+
+                console.log( data);
+            },
+
+            error: function (response, status) {
+
+                console.log("Failed");
+
+            }
+        });
     }
 
     function changePage(page) {
@@ -51,6 +81,7 @@ function startQuiz(data) {
         let prevBtn = document.getElementById('prev');
         prevBtn.addEventListener('click', prevPage);
         let submitBtn = document.getElementById('submit');
+        submitBtn.addEventListener('click', nextPage);
 
         for (let i = (page - 1); i < page; i++) {
 
@@ -66,11 +97,12 @@ function startQuiz(data) {
                 outputAnswer +=
                     '<div class="radio">' +
                     '<label style="font-size:20px;text-align:left;margin-left:60px;">' +
-                    '<input type="radio" name="option">' +
+                    '<input type="radio" name="option" id = "selected_' + i + '" value="' + data[i].answers[j].name + '">' +
                     data[i].answers[j].name +
                     '</label>' +
                     '</div>';
             }
+
             result += outputQuestion +
                 '<br>' +
                 outputAnswer +
@@ -78,7 +110,6 @@ function startQuiz(data) {
                 '</div>';
 
             document.getElementById('result').innerHTML = result;
-
 
         }
 
@@ -109,5 +140,4 @@ function startQuiz(data) {
         changePage(1);
     };
     console.log(data);
-
 }

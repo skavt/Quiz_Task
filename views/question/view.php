@@ -34,6 +34,7 @@ YiiAsset::register($this);
         'model' => $model,
         'attributes' =>
             [
+                'id',
                 'name',
                 'hint',
                 'max_ans',
