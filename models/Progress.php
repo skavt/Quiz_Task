@@ -4,7 +4,6 @@ namespace app\models;
 
 use Yii;
 use yii\behaviors\BlameableBehavior;
-use yii\behaviors\TimestampBehavior;
 
 /**
  * This is the model class for table "progress".
@@ -12,15 +11,13 @@ use yii\behaviors\TimestampBehavior;
  * @property int $id
  * @property int $quiz_id
  * @property int $question_id
- * @property string $selected_answer
+ * @property int $selected_answer
  * @property int $is_correct
  * @property int $last_question
  * @property int $created_at
- * @property int $passed_by
+ * @property int $created_by
  *
- * @property Question $question
- * @property Quiz $quiz
- * @property User $passedBy
+ * @property User $createdBy
  */
 class Progress extends \yii\db\ActiveRecord
 {
@@ -32,38 +29,71 @@ class Progress extends \yii\db\ActiveRecord
         return 'progress';
     }
 
+    public function behaviors()
+    {
+        return [
+            [
+                'class' => BlameableBehavior::class,
+                'updatedByAttribute' => false,
+            ]
+        ];
+    }
+
     /**
      * {@inheritdoc}
      */
     public function rules()
     {
         return [
-            [['quiz_id', 'question_id', 'is_correct', 'last_question', 'created_at', 'passed_by'], 'integer'],
-            [['selected_answer'], 'string', 'max' => 255],
-            [['passed_by'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['passed_by' => 'id']],
+            [['quiz_id', 'question_id', 'selected_answer', 'is_correct', 'last_question', 'created_at', 'created_by'], 'integer'],
+            [['created_by'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['created_by' => 'id']],
         ];
     }
 
     public function insertData()
     {
         $data = Yii::$app->request->post();
-        $answers = Answer::find()->where(['name' => $data['selected_answer']])->one();
+
+        if ($data['selected_answer'] == null) {
+            $this->is_correct = null;
+        } else {
+            $answers = Answer::find()->where(['id' => $data['selected_answer']])->one();
+            $this->is_correct = $answers->is_correct;
+        }
 
         $this->quiz_id = $data['quiz_id'];
         $this->question_id = $data['question_id'];
         $this->selected_answer = $data['selected_answer'];
-        $this->is_correct = $answers->is_correct;
-        $this->last_question = $data['last_question'];
+//        $this->last_question = $data['last_question'];
         $this->created_at = time();
 
         $this->save();
+
+        $this->created_by = function () {
+            return $this->createdBy->id;
+        };
+
     }
 
-//    public function progressData()
-//    {
-//        $model = Progress::find()->all();
-//        return $model;
-//    }
+    public function outcomeData()
+    {
+        $countCorrectAnswer = Progress::find()
+            ->where(['is_correct' => true])
+            ->count();
+
+        $countQuestion = Progress::find()->count();
+
+        return [
+            'countCorrectAnswer' => $countCorrectAnswer,
+            'countQuestion' => $countQuestion,
+        ];
+    }
+
+    public function progressData()
+    {
+        $model = Progress::find()->all();
+        return $model;
+    }
 
     /**
      * {@inheritdoc}
@@ -78,15 +108,15 @@ class Progress extends \yii\db\ActiveRecord
             'is_correct' => 'Is Correct',
             'last_question' => 'Last Question',
             'created_at' => 'Created At',
-            'passed_by' => 'Passed By',
+            'created_by' => 'Created By',
         ];
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getPassedBy()
+    public function getCreatedBy()
     {
-        return $this->hasOne(User::className(), ['id' => 'passed_by']);
+        return $this->hasOne(User::class, ['id' => 'created_by']);
     }
 }

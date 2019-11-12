@@ -16,16 +16,16 @@ class m191111_123807_create_progress_table extends Migration
             'id' => $this->primaryKey(),
             'quiz_id' => $this->integer(),
             'question_id' => $this->integer(),
-            'selected_answer' => $this->string(255),
+            'selected_answer' => $this->integer(),
             'is_correct' => $this->boolean(),
-            'last_question' => $this->integer(),
+            'last_question' => $this->boolean(),
             'created_at' => $this->integer(),
-            'passed_by' => $this->integer(),
+            'created_by' => $this->integer(),
         ]);
         $this->addForeignKey(
             'fk_progress_user_id',
             'progress',
-            'passed_by',
+            'created_by',
             'user',
             'id',
             'CASCADE'

@@ -171,38 +171,67 @@ class QuizController extends Controller
 
     public function actionProgress()
     {
-        $model = new Progress();
+        $progressModel = new Progress();
 
         if (Yii::$app->request->isAjax && Yii::$app->request->isPost) {
 
-            $model->insertData();
+            $data = Yii::$app->request->post();
 
+            $progressModel->deleteAll(['question_id' => $data['question_id']]);
+
+            $progressModel->insertData();
+
+        }
+
+        if (Yii::$app->request->isAjax) {
+            Yii::$app->response->format = Response::FORMAT_JSON;
+            return Json::encode($progressModel->progressData());
         }
     }
 
-    public function actionStart($id)
+    public function actionOutcome($id)
+    {
+        $quizModel = $this->findModel($id);
+
+        $progressModel = new Progress();
+
+        $progress = $progressModel->outcomeData();
+
+        $correctAnswer = $progress['countCorrectAnswer'];
+        $countQuestion = $progress['countQuestion'];
+
+
+        if ($correctAnswer < $quizModel->min_correct_ans) {
+            $failed = ' ';
+            $passed = '';
+        } else {
+            $failed = '';
+            $passed = ' ';
+        }
+
+        return $this->render('outcome', [
+            'correctAnswer' => $correctAnswer,
+            'countQuestion' => $countQuestion,
+            'quizModel' => $quizModel,
+            'failed' => $failed,
+            'passed' => $passed,
+        ]);
+
+    }
+
+    public
+    function actionStart($id)
     {
         $quizModel = $this->findModel($id);
         $questionModel = Question::find()
             ->where(['quiz_id' => $id])
             ->all();
-        $progress = new Progress();
 
         if (Yii::$app->request->isAjax) {
             Yii::$app->response->format = Response::FORMAT_JSON;
             return Json::encode($quizModel->questionsWithAnswers());
         }
 
-//        foreach ($questionModel as $question){
-//            $answerModel = Answer::find()
-//                ->where((['question_id' => $question->id]))
-//                ->all();
-//            return Json::encode($answerModel);
-//        }
-
-        $countQuestion = Question::find()
-            ->where(['quiz_id' => $id])
-            ->count();
 
         $questionValidator = $quizModel->startQuizQuestionValidation();
 
@@ -224,25 +253,6 @@ class QuizController extends Controller
             return $this->render('_error');
         }
 
-//        $correctAnswer = $quizModel->startQuiz();
-//
-//        if (Yii::$app->request->post()) {
-//
-//            if ($correctAnswer < $quizModel->min_correct_ans) {
-//                $failed = ' ';
-//                $passed = '';
-//            } else {
-//                $failed = '';
-//                $passed = ' ';
-//            }
-//            return $this->render('outcome', [
-//                'failed' => $failed,
-//                'passed' => $passed,
-//                'countQuestion' => $countQuestion,
-//                'correctAnswer' => $correctAnswer,
-//                'quizModel' => $quizModel,
-//            ]);
-//        }
 
         return $this->render('start', [
             'quizModel' => $quizModel,
@@ -250,7 +260,8 @@ class QuizController extends Controller
         ]);
     }
 
-    public function actionResult()
+    public
+    function actionResult()
     {
         $searchModel = new ResultSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);

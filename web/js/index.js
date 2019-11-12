@@ -1,5 +1,7 @@
+//get quiz id from start.php file
 let id = document.getElementById('id').value;
 
+// ajax type GET , getting up questions and answer tables data and parse by json
 $.ajax({
 
     type: "GET",
@@ -22,16 +24,22 @@ $.ajax({
     }
 });
 
+//startQuiz is main function which units other functions
+
 function startQuiz(data) {
 
     let currentPage = 1;
 
+//here is prevPage and nextPage functions which defines the action after click previous and next button
+
     function prevPage() {
         chooseOption();
+
         if (currentPage > 1) {
             currentPage--;
             changePage(currentPage);
         }
+        checkedAnswer(data);
     }
 
     function nextPage() {
@@ -40,35 +48,93 @@ function startQuiz(data) {
             currentPage++;
             changePage(currentPage);
         }
+        checkedAnswer(data);
     }
+
+//chooseOption get value from input and ajax POST type request, connect QuizController's actionProgress and will save data in progress table
 
     function chooseOption() {
         let chooseAnswer;
+
         if (document.querySelector('input[name = "option"]:checked') != null) {
             chooseAnswer = document.querySelector('input[name = "option"]:checked').value;
         } else {
             chooseAnswer = null;
         }
+
         $.ajax({
 
             type: "POST",
             url: "/quiz/progress",
             data: {
                 selected_answer: chooseAnswer,
-                last_question: currentPage,
+                // last_question: currentPage,
                 quiz_id: id,
-                question_id: data[currentPage-1].id,
+                question_id: data[currentPage - 1].id,
                 _csrf: yii.getCsrfToken()
             },
 
             success: function (data) {
 
-                console.log( data);
+                // console.log('Success')
+
             },
 
             error: function (response, status) {
 
                 console.log("Failed");
+
+            }
+        });
+    }
+
+//checkedAnswer is for a radio buttons checked visualisation
+
+    function checkedAnswer(data) {
+
+        $.ajax({
+
+            type: "GET",
+            url: "/quiz/progress",
+            data: {_csrf: yii.getCsrfToken()},
+            dataType: "json",
+
+            success: function (progressData) {
+
+                progressData = JSON.parse(progressData);
+
+                try {
+                    for (let i = 0; i < 1; i++) {
+                        for (let j = 0; j < data[i].max_ans; j++) {
+
+                            let selectedAnswer = document.getElementsByClassName('selectedAnswer')[j].value;
+
+                            for (let k = 0; k < progressData.length; k++) {
+
+                                if (selectedAnswer) {
+                                    if (selectedAnswer == progressData[k].selected_answer) {
+
+                                        document.getElementsByClassName('selectedAnswer')[j].checked = true;
+
+                                    }
+                                }
+                            }
+
+                        }
+                    }
+                } catch (e) {
+                    if (e) {
+                        let selectedAnswer = document.getElementsByClassName('selectedAnswer').value;
+                    }
+                }
+
+                // console.log(progressData);
+
+            },
+
+            error: function (response, status) {
+
+                alert("Failed");
 
             }
         });
@@ -81,7 +147,12 @@ function startQuiz(data) {
         let prevBtn = document.getElementById('prev');
         prevBtn.addEventListener('click', prevPage);
         let submitBtn = document.getElementById('submit');
-        submitBtn.addEventListener('click', nextPage);
+        submitBtn.onclick = function () {
+            nextPage();
+            setTimeout(function() {
+                location.href = `outcome?id=${id}`
+            }, 0.0001);
+        };
 
         for (let i = (page - 1); i < page; i++) {
 
@@ -97,7 +168,7 @@ function startQuiz(data) {
                 outputAnswer +=
                     '<div class="radio">' +
                     '<label style="font-size:20px;text-align:left;margin-left:60px;">' +
-                    '<input type="radio" name="option" id = "selected_' + i + '" value="' + data[i].answers[j].name + '">' +
+                    '<input class="selectedAnswer" type="radio" name="option" value="' + data[i].answers[j].id + '">' +
                     data[i].answers[j].name +
                     '</label>' +
                     '</div>';
@@ -138,6 +209,7 @@ function startQuiz(data) {
 
     window.onload = function () {
         changePage(1);
+        checkedAnswer(data);
     };
     console.log(data);
 }
