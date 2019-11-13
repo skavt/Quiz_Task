@@ -67,7 +67,11 @@ class Progress extends \yii\db\ActiveRecord
 //        $this->last_question = $data['last_question'];
         $this->created_at = time();
 
-        $this->save();
+        if (!$this->save()) {
+            return [
+                'message' => 'Your Progress didn\'t save'
+            ];
+        }
 
         $this->created_by = function () {
             return $this->createdBy->id;

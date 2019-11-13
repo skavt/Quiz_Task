@@ -207,6 +207,8 @@ class QuizController extends Controller
             $passed = ' ';
         }
 
+        $quizModel->insertResultData();
+
         $progressModel->deleteAll(['quiz_id' => $id]);
 
         return $this->render('outcome', [
@@ -230,7 +232,6 @@ class QuizController extends Controller
             return Json::encode($quizModel->questionsWithAnswers());
         }
 
-
         $questionValidator = $quizModel->startQuizQuestionValidation();
 
         if ($questionValidator == true) {
@@ -251,15 +252,13 @@ class QuizController extends Controller
             return $this->render('_error');
         }
 
-
         return $this->render('start', [
             'quizModel' => $quizModel,
             'questionModel' => $questionModel,
         ]);
     }
 
-    public
-    function actionResult()
+    public function actionResult()
     {
         $searchModel = new ResultSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);

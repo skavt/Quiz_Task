@@ -113,48 +113,35 @@ class Quiz extends \yii\db\ActiveRecord
         }
     }
 
-//    public function startQuiz()
-//    {
-//        $result = new Result();
-//        $countQuestion = Question::find()
-//            ->where(['quiz_id' => $this->id])
-//            ->count();
-//
-//        if (Yii::$app->request->post()) {
-//            $response = Yii::$app->request->post();
-//            $answerIndex = 0;
-//            $correctAnswer = 0;
-//            $array = [];
-//
-//            foreach ($response as $text => $answerId) {
-//                $select = substr($text, 0, 9);
-//                if ($select == 'selected_') {
-//                    $array[$answerIndex] = $answerId;
-//                    $answerIndex++;
-//                }
-//            }
-//            foreach ($array as $arr) {
-//                $answer = Answer::findOne($arr);
-//                if ($answer->is_correct == 1) {
-//                    $correctAnswer++;
-//                }
-//            }
-//            $result->correct_ans = $correctAnswer;
-//            $result->quiz_name = $this->subject;
-//            $result->question_count = $countQuestion;
-//            $result->min_correct_ans = $this->min_correct_ans;
-//            $result->created_at = time();
-//            $month = strtotime(" + $this->certification_valid months", $result->created_at);
-//            $result->certification_valid = $month;
-//
-//            if (!$result->save()) {
-//                return [
-//                    'message' => 'Your result didn\'t save'
-//                ];
-//            }
-//            return $correctAnswer;
-//        }
-//    }
+    public function insertResult()
+    {
+        return [
+            'subject' => $this->subject,
+            'min_correct_ans' => $this->min_correct_ans,
+            'certification_valid' => $this->certification_valid,
+        ];
+    }
+
+    public function insertResultData()
+    {
+        $result = new Result();
+        $progressModel = new Progress();
+        $progress = $progressModel->outcomeData();
+
+        $result->correct_ans = $progress['countCorrectAnswer'];
+        $result->quiz_name = $this->subject;
+        $result->question_count = $progress['countQuestion'];
+        $result->min_correct_ans = $this->min_correct_ans;
+        $result->created_at = time();
+        $month = strtotime(" + $this->certification_valid months", $result->created_at);
+        $result->certification_valid = $month;
+
+        if (!$result->save()) {
+            return [
+                'message' => 'Your result didn\'t save'
+            ];
+        }
+    }
 
     public function questionsWithAnswers()
     {
