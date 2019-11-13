@@ -134,7 +134,7 @@ function startQuiz(data) {
 
             error: function (response, status) {
 
-                alert("Failed");
+                console.log("Failed");
 
             }
         });
@@ -149,8 +149,8 @@ function startQuiz(data) {
         let submitBtn = document.getElementById('submit');
         submitBtn.onclick = function () {
             nextPage();
-            setTimeout(function() {
-                location.href = `outcome?id=${id}`
+            setTimeout(function () {
+                location.href = `/quiz/outcome?id=${id}`;
             }, 0.0001);
         };
 

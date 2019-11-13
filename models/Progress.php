@@ -72,7 +72,6 @@ class Progress extends \yii\db\ActiveRecord
         $this->created_by = function () {
             return $this->createdBy->id;
         };
-
     }
 
     public function outcomeData()

@@ -191,15 +191,13 @@ class QuizController extends Controller
 
     public function actionOutcome($id)
     {
-        $quizModel = $this->findModel($id);
-
         $progressModel = new Progress();
+        $quizModel = $this->findModel($id);
 
         $progress = $progressModel->outcomeData();
 
         $correctAnswer = $progress['countCorrectAnswer'];
         $countQuestion = $progress['countQuestion'];
-
 
         if ($correctAnswer < $quizModel->min_correct_ans) {
             $failed = ' ';
@@ -209,6 +207,8 @@ class QuizController extends Controller
             $passed = ' ';
         }
 
+        $progressModel->deleteAll(['quiz_id' => $id]);
+
         return $this->render('outcome', [
             'correctAnswer' => $correctAnswer,
             'countQuestion' => $countQuestion,
@@ -216,11 +216,9 @@ class QuizController extends Controller
             'failed' => $failed,
             'passed' => $passed,
         ]);
-
     }
 
-    public
-    function actionStart($id)
+    public function actionStart($id)
     {
         $quizModel = $this->findModel($id);
         $questionModel = Question::find()
