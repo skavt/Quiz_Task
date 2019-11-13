@@ -101,7 +101,7 @@ class Progress extends \yii\db\ActiveRecord
         if ($countUnselectedAnswer > 0) {
             return [
                 'success' => false,
-                'message' => 'You must select all answer'
+                'message' => 'You must select all answers'
             ];
         } else {
             return [
