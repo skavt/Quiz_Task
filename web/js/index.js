@@ -68,7 +68,7 @@ function startQuiz(data) {
             url: "/quiz/progress",
             data: {
                 selected_answer: chooseAnswer,
-                // last_question: currentPage,
+                last_question: currentPage,
                 quiz_id: id,
                 question_id: data[currentPage - 1].id,
                 _csrf: yii.getCsrfToken()
@@ -128,7 +128,7 @@ function startQuiz(data) {
                     }
                 }
 
-                // console.log(progressData);
+                console.log(progressData);
 
             },
 
@@ -211,5 +211,6 @@ function startQuiz(data) {
         changePage(1);
         checkedAnswer(data);
     };
+
     console.log(data);
 }

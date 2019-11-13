@@ -64,7 +64,7 @@ class Progress extends \yii\db\ActiveRecord
         $this->quiz_id = $data['quiz_id'];
         $this->question_id = $data['question_id'];
         $this->selected_answer = $data['selected_answer'];
-//        $this->last_question = $data['last_question'];
+        $this->last_question = $data['last_question'];
         $this->created_at = time();
 
         if (!$this->save()) {
@@ -91,6 +91,25 @@ class Progress extends \yii\db\ActiveRecord
             'countQuestion' => $countQuestion,
         ];
     }
+
+    public function allAnswerChecked()
+    {
+        $countUnselectedAnswer = Progress::find()
+            ->where(['selected_answer' => null])
+            ->count();
+
+        if ($countUnselectedAnswer > 0) {
+            return [
+                'success' => false,
+                'message' => 'You must select all answer'
+            ];
+        } else {
+            return [
+                'success' => true,
+            ];
+        }
+    }
+
 
     public function progressData()
     {

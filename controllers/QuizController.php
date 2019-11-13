@@ -105,6 +105,7 @@ class QuizController extends Controller
         $model = new Quiz();
         $dropDownList = $model->dropDownList();
 
+
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect('index');
         }
@@ -195,9 +196,15 @@ class QuizController extends Controller
         $quizModel = $this->findModel($id);
 
         $progress = $progressModel->outcomeData();
+        $bla = $progressModel->allAnswerChecked();
 
         $correctAnswer = $progress['countCorrectAnswer'];
         $countQuestion = $progress['countQuestion'];
+
+        if ($bla['success'] == false) {
+            Yii::$app->session->setFlash('error', $bla['message']);
+            return $this->redirect(['start', 'id' => $id]);
+        }
 
         if ($correctAnswer < $quizModel->min_correct_ans) {
             $failed = ' ';
@@ -218,6 +225,7 @@ class QuizController extends Controller
             'failed' => $failed,
             'passed' => $passed,
         ]);
+
     }
 
     public function actionStart($id)

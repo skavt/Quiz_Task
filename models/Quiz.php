@@ -13,11 +13,12 @@ use yii\behaviors\TimestampBehavior;
  * @property string $subject
  * @property int $min_correct_ans
  * @property int $max_questions
- * @property string $certification_valid
+ * @property int $certification_valid
  * @property int $created_at
  * @property int $updated_at
  * @property int $created_by
  * @property int $updated_by
+ * @property int $quiz_time
  *
  * @property Question[] $questions
  * @property User $updatedBy
@@ -48,7 +49,7 @@ class Quiz extends \yii\db\ActiveRecord
     {
         return [
             [['subject', 'min_correct_ans', 'certification_valid', 'max_questions'], 'required'],
-            [['min_correct_ans', 'max_questions', 'created_at', 'updated_at', 'created_by', 'updated_by'], 'integer'],
+            [['min_correct_ans', 'max_questions', 'created_at', 'updated_at', 'created_by', 'updated_by', 'quiz_time'], 'integer'],
             [['certification_valid'], 'safe'],
             [['min_correct_ans'], 'integer', 'min' => 1],
             [['max_questions'], 'integer', 'min' => 2],
@@ -175,14 +176,14 @@ class Quiz extends \yii\db\ActiveRecord
             'updated_at' => 'Updated At',
             'created_by' => 'Created By',
             'updated_by' => 'Updated By',
+            'quiz_time' => 'Quiz Time',
         ];
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public
-    function getQuestions()
+    public function getQuestions()
     {
         return $this->hasMany(Question::className(), ['quiz_id' => 'id']);
     }
@@ -190,8 +191,7 @@ class Quiz extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public
-    function getUpdatedBy()
+    public function getUpdatedBy()
     {
         return $this->hasOne(User::className(), ['id' => 'updated_by']);
     }
@@ -199,8 +199,7 @@ class Quiz extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public
-    function getCreatedBy()
+    public function getCreatedBy()
     {
         return $this->hasOne(User::className(), ['id' => 'created_by']);
     }

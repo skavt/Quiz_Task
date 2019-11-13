@@ -36,7 +36,6 @@ $this->title = 'Quiz \'' . $quizModel->subject . '\'';
         <!--    --><?php //echo Html::submitButton('Submit', ['class' => 'btn btn-success']) ?>
     </div>
 </form>
-<script src="https://code.jquery.com/jquery-3.4.0.min.js"></script>
 
 <?php $form = ActiveForm::end() ?>
 

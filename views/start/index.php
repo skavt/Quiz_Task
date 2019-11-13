@@ -8,7 +8,6 @@ use yii\grid\GridView;
 /* @var $model app\models\Quiz */
 /* @var $searchModel app\models\QuizSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
-
 ?>
 <?php echo GridView::widget([
     'dataProvider' => $dataProvider,
@@ -28,7 +27,8 @@ use yii\grid\GridView;
                     [
                         'view' => function ($url) {
                             return Html::a('<span class="btn btn-success">Start</span>', $url);
-                        },],
+                        },
+                    ],
                 'urlCreator' => function ($action, $model) {
                     if ($action === 'view') {
                         $url = '/quiz/start?id=' . $model->id;
@@ -38,4 +38,3 @@ use yii\grid\GridView;
             ],
         ]
 ]); ?>
-
