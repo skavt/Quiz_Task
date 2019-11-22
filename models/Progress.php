@@ -92,10 +92,11 @@ class Progress extends \yii\db\ActiveRecord
     public function outcomeData()
     {
         $countCorrectAnswer = Progress::find()
-            ->where(['is_correct' => true])
+            ->where(['is_correct' => true, 'created_by' => Yii::$app->user->id])
             ->count();
 
         $countQuestion = Progress::find()
+            ->where(['created_by' => Yii::$app->user->id])
             ->count();
 
         return [
@@ -125,7 +126,7 @@ class Progress extends \yii\db\ActiveRecord
 
     public function progressData()
     {
-        $model = Progress::find()->all();
+        $model = Progress::find()->where(['created_by' => Yii::$app->user->id])->all();
         return $model;
     }
 

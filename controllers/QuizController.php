@@ -178,7 +178,7 @@ class QuizController extends Controller
 
             $data = Yii::$app->request->post();
 
-            $progressModel->deleteAll(['question_id' => $data['question_id']]);
+            $progressModel->deleteAll(['question_id' => $data['question_id'], 'created_by' => Yii::$app->user->id]);
 
             $progressModel->insertData();
 
@@ -216,7 +216,7 @@ class QuizController extends Controller
 
         $quizModel->insertResultData();
 
-        $progressModel->deleteAll(['quiz_id' => $id]);
+        $progressModel->deleteAll(['quiz_id' => $id, 'created_by' => Yii::$app->user->id]);
 
         return $this->render('outcome', [
             'correctAnswer' => $correctAnswer,
