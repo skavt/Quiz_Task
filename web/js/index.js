@@ -1,5 +1,6 @@
 //get quiz id from start.php file
 let id = document.getElementById('id').value;
+let lastQuestion = document.getElementById('last_question').value;
 
 // ajax type GET , getting up questions and answer tables data and parse by json
 $.ajax({
@@ -28,27 +29,48 @@ $.ajax({
 
 function startQuiz(data) {
 
-    let currentPage = 1;
+    let nextBtn = document.getElementById('next');
+    nextBtn.addEventListener('click', nextPage);
+
+    let prevBtn = document.getElementById('prev');
+    prevBtn.addEventListener('click', prevPage);
+
+    let currentPage = lastQuestion;
 
 //here is prevPage and nextPage functions which defines the action after click previous and next button
 
-    function prevPage() {
+    function prevPage(clicked_id) {
+
+        if (this.hasAttribute('disabled')) {
+            return;
+        }
+
         chooseOption();
 
-        if (currentPage > 1) {
-            currentPage--;
-            changePage(currentPage);
-        }
-        checkedAnswer(data);
+        currentPage--;
+        changePage(currentPage);
+
+        checkedAnswer();
+
+        console.log(clicked_id.srcElement.id)
+
     }
 
-    function nextPage() {
-        chooseOption();
-        if (currentPage < data.length) {
-            currentPage++;
-            changePage(currentPage);
+    function nextPage(clicked_id) {
+
+        if (this.hasAttribute('disabled')) {
+            return;
         }
-        checkedAnswer(data);
+
+        chooseOption();
+
+        currentPage++;
+        changePage(currentPage);
+
+        checkedAnswer();
+
+        console.log(clicked_id.srcElement.id)
+
     }
 
 //chooseOption get value from input and ajax POST type request, connect QuizController's actionProgress and will save data in progress table
@@ -90,7 +112,7 @@ function startQuiz(data) {
 
 //checkedAnswer is for a radio buttons checked visualisation
 
-    function checkedAnswer(data) {
+    function checkedAnswer() {
 
         $.ajax({
 
@@ -142,13 +164,9 @@ function startQuiz(data) {
 
     function changePage(page) {
 
-        let nextBtn = document.getElementById('next');
-        nextBtn.addEventListener('click', nextPage);
-        let prevBtn = document.getElementById('prev');
-        prevBtn.addEventListener('click', prevPage);
         let submitBtn = document.getElementById('submit');
         submitBtn.onclick = function () {
-            nextPage();
+            chooseOption();
             setTimeout(function () {
                 location.href = `/quiz/outcome?id=${id}`;
             }, 0.0001);
@@ -184,32 +202,32 @@ function startQuiz(data) {
 
         }
 
-        if (page === 1) {
+        if (page == 1) {
             submitBtn.style.visibility = 'hidden';
-            prevBtn.style.cursor = 'not-allowed';
             prevBtn.className = 'btn btn-secondary';
+            prevBtn.setAttribute('disabled', 'true');
         } else {
-            prevBtn.style.cursor = 'pointer';
+            prevBtn.removeAttribute('disabled');
             prevBtn.className = 'btn btn-danger';
             submitBtn.style.visibility = 'hidden';
         }
 
-        if (page === data.length) {
+        if (page == data.length) {
             submitBtn.style.visibility = 'visible';
-            nextBtn.style.cursor = 'not-allowed';
             nextBtn.className = 'btn btn-secondary';
+            nextBtn.setAttribute('disabled', 'true');
 
         } else {
+            nextBtn.removeAttribute('disabled');
             nextBtn.style.visibility = 'visible';
             submitBtn.style.visibility = 'hidden';
-            nextBtn.style.cursor = 'pointer';
             nextBtn.className = 'btn btn-success';
         }
     }
 
     window.onload = function () {
-        changePage(1);
-        checkedAnswer(data);
+        changePage(lastQuestion);
+        checkedAnswer();
     };
 
     console.log(data);

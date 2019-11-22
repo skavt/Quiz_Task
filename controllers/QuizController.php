@@ -184,6 +184,11 @@ class QuizController extends Controller
 
         }
 
+//        echo '<pre>';
+//        var_dump($progressModel->progressData());
+//        echo '</pre>';
+//        exit();
+
         if (Yii::$app->request->isAjax) {
             Yii::$app->response->format = Response::FORMAT_JSON;
             return Json::encode($progressModel->progressData());
@@ -196,13 +201,13 @@ class QuizController extends Controller
         $quizModel = $this->findModel($id);
 
         $progress = $progressModel->outcomeData();
-        $bla = $progressModel->allAnswerChecked();
+        $answerChecked = $progressModel->allAnswerChecked();
 
         $correctAnswer = $progress['countCorrectAnswer'];
         $countQuestion = $progress['countQuestion'];
 
-        if ($bla['success'] == false) {
-            Yii::$app->session->setFlash('error', $bla['message']);
+        if ($answerChecked['success'] == false) {
+            Yii::$app->session->setFlash('error', $answerChecked['message']);
             return $this->redirect(['start', 'id' => $id]);
         }
 
@@ -260,9 +265,21 @@ class QuizController extends Controller
             return $this->render('_error');
         }
 
+        if (Progress::find()->count() != 0) {
+
+            $lastQuestion = Progress::find()
+                ->orderBy(['id' => SORT_DESC])
+                ->one()
+                ->last_question;
+
+        } else {
+            $lastQuestion = 1;
+        }
+
         return $this->render('start', [
             'quizModel' => $quizModel,
             'questionModel' => $questionModel,
+            'lastQuestion' => $lastQuestion,
         ]);
     }
 

@@ -84,7 +84,8 @@ class Progress extends \yii\db\ActiveRecord
             ->where(['is_correct' => true])
             ->count();
 
-        $countQuestion = Progress::find()->count();
+        $countQuestion = Progress::find()
+            ->count();
 
         return [
             'countCorrectAnswer' => $countCorrectAnswer,

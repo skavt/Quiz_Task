@@ -11,6 +11,8 @@ use yii\widgets\ActiveForm;
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\QuizSearch */
 /* @var $quizModel QuizController */
+/* @var $lastQuestion QuizController */
+/* @var $progressLength QuizController */
 /* @var $questionModel QuizController */
 /* @var $answerModel QuizController */
 /* @var $model QuestionController */
@@ -24,6 +26,7 @@ $this->title = 'Quiz \'' . $quizModel->subject . '\'';
     <?php echo Html::encode($this->title) ?>
 </h1>
 <input id="id" value="<?php echo $quizModel->id ?>" hidden>
+<input id="last_question" value="<?php echo $lastQuestion ?>" hidden>
 <hr>
 <label id="result" for="name">
     <br>
