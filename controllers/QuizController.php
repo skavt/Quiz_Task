@@ -184,11 +184,6 @@ class QuizController extends Controller
 
         }
 
-//        echo '<pre>';
-//        var_dump($progressModel->progressData());
-//        echo '</pre>';
-//        exit();
-
         if (Yii::$app->request->isAjax) {
             Yii::$app->response->format = Response::FORMAT_JSON;
             return Json::encode($progressModel->progressData());
@@ -267,10 +262,21 @@ class QuizController extends Controller
 
         if (Progress::find()->count() != 0) {
 
-            $lastQuestion = Progress::find()
+            $progress = Progress::find()
+                ->orderBy(['id' => SORT_DESC, 'created_by' => Yii::$app->user->id])
+                ->one();
+
+            if (Progress::find()
                 ->orderBy(['id' => SORT_DESC])
-                ->one()
-                ->last_question;
+                ->where(['is_next' => 1, 'id' => $progress->id, 'created_by' => Yii::$app->user->id])
+                ->one()) {
+
+                $lastQuestion = $progress->last_question + 1;
+
+            } else {
+
+                $lastQuestion = $progress->last_question - 1;
+            }
 
         } else {
             $lastQuestion = 1;

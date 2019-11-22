@@ -39,43 +39,44 @@ function startQuiz(data) {
 
 //here is prevPage and nextPage functions which defines the action after click previous and next button
 
-    function prevPage(clicked_id) {
+    function prevPage() {
 
         if (this.hasAttribute('disabled')) {
             return;
         }
 
-        chooseOption();
+        chooseOption(false);
 
         currentPage--;
         changePage(currentPage);
 
         checkedAnswer();
 
-        console.log(clicked_id.srcElement.id)
+        console.log(event.srcElement.id)
 
     }
 
-    function nextPage(clicked_id) {
+
+    function nextPage() {
 
         if (this.hasAttribute('disabled')) {
             return;
         }
 
-        chooseOption();
+        chooseOption(true);
 
         currentPage++;
         changePage(currentPage);
 
         checkedAnswer();
 
-        console.log(clicked_id.srcElement.id)
+        console.log(event.srcElement.id);
 
     }
 
 //chooseOption get value from input and ajax POST type request, connect QuizController's actionProgress and will save data in progress table
 
-    function chooseOption() {
+    function chooseOption(is_next) {
         let chooseAnswer;
 
         if (document.querySelector('input[name = "option"]:checked') != null) {
@@ -83,6 +84,7 @@ function startQuiz(data) {
         } else {
             chooseAnswer = null;
         }
+        console.log(is_next);
 
         $.ajax({
 
@@ -91,6 +93,7 @@ function startQuiz(data) {
             data: {
                 selected_answer: chooseAnswer,
                 last_question: currentPage,
+                is_next: (is_next) ? 1 : 0,
                 quiz_id: id,
                 question_id: data[currentPage - 1].id,
                 _csrf: yii.getCsrfToken()
@@ -166,7 +169,7 @@ function startQuiz(data) {
 
         let submitBtn = document.getElementById('submit');
         submitBtn.onclick = function () {
-            chooseOption();
+            chooseOption(true);
             setTimeout(function () {
                 location.href = `/quiz/outcome?id=${id}`;
             }, 0.0001);

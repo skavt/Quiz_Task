@@ -3,7 +3,9 @@
 namespace app\models;
 
 use Yii;
+use yii\base\InvalidArgumentException;
 use yii\behaviors\BlameableBehavior;
+use yii\behaviors\TimestampBehavior;
 
 /**
  * This is the model class for table "progress".
@@ -33,6 +35,10 @@ class Progress extends \yii\db\ActiveRecord
     {
         return [
             [
+                'class' => TimestampBehavior::class,
+                'updatedAtAttribute' => false,
+            ],
+            [
                 'class' => BlameableBehavior::class,
                 'updatedByAttribute' => false,
             ]
@@ -45,8 +51,9 @@ class Progress extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['quiz_id', 'question_id', 'selected_answer', 'is_correct', 'last_question', 'created_at', 'created_by'], 'integer'],
+            [['quiz_id', 'question_id', 'selected_answer', 'is_correct', 'last_question', 'is_next', 'created_at', 'created_by'], 'integer'],
             [['created_by'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['created_by' => 'id']],
+            [['created_by', 'created_at'], 'safe'],
         ];
     }
 
@@ -65,7 +72,11 @@ class Progress extends \yii\db\ActiveRecord
         $this->question_id = $data['question_id'];
         $this->selected_answer = $data['selected_answer'];
         $this->last_question = $data['last_question'];
+        $this->is_next = $data['is_next'];
         $this->created_at = time();
+
+//        $this->load($data);
+
 
         if (!$this->save()) {
             return [
