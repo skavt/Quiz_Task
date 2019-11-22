@@ -52,8 +52,6 @@ function startQuiz(data) {
 
         checkedAnswer();
 
-        console.log(event.srcElement.id)
-
     }
 
 
@@ -69,8 +67,6 @@ function startQuiz(data) {
         changePage(currentPage);
 
         checkedAnswer();
-
-        console.log(event.srcElement.id);
 
     }
 

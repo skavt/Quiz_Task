@@ -25,8 +25,16 @@ use yii\grid\GridView;
                 'template' => '{view}',
                 'buttons' =>
                     [
-                        'view' => function ($url) {
-                            return Html::a('<span class="btn btn-success">Start</span>', $url);
+                        'view' => function ($url, $model) {
+                            if (\app\models\Progress::findOne(['created_by' => Yii::$app->user->id, 'quiz_id' => $model->id])) {
+                                return Html::a('<span class="btn btn-success">Continue</span>', $url);
+                            } else {
+                                if(\app\models\Progress::findOne(['created_by' => Yii::$app->user->id])) {
+                                    return Html::a('<span class="btn btn-success" disabled="true">Start</span>');
+                                }else {
+                                    return Html::a('<span class="btn btn-success">Start</span>', $url);
+                                }
+                            }
                         },
                     ],
                 'urlCreator' => function ($action, $model) {
