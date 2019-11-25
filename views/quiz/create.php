@@ -5,7 +5,6 @@ use yii\helpers\Html;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Quiz */
-/* @var $dropDownList QuizController */
 
 $this->title = 'Create Quiz';
 $this->params['breadcrumbs'][] = ['label' => 'Quizzes', 'url' => ['index']];
@@ -18,7 +17,6 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php echo $this->render('_form',
         [
             'model' => $model,
-            'dropDownList' => $dropDownList,
         ]);
     ?>
 

@@ -201,27 +201,28 @@ function startQuiz(data) {
 
         }
 
-        if (page == 1) {
-            submitBtn.style.visibility = 'hidden';
-            prevBtn.className = 'btn btn-secondary';
-            prevBtn.setAttribute('disabled', 'true');
-        } else {
-            prevBtn.removeAttribute('disabled');
-            prevBtn.className = 'btn btn-danger';
-            submitBtn.style.visibility = 'hidden';
-        }
+    }
 
-        if (page == data.length) {
-            submitBtn.style.visibility = 'visible';
-            nextBtn.className = 'btn btn-secondary';
-            nextBtn.setAttribute('disabled', 'true');
+    if (page == 1) {
+        submitBtn.style.visibility = 'hidden';
+        prevBtn.className = 'btn btn-secondary';
+        prevBtn.setAttribute('disabled', 'true');
+    } else {
+        prevBtn.removeAttribute('disabled');
+        prevBtn.className = 'btn btn-danger';
+        submitBtn.style.visibility = 'hidden';
+    }
 
-        } else {
-            nextBtn.removeAttribute('disabled');
-            nextBtn.style.visibility = 'visible';
-            submitBtn.style.visibility = 'hidden';
-            nextBtn.className = 'btn btn-success';
-        }
+    if (page == data.length) {
+        submitBtn.style.visibility = 'visible';
+        nextBtn.className = 'btn btn-secondary';
+        nextBtn.setAttribute('disabled', 'true');
+
+    } else {
+        nextBtn.removeAttribute('disabled');
+        nextBtn.style.visibility = 'visible';
+        submitBtn.style.visibility = 'hidden';
+        nextBtn.className = 'btn btn-success';
     }
 
     window.onload = function () {

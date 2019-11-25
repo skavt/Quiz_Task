@@ -16,6 +16,7 @@ use yii\behaviors\TimestampBehavior;
  * @property int $selected_answer
  * @property int $is_correct
  * @property int $last_question
+ * @property int $is_next
  * @property int $created_at
  * @property int $created_by
  *

@@ -56,6 +56,14 @@ $this->params['breadcrumbs'][] = $this->title;
 //                    ]),
                 ],
                 [
+                    'attribute' => 'certification_valid',
+                    'value' => function ($model) {
+                        return $model->certification_valid . ' Months';
+                    }
+                ],
+                'quiz_time',
+                'quiz_time_format',
+                [
                     'class' => 'yii\grid\ActionColumn'
                 ],
             ],

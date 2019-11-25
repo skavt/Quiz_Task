@@ -20,8 +20,15 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'max_questions')->textInput() ?>
 
-    <?= $form->field($model, 'certification_valid')->dropDownList((array)$dropDownList) ?>
+    <?= $form->field($model, 'certification_valid')->dropDownList($model->dropDownList()) ?>
 
+    <div style="display:inline-block;  width:48.6%; float: left; margin-right: 30px;">
+        <?= $form->field($model, 'quiz_time')->textInput() ?>
+    </div>
+
+    <div style="width:48.7%;display:inline-block; ">
+        <?= $form->field($model, 'quiz_time_format')->dropDownList($model->timeChooserOptions()) ?>
+    </div>
     <div class="form-group">
         <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
     </div>

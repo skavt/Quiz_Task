@@ -19,6 +19,7 @@ use yii\behaviors\TimestampBehavior;
  * @property int $created_by
  * @property int $updated_by
  * @property int $quiz_time
+ * @property string $quiz_time_format
  *
  * @property Question[] $questions
  * @property User $updatedBy
@@ -54,6 +55,7 @@ class Quiz extends \yii\db\ActiveRecord
             [['min_correct_ans'], 'integer', 'min' => 1],
             [['max_questions'], 'integer', 'min' => 2],
             [['subject'], 'string', 'max' => 127],
+            [['quiz_time_format'], 'string', 'max' => 10],
             ['max_questions', 'compare', 'compareAttribute' => 'min_correct_ans', 'operator' => '>=', 'type' => 'number'],
             ['max_questions', 'maxQuestionValidator'],
             [['updated_by'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['updated_by' => 'id']],
@@ -160,6 +162,18 @@ class Quiz extends \yii\db\ActiveRecord
         return range(1, 6);
     }
 
+    public function timeChooserOptions()
+    {
+        return [
+            'minute' => 'minute',
+            'hour' => 'hour',
+            'day' => 'day',
+            'week' => 'week',
+            'month' => 'month',
+            'year' => 'year'
+        ];
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -177,6 +191,7 @@ class Quiz extends \yii\db\ActiveRecord
             'created_by' => 'Created By',
             'updated_by' => 'Updated By',
             'quiz_time' => 'Quiz Time',
+            'quiz_time_format' => 'Quiz Time Format',
         ];
     }
 

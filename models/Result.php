@@ -64,6 +64,8 @@ class Result extends \yii\db\ActiveRecord
             'correct_ans' => 'Correct Answer',
             'min_correct_ans' => 'Min Correct Answer',
             'question_count' => 'Question Count',
+            'status' => 'Status',
+            'percentage' => 'Percentage',
             'certification_valid' => 'Certification Status',
             'created_at' => 'Passed At',
             'created_by' => 'Passed By',

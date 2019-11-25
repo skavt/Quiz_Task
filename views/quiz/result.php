@@ -8,9 +8,10 @@ use app\models\Quiz;
 
 <?php echo \yii\grid\GridView::widget([
     'dataProvider' => $dataProvider,
+//    'filterModel' => $searchModel,
     'headerRowOptions' =>
         [
-            'style' => 'background-color:#ccf8fe; color:#0a73bb',
+            'style' => 'color:#337AB7',
         ],
     'columns' =>
         [
@@ -19,7 +20,7 @@ use app\models\Quiz;
             'min_correct_ans',
             'question_count',
             [
-                'label' => 'Status',
+                'attribute' => 'status',
                 'value' => function ($model) {
                     if ($model->correct_ans >= $model->min_correct_ans) {
                         return 'passed';
@@ -32,7 +33,7 @@ use app\models\Quiz;
                 }
             ],
             [
-                'label' => 'Percentage',
+                'attribute' => 'percentage',
                 'value' => function ($model) {
                     return round(($model->correct_ans * 100) / $model->question_count) . ' %';
                 }

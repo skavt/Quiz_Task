@@ -103,15 +103,12 @@ class QuizController extends Controller
     public function actionCreate()
     {
         $model = new Quiz();
-        $dropDownList = $model->dropDownList();
-
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect('index');
         }
         return $this->render('create', [
             'model' => $model,
-            'dropDownList' => $dropDownList,
         ]);
     }
 
