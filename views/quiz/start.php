@@ -46,38 +46,3 @@ $this->title = 'Quiz \'' . $quizModel->subject . '\'';
     $this->registerJsFile('@web/js/index.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
 } catch (\yii\base\InvalidConfigException $e) {
 } ?>
-
-<?php //$form = ActiveForm::begin() ?>
-<!--<h1 style="text-align: center">--><?php //echo Html::encode($this->title) ?><!--</h1>-->
-<!--<hr>-->
-<!---->
-<?php //foreach ($questionModel as $question) : ?>
-<!---->
-<!--    <label for="name" style="font-size: 30px; margin-left: 30px; color: #23527c ;">-->
-<!--        --><?php //echo $question->name ?>
-<!--        <br>-->
-<!--        <small style="font-size: 10px">-->
-<!--            --><?php //echo $question->hint ?>
-<!--        </small>-->
-<!--    </label>-->
-<!--    --><?php
-//    $answerModel = Answer::find()->where(['question_id' => $question->id])->all();
-//    foreach ($answerModel as $answer) : ?>
-<!---->
-<!--        <div class="radio">-->
-<!--            <label style="font-size: 20px; text-align: left;  margin-left: 60px;">-->
-<!--                --><?php //echo Html::radio("selected_{$question->id}", false, [
-//                    'value' => $answer->id
-//                ]); ?>
-<!--                --><?php //echo $answer->name ?>
-<!--            </label>-->
-<!--        </div>-->
-<!---->
-<!--    --><?php //endforeach; ?>
-<!---->
-<?php //endforeach; ?>
-<!---->
-<!--<div class="pull-right">-->
-<!--    --><?php //echo Html::submitButton('Submit', ['class' => 'btn btn-success']) ?>
-<!--</div>-->
-<?php //$form = ActiveForm::end() ?>

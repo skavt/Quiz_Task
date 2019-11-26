@@ -43,8 +43,12 @@ YiiAsset::register($this);
                         return $model->certification_valid . ' Months';
                     }
                 ],
-                'quiz_time',
-                'quiz_time_format',
+                [
+                    'attribute' => 'quiz_time',
+                    'value' => function ($model) {
+                        return $model->quiz_time . ' ' . $model->quiz_time_format;
+                    }
+                ],
                 'created_at:datetime',
                 'updated_at:datetime',
                 [
