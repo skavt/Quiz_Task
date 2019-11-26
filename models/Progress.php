@@ -76,9 +76,6 @@ class Progress extends \yii\db\ActiveRecord
         $this->is_next = $data['is_next'];
         $this->created_at = time();
 
-//        $this->load($data);
-
-
         if (!$this->save()) {
             return [
                 'message' => 'Your Progress didn\'t save'
@@ -88,6 +85,13 @@ class Progress extends \yii\db\ActiveRecord
         $this->created_by = function () {
             return $this->createdBy->id;
         };
+    }
+
+    public function saveTime()
+    {
+        $this->created_at = time();
+
+        $this->save();
     }
 
     public function outcomeData()

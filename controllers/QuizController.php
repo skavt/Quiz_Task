@@ -122,7 +122,6 @@ class QuizController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-        $dropDownList = $model->dropDownList();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
@@ -131,7 +130,7 @@ class QuizController extends Controller
 
         return $this->render('update', [
             'model' => $model,
-            'dropDownList' => $dropDownList,
+
         ]);
     }
 
@@ -257,7 +256,20 @@ class QuizController extends Controller
             return $this->render('_error');
         }
 
-        if (Progress::find()->count() != 0) {
+        if (Progress::find()->count() == 0) {
+
+            $lastQuestion = 1;
+
+            $progressModel = new Progress();
+            $progressModel->quiz_id = $quizModel->id;
+            $progressModel->saveTime();
+
+
+        } else if (Progress::find()->count() == 1) {
+
+            $lastQuestion = 1;
+
+        } else {
 
             $progress = Progress::find()
                 ->orderBy(['id' => SORT_DESC, 'created_by' => Yii::$app->user->id])
@@ -275,9 +287,15 @@ class QuizController extends Controller
                 $lastQuestion = $progress->last_question - 1;
             }
 
-        } else {
-            $lastQuestion = 1;
         }
+
+        $progressCreatedTime = Progress::find()->one()->created_at;
+        $lastTime = strtotime(" + $quizModel->quiz_time $quizModel->quiz_time_format", $progressCreatedTime);
+
+        echo '<pre>';
+        var_dump(Yii::$app->formatter->asDatetime($lastTime));
+        echo '</pre>';
+        exit();
 
         return $this->render('start', [
             'quizModel' => $quizModel,

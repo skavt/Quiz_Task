@@ -7,6 +7,9 @@
 
 namespace app\commands;
 
+use app\models\Progress;
+use app\models\Quiz;
+use Yii;
 use yii\console\Controller;
 use yii\console\ExitCode;
 
@@ -31,4 +34,25 @@ class HelloController extends Controller
 
         return ExitCode::OK;
     }
+
+    public function actionProgress()
+    {
+        $progressModelId = Progress::find()->one()->quiz_id;
+        $quizModel = Quiz::findAll(['id' => $progressModelId]);
+
+        $progressCreatedTime = Progress::find()->one()->created_at;
+
+        $quizTime = $quizModel[0]->quiz_time;
+        $quizTimeFormat = $quizModel[0]->quiz_time_format;
+
+        $lastTime = strtotime(" + $quizTime $quizTimeFormat", $progressCreatedTime);
+
+        if (time() > $lastTime) {
+
+            $progressModel = Progress::find()->all();
+            $progressModel[0]->deleteAll(['quiz_id' => $quizModel[0]->id]);
+
+        }
+    }
+
 }

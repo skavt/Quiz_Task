@@ -159,12 +159,13 @@ class Quiz extends \yii\db\ActiveRecord
 
     public function dropDownList()
     {
-        return range(1, 6);
+        return range(0, 6);
     }
 
     public function timeChooserOptions()
     {
         return [
+            '' => '',
             'minute' => 'minute',
             'hour' => 'hour',
             'day' => 'day',
@@ -172,6 +173,14 @@ class Quiz extends \yii\db\ActiveRecord
             'month' => 'month',
             'year' => 'year'
         ];
+    }
+
+    public function deleteProgress($id)
+    {
+        $time = Progress::find()->one()->created_at;
+        $day = strtotime(" + $this->quiz_time $this->quiz_time_format", $time);
+
+        return $day;
     }
 
     /**
