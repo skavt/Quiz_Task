@@ -289,14 +289,6 @@ class QuizController extends Controller
 
         }
 
-        $progressCreatedTime = Progress::find()->one()->created_at;
-        $lastTime = strtotime(" + $quizModel->quiz_time $quizModel->quiz_time_format", $progressCreatedTime);
-
-        echo '<pre>';
-        var_dump(Yii::$app->formatter->asDatetime($lastTime));
-        echo '</pre>';
-        exit();
-
         return $this->render('start', [
             'quizModel' => $quizModel,
             'questionModel' => $questionModel,
