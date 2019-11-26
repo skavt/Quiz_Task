@@ -256,7 +256,7 @@ class QuizController extends Controller
             return $this->render('_error');
         }
 
-        if (Progress::find()->count() == 0) {
+        if (Progress::find()->where(['created_by' => Yii::$app->user->id])->count() == 0) {
 
             $lastQuestion = 1;
 
@@ -265,14 +265,15 @@ class QuizController extends Controller
             $progressModel->saveTime();
 
 
-        } else if (Progress::find()->count() == 1) {
+        } else if (Progress::find()->where(['created_by' => Yii::$app->user->id])->count() == 1) {
 
             $lastQuestion = 1;
 
         } else {
 
             $progress = Progress::find()
-                ->orderBy(['id' => SORT_DESC, 'created_by' => Yii::$app->user->id])
+                ->where(['created_by' => Yii::$app->user->id])
+                ->orderBy(['id' => SORT_DESC])
                 ->one();
 
             if (Progress::find()

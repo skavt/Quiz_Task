@@ -102,7 +102,7 @@ class Progress extends \yii\db\ActiveRecord
 
         $countQuestion = Progress::find()
             ->where(['created_by' => Yii::$app->user->id])
-            ->count();
+            ->count()-1;
 
         return [
             'countCorrectAnswer' => $countCorrectAnswer,
@@ -113,10 +113,10 @@ class Progress extends \yii\db\ActiveRecord
     public function allAnswerChecked()
     {
         $countUnselectedAnswer = Progress::find()
-            ->where(['selected_answer' => null])
+            ->where(['selected_answer' => null, 'created_by' => Yii::$app->user->id])
             ->count();
 
-        if ($countUnselectedAnswer > 0) {
+        if ($countUnselectedAnswer > 1) {
             return [
                 'success' => false,
                 'message' => 'You must select all answers'

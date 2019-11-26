@@ -9,6 +9,7 @@ $.ajax({
     url: `/quiz/start?id=${id}`,
     data: {_csrf: yii.getCsrfToken()},
     dataType: "json",
+    async: false,
 
     success: function (data) {
 
@@ -94,6 +95,7 @@ function startQuiz(data) {
                 question_id: data[currentPage - 1].id,
                 _csrf: yii.getCsrfToken()
             },
+            async: false,
 
             success: function (data) {
 
@@ -119,6 +121,7 @@ function startQuiz(data) {
             url: "/quiz/progress",
             data: {_csrf: yii.getCsrfToken()},
             dataType: "json",
+            async: false,
 
             success: function (progressData) {
 

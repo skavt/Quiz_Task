@@ -50,7 +50,7 @@ class HelloController extends Controller
         if (time() > $lastTime) {
 
             $progressModel = Progress::find()->all();
-            $progressModel[0]->deleteAll(['quiz_id' => $quizModel[0]->id]);
+            $progressModel[0]->deleteAll(['quiz_id' => $quizModel[0]->id, 'created_by' => $progressModel[0]->created_by]);
 
         }
     }
