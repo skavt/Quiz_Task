@@ -170,8 +170,6 @@ class Quiz extends \yii\db\ActiveRecord
             'hour' => 'hour',
             'day' => 'day',
             'week' => 'week',
-            'month' => 'month',
-            'year' => 'year'
         ];
     }
 
